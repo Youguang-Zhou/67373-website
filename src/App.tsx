@@ -1,8 +1,12 @@
+import moment from 'moment'
+import 'moment/locale/zh-cn'
 import React, { FC } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Header from './components/Header'
 import HomePage from './pages/HomePage'
 import LivePage from './pages/LivePage'
+
+moment.locale('zh-cn')
 
 const App: FC = () => (
 	<BrowserRouter>
