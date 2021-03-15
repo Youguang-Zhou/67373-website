@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { IVideoList, IVideoPlayDetail } from '../interfaces'
+import { IVideoList, IVideoPlayDetail } from './interfaces'
 
 const API = axios.create({
 	baseURL: 'https://67373upup.com/api/',

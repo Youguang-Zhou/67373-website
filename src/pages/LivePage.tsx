@@ -1,8 +1,8 @@
 import { Col, Row } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
-import { getLiveURL } from '../api'
 import VideoPlayer from '../components/VideoPlayer'
-import { IPlayOptions } from '../interfaces/index'
+import { getLiveURL } from '../utils/api'
+import { IPlayOptions } from '../utils/interfaces'
 
 const LivePage: FC = () => {
 	const [playOptions, setPlayOptions] = useState<IPlayOptions | null>(null)

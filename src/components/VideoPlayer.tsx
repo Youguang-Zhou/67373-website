@@ -2,7 +2,7 @@ import React, { FC, useEffect, useRef } from 'react'
 import videojs from 'video.js'
 import zhCN from 'video.js/dist/lang/zh-CN.json'
 import 'video.js/dist/video-js.css'
-import '../video-player.css'
+import '../utils/video-player.css'
 
 interface IVideoPlayer {
 	options: videojs.PlayerOptions

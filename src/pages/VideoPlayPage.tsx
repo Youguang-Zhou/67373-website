@@ -1,9 +1,9 @@
 import { Col, Row } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { getPlayURL } from '../api'
 import VideoPlayer from '../components/VideoPlayer'
-import { IPlayOptions } from '../interfaces/index'
+import { getPlayURL } from '../utils/api'
+import { IPlayOptions } from '../utils/interfaces'
 
 const VideoPlayPage: FC = () => {
 	const [title, setTitle] = useState('')
