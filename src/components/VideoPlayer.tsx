@@ -42,7 +42,7 @@ const VideoPlayer: FC<IVideoPlayer> = ({ options }: IVideoPlayer) => {
 		}
 	}, [options])
 
-	return <video ref={videoRef} className="video-js custom-css" />
+	return <video ref={videoRef} className="video-js vjs-16-9 custom-css" />
 }
 
 export default VideoPlayer

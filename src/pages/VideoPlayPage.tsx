@@ -3,10 +3,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getPlayURL } from '../api'
 import VideoPlayer from '../components/VideoPlayer'
-
-interface IPlayOptions {
-	sources: Array<{ src: string; type: string }>
-}
+import { IPlayOptions } from '../interfaces/index'
 
 const VideoPlayPage: FC = () => {
 	const [title, setTitle] = useState('')
