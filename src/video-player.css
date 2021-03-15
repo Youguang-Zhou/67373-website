@@ -1,0 +1,97 @@
+/*
+  Player Skin Designer for Video.js
+  http://videojs.com
+
+  To customize the player skin edit 
+  the CSS below. Click "details" 
+  below to add comments or questions.
+  This file uses some SCSS. Learn more  
+  at http://sass-lang.com/guide)
+
+  This designer can be linked to at:
+  https://codepen.io/heff/pen/EarCt/left/?editors=010
+*/
+.video-js {
+	/* The base font size controls the size of everything, not just text.
+       All dimensions use em-based sizes so that the scale along with the font size.
+       Try increasing it to 15px and see what happens. */
+	font-size: 17px;
+	/* The main font color changes the ICON COLORS as well as the text */
+	color: orange;
+}
+
+/* The "Big Play Button" is the play button that shows before the video plays.
+     To center it set the align values to center and middle. The typical location
+     of the button is the center, but there is trend towards moving it to a corner
+     where it gets out of the way of valuable content in the poster image.*/
+.custom-css .vjs-big-play-button {
+	display: none;
+}
+
+/* The default color of control backgrounds is mostly black but with a little
+     bit of blue so it can still be seen on all-black video frames, which are common. */
+.video-js .vjs-control-bar,
+.video-js .vjs-big-play-button,
+.video-js .vjs-menu-button .vjs-menu-content {
+	/* IE8 - has no alpha support */
+	background-color: #000;
+	/* Opacity: 1.0 = 100%, 0.0 = 0% */
+	background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Slider - used for Volume bar and Progress bar */
+.video-js .vjs-slider {
+	background-color: #545454;
+	background-color: rgba(84, 84, 84, 0.5);
+}
+
+/* The slider bar color is used for the progress bar and the volume bar
+     (the first two can be removed after a fix that's coming) */
+.video-js .vjs-volume-level,
+.video-js .vjs-play-progress,
+.video-js .vjs-slider-bar {
+	background: orange;
+}
+
+/* 声音进度条右部分的颜色 */
+.video-js .vjs-volume-bar.vjs-slider-bar.vjs-slider {
+	background-color: rgba(84, 84, 84, 0.5);
+}
+
+/* The main progress bar also has a bar that shows how much has been loaded. */
+.video-js .vjs-load-progress {
+	/* For IE8 we'll lighten the color */
+	background: #949494;
+	/* Otherwise we'll rely on stacked opacities */
+	background: rgba(84, 84, 84, 0.5);
+}
+
+/* The load progress bar also has internal divs that represent
+     smaller disconnected loaded time ranges */
+.video-js .vjs-load-progress div {
+	/* For IE8 we'll lighten the color */
+	background: #d4d4d4;
+	/* Otherwise we'll rely on stacked opacities */
+	background: rgba(84, 84, 84, 0.75);
+}
+
+/* 默认显示进度条 */
+.video-js .vjs-control-bar {
+	display: flex;
+}
+
+/* 显示当前时间和总共时间 */
+.video-js .vjs-control-bar .vjs-time-control {
+	display: block;
+	padding: 0rem 0.2rem;
+}
+
+/* 当前时间和总共时间之间的分隔符 --> '/' */
+.video-js .vjs-control-bar .vjs-time-control.vjs-time-divider {
+	min-width: min-content;
+}
+
+/* 卡顿时loading提示的颜色 */
+.video-js .vjs-loading-spinner {
+	border: 6px solid white;
+}
