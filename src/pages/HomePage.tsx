@@ -3,12 +3,12 @@ import React, { FC, useEffect, useState } from 'react'
 import CardDeck from 'react-bootstrap/CardDeck'
 import InfiniteScroll from 'react-infinite-scroller'
 import styled from 'styled-components'
-import { getVideoList } from '../api'
 import cat from '../assets/cat.jpeg'
 import love_you from '../assets/love_you.png'
 import Avatar from '../components/Avatar'
 import VideoCard from '../components/VideoCard'
-import { IVideo } from '../interfaces'
+import { getVideoList } from '../utils/api'
+import { IVideo } from '../utils/interfaces'
 
 const Container = styled.main`
 	background: whitesmoke;
