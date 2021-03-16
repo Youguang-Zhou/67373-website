@@ -25,6 +25,7 @@ interface IVideoPlayer {
 
 const initialOptions: VideoJsPlayerOptions = {
 	autoplay: true,
+	bigPlayButton: false,
 	controls: true,
 	fluid: true,
 	language: 'zhCN',

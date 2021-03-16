@@ -1,11 +1,11 @@
 import { Col, Row } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
+import { VideoJsPlayerOptions } from 'video.js'
 import VideoPlayer from '../components/VideoPlayer'
 import { getLiveURL } from '../utils/api'
-import { IPlayOptions } from '../utils/interfaces'
 
 const LivePage: FC = () => {
-	const [playOptions, setPlayOptions] = useState<IPlayOptions>()
+	const [playOptions, setPlayOptions] = useState<VideoJsPlayerOptions>()
 
 	useEffect(() => {
 		getLiveURL().then((url) => {
