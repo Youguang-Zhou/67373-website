@@ -7,7 +7,7 @@ import { IPlayOptions } from '../utils/interfaces'
 
 const VideoPlayPage: FC = () => {
 	const [title, setTitle] = useState('')
-	const [playOptions, setPlayOptions] = useState<IPlayOptions | null>(null)
+	const [playOptions, setPlayOptions] = useState<IPlayOptions>()
 	const { id } = useParams<{ id: string }>()
 
 	useEffect(() => {
