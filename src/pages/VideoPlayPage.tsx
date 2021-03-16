@@ -1,19 +1,18 @@
 import { Col, Row } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { VideoJsPlayerOptions } from 'video.js'
 import VideoPlayer from '../components/VideoPlayer'
 import { getPlayURL } from '../utils/api'
-import { IPlayOptions } from '../utils/interfaces'
 
 const VideoPlayPage: FC = () => {
 	const [title, setTitle] = useState('')
-	const [playOptions, setPlayOptions] = useState<IPlayOptions>()
+	const [playOptions, setPlayOptions] = useState<VideoJsPlayerOptions>()
 	const { id } = useParams<{ id: string }>()
 
 	useEffect(() => {
 		getPlayURL(id).then(({ data }) => {
 			const options = {
-				poster: data.VideoBase.CoverURL,
 				sources: [
 					{
 						src: data.PlayInfoList.PlayInfo[2].PlayURL,

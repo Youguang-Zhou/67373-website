@@ -67,7 +67,3 @@ export interface IVideoPlayDetail {
 		}
 	}
 }
-
-export interface IPlayOptions {
-	sources: Array<{ src: string; type: string }>
-}

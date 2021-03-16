@@ -20,14 +20,6 @@
 	color: orange;
 }
 
-/* The "Big Play Button" is the play button that shows before the video plays.
-     To center it set the align values to center and middle. The typical location
-     of the button is the center, but there is trend towards moving it to a corner
-     where it gets out of the way of valuable content in the poster image.*/
-.custom-css .vjs-big-play-button {
-	display: none;
-}
-
 /* The default color of control backgrounds is mostly black but with a little
      bit of blue so it can still be seen on all-black video frames, which are common. */
 .video-js .vjs-control-bar,
