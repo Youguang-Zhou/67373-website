@@ -91,7 +91,22 @@
 	min-width: min-content;
 }
 
+/* 隐藏右边的剩余时间 */
+.video-js .vjs-control-bar .vjs-remaining-time {
+	display: none;
+}
+
 /* 卡顿时loading提示的颜色 */
 .video-js .vjs-loading-spinner {
 	border: 6px solid white;
+}
+
+/* 直播模式隐藏时间栏 */
+.video-js.vjs-live .vjs-control-bar .vjs-time-control {
+	display: none;
+}
+
+/* 隐藏按钮的边框 */
+.video-js button:focus {
+	outline: 0;
 }
