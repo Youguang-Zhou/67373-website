@@ -5,7 +5,7 @@ import { getLiveURL } from '../utils/api'
 import { IPlayOptions } from '../utils/interfaces'
 
 const LivePage: FC = () => {
-	const [playOptions, setPlayOptions] = useState<IPlayOptions | null>(null)
+	const [playOptions, setPlayOptions] = useState<IPlayOptions>()
 
 	useEffect(() => {
 		getLiveURL().then((url) => {
