@@ -20,10 +20,4 @@ const getPlayURL = (id: string): Promise<IVideoPlayDetail> =>
 		.then(({ data }) => data)
 		.catch((error) => console.log(error))
 
-const getLiveURL = (): Promise<string> =>
-	axios
-		.get('https://67373upup.oss-cn-hangzhou.aliyuncs.com/live_url.txt')
-		.then(({ data }) => data)
-		.catch((error) => console.log(error))
-
-export { getVideoList, getPlayURL, getLiveURL }
+export { getVideoList, getPlayURL }
