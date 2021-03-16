@@ -21,6 +21,7 @@ const Notice = styled.div`
 
 interface IVideoPlayer {
 	options: VideoJsPlayerOptions
+	onLoad?: (player: VideoJsPlayer) => void
 }
 
 const initialOptions: VideoJsPlayerOptions = {
@@ -39,7 +40,7 @@ const initialOptions: VideoJsPlayerOptions = {
 	},
 }
 
-const VideoPlayer: FC<IVideoPlayer> = ({ options }: IVideoPlayer) => {
+const VideoPlayer: FC<IVideoPlayer> = ({ options, onLoad }: IVideoPlayer) => {
 	const playerRef = useRef<VideoJsPlayer>()
 	const noticeRef = useRef<HTMLDivElement>(null)
 
@@ -51,6 +52,7 @@ const VideoPlayer: FC<IVideoPlayer> = ({ options }: IVideoPlayer) => {
 				hotkeys: ({ which }) => setupHotkeys(which),
 			},
 		})
+		onLoad && onLoad(playerRef.current)
 		return () => {
 			if (playerRef.current) {
 				playerRef.current.dispose()
