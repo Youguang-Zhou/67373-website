@@ -12,7 +12,7 @@ import { IVideo } from '../utils/interfaces'
 
 const Container = styled.main`
 	background: whitesmoke;
-	padding: 30px 100px;
+	padding: 30px 5%;
 `
 
 const SpinContainer = styled.div`

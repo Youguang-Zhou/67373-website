@@ -7,7 +7,7 @@ import { Link as RouterLink } from 'react-router-dom'
 import styled from 'styled-components'
 
 const Card = styled(BootStrapCard)`
-	margin: 30px;
+	margin: 15px !important;
 	min-width: 320px;
 	transition: box-shadow 0.3s;
 
