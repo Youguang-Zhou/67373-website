@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from 'react'
+import React, { forwardRef, ForwardRefRenderFunction, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
 import zhCN from 'video.js/dist/lang/zh-CN.json'
@@ -40,7 +40,10 @@ const initialOptions: VideoJsPlayerOptions = {
 	},
 }
 
-const VideoPlayer: FC<IVideoPlayer> = ({ options, onLoad }: IVideoPlayer) => {
+const VideoPlayer: ForwardRefRenderFunction<HTMLDivElement, IVideoPlayer> = (
+	{ options, onLoad }: IVideoPlayer,
+	ref
+) => {
 	const playerRef = useRef<VideoJsPlayer>()
 	const noticeRef = useRef<HTMLDivElement>(null)
 
@@ -112,11 +115,11 @@ const VideoPlayer: FC<IVideoPlayer> = ({ options, onLoad }: IVideoPlayer) => {
 	}
 
 	return (
-		<div>
+		<div ref={ref}>
 			<video id="video-player-67373" className="video-js vjs-16-9 custom-css" />
 			<Notice ref={noticeRef} />
 		</div>
 	)
 }
 
-export default VideoPlayer
+export default forwardRef(VideoPlayer)
