@@ -3,7 +3,6 @@ import React, { FC, useEffect, useState } from 'react'
 import CardDeck from 'react-bootstrap/CardDeck'
 import InfiniteScroll from 'react-infinite-scroller'
 import styled from 'styled-components'
-import cat from '../assets/cat.jpeg'
 import love_you from '../assets/love_you.png'
 import Avatar from '../components/Avatar'
 import VideoCard from '../components/VideoCard'
@@ -107,7 +106,7 @@ const HomePage: FC = () => {
 
 				{/* 回到顶部按钮 */}
 				<BackTop>
-					<Avatar src={cat} size={80} />
+					<Avatar size={80} />
 				</BackTop>
 			</InfiniteScroll>
 		</Container>
