@@ -54,34 +54,20 @@ const VideoList: FC<IVideoList> = ({ cateId, emptyImage }: IVideoList) => {
 		setPageNo(pageNo + 1)
 	}
 
-	const addEmptyCard = (totalVideos: number) => {
-		// totalVideos % 4 取余得出最后一行卡片的个数
-		// 再用4减去最后一行卡片个数得出需要填充隐形卡片的个数
-		// PAGE_SIZE取12的目的是无论一行展示1个/2个/3个/4个视频，都可以被12整除
-		const num = 4 - (totalVideos % 4)
-		const arr = []
-		for (let i = 0; i < num; i++) {
-			arr.push(<VideoCard disable info={{ id: '', createTime: '', title: '', duration: 0, cover: '' }} />)
-		}
-		return arr
-	}
-
 	return (
 		<InfiniteScroll initialLoad={false} loadMore={handleInfiniteOnLoad} hasMore={!isLoading && hasMore}>
 			{/* 视频列表 */}
 			<CardDeck>
 				{videos.map((video) => {
 					const info = {
-						id: video.videoId,
+						videoId: video.videoId,
 						createTime: video.createTime,
 						title: video.title,
 						duration: video.duration,
-						cover: video.coverURL,
+						coverURL: video.coverURL,
 					}
 					return <VideoCard key={video.videoId} info={info} />
 				})}
-				{/* 当最后一行卡片个数不够填满一整行时，添加隐形的卡片，来维持最后一行卡片的大小 */}
-				{videos.length === total && total !== 0 && addEmptyCard(videos.length)}
 			</CardDeck>
 
 			{/* 加载图标 */}

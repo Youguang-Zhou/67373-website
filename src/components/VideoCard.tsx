@@ -1,14 +1,14 @@
-import { Typography } from 'antd'
+import { Col, Typography } from 'antd'
 import moment from 'moment'
 import React, { FC } from 'react'
 import { Card as BootStrapCard } from 'react-bootstrap'
 import { useDimensions } from 'react-dimensions-hook'
 import { Link as RouterLink } from 'react-router-dom'
 import styled from 'styled-components'
+import { IVideo } from '../utils/interfaces'
 
 const Card = styled(BootStrapCard)`
 	margin: 15px !important;
-	min-width: 320px;
 	transition: box-shadow 0.3s;
 
 	&:hover {
@@ -45,6 +45,7 @@ const DurationTag = styled.span`
 	bottom: 0;
 	color: #fff;
 	font-size: 0.8rem;
+	margin: 1px 0px;
 	padding: 0 5px;
 	position: absolute;
 	right: 0;
@@ -54,18 +55,11 @@ const { Body } = Card
 
 interface IVideoCard {
 	key?: string
-	info: {
-		id: string
-		createTime: string
-		title: string
-		duration: number
-		cover: string
-	}
-	disable?: boolean
+	info: IVideo
 }
 
-const VideoCard: FC<IVideoCard> = ({ info, disable }: IVideoCard) => {
-	const { id, createTime, title, duration, cover } = info
+const VideoCard: FC<IVideoCard> = ({ info }: IVideoCard) => {
+	const { videoId, createTime, title, duration, coverURL } = info
 	const {
 		ref,
 		dimensions: { width },
@@ -78,19 +72,21 @@ const VideoCard: FC<IVideoCard> = ({ info, disable }: IVideoCard) => {
 	}
 
 	return (
-		<Card ref={ref} style={disable && { opacity: 0, pointerEvents: 'none' }}>
-			<Link to={`/watch/${id}`}>
-				{/* 统一视频封面高度，由其宽度决定，按照16:9的尺寸 */}
-				<div style={{ position: 'relative', height: (9 / 16) * width }}>
-					<Cover variant="top" src={cover} />
-					<DurationTag>{formatDuration(duration)}</DurationTag>
-				</div>
-				<Body>
-					<Title ellipsis={{ rows: 2, tooltip: true }}>{title}</Title>
-					<small className="text-muted">{moment().to(createTime)}</small>
-				</Body>
-			</Link>
-		</Card>
+		<Col xs={24} sm={12} md={12} lg={8} xl={6}>
+			<Card ref={ref}>
+				<Link to={`/watch/${videoId}`}>
+					{/* 统一视频封面高度，由其宽度决定，按照16:9的尺寸 */}
+					<div style={{ position: 'relative', height: (9 / 16) * width }}>
+						<Cover variant="top" src={coverURL} />
+						<DurationTag>{formatDuration(duration)}</DurationTag>
+					</div>
+					<Body>
+						<Title ellipsis={{ rows: 2, tooltip: true }}>{title}</Title>
+						<small className="text-muted">{moment().to(createTime)}</small>
+					</Body>
+				</Link>
+			</Card>
+		</Col>
 	)
 }
 
