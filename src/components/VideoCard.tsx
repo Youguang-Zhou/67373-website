@@ -35,12 +35,14 @@ const Title = styled(Typography.Paragraph)`
 
 const Cover = styled(Card.Img)`
 	background-color: black;
-	height: ${({ height }) => height}px;
+	max-height: 100%;
+	max-width: 100%;
 	object-fit: contain;
 `
 
 const DurationTag = styled.span`
 	background-color: rgba(0, 0, 0, 0.8);
+	bottom: 0;
 	color: #fff;
 	font-size: 0.8rem;
 	padding: 0 5px;
@@ -66,11 +68,8 @@ const VideoCard: FC<IVideoCard> = ({ info, disable }: IVideoCard) => {
 	const { id, createTime, title, duration, cover } = info
 	const {
 		ref,
-		dimensions: { height, width },
+		dimensions: { width },
 	} = useDimensions()
-
-	// 统一视频封面高度，由其宽度决定，按照16:9的尺寸
-	const coverHeight = (width: number) => (9 / 16) * width
 
 	// 格式化duration，单位是秒
 	const formatDuration = (duration: number) => {
@@ -81,9 +80,11 @@ const VideoCard: FC<IVideoCard> = ({ info, disable }: IVideoCard) => {
 	return (
 		<Card ref={ref} style={disable && { opacity: 0, pointerEvents: 'none' }}>
 			<Link to={`/watch/${id}`}>
-				<Cover variant="top" src={cover} height={coverHeight(width)} />
-				{/* 时长标签的bottom位置计算：卡片总高度-封面高度 */}
-				<DurationTag style={{ bottom: height - coverHeight(width) }}>{formatDuration(duration)}</DurationTag>
+				{/* 统一视频封面高度，由其宽度决定，按照16:9的尺寸 */}
+				<div style={{ position: 'relative', height: (9 / 16) * width }}>
+					<Cover variant="top" src={cover} />
+					<DurationTag>{formatDuration(duration)}</DurationTag>
+				</div>
 				<Body>
 					<Title ellipsis={{ rows: 2, tooltip: true }}>{title}</Title>
 					<small className="text-muted">{moment().to(createTime)}</small>
