@@ -1,29 +1,15 @@
 export interface IVideo {
-	AppId: string
-	CateId: number
-	CateName: string
-	CommentsNum: number
-	CoverURL: string
-	CreateTime: string
-	CreationTime: string
-	Duration: number
-	ModificationTime: string
-	ModifyTime: string
-	Size: number
-	Snapshots: {
-		Snapshot: Array<string>
-	}
-	Status: string
-	StorageLocation: string
-	Title: string
-	VideoId: string
+	cateName: string
+	coverURL: string
+	createTime: string
+	duration: number
+	title: string
+	videoId: string
 }
 
 export interface IVideoList {
-	data: {
-		total: number
-		videos: Array<IVideo>
-	}
+	total: number
+	videoList: Array<IVideo>
 }
 
 export interface IPlayInfo {
