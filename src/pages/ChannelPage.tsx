@@ -1,9 +1,16 @@
-import { Box, Tab, Tabs, Typography } from '@material-ui/core'
+import { Tab, Tabs, Typography } from '@material-ui/core'
 import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import { Row } from 'antd'
 import React, { ChangeEvent, FC, ReactNode, useState } from 'react'
 import banner from '../assets/banner.jpeg'
+import fafa_1 from '../assets/fafa_1.png'
+import fafa_2 from '../assets/fafa_2.png'
+import fafa_3 from '../assets/fafa_3.png'
+import fafa_4 from '../assets/fafa_4.png'
+import fafa_5 from '../assets/fafa_5.png'
+import xiruisi from '../assets/xiruisi.png'
 import Avatar from '../components/Avatar'
+import VideoList from '../components/VideoList'
 
 interface TabPanelProps {
 	children?: ReactNode
@@ -19,11 +26,7 @@ const TabPanel = ({ children, value, index }: TabPanelProps) => (
 		aria-labelledby={`simple-tab-${index}`}
 		style={{ backgroundColor: 'whitesmoke' }}
 	>
-		{value === index && (
-			<Box p={3}>
-				<Typography>{children}</Typography>
-			</Box>
-		)}
+		{value === index && <div style={{ padding: '1vw 5vw' }}>{children}</div>}
 	</div>
 )
 
@@ -44,7 +47,9 @@ const ChannelPage: FC = () => {
 					</Row>
 					<Typography variant="caption">673.73万位订阅者</Typography>
 				</div>
-				<h4>喜瑞斯</h4>
+				<a href="https://chenyifaer.taobao.com/" target="_blank" rel="noopener noreferrer">
+					<img src={xiruisi} alt="喜瑞斯" style={{ border: '1px solid rgb(4,7,110)', borderRadius: '5px' }} />
+				</a>
 			</Row>
 			<Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary" centered>
 				<Tab label="唱歌视频" />
@@ -54,19 +59,24 @@ const ChannelPage: FC = () => {
 				<Tab label="日常" />
 			</Tabs>
 			<TabPanel value={value} index={0}>
-				唱歌视频
+				{/* 唱歌视频 */}
+				<VideoList cateId={process.env.REACT_APP_VOD_CHANGGE_CATE_ID} emptyImage={fafa_1} />
 			</TabPanel>
 			<TabPanel value={value} index={1}>
-				直播剪辑
+				{/* 直播剪辑 */}
+				<VideoList cateId={process.env.REACT_APP_VOD_ZHIBO_CATE_ID} emptyImage={fafa_2} />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
-				茶话会文字视频
+				{/* 茶话会文字视频 */}
+				<VideoList cateId={process.env.REACT_APP_VOD_CHAHUAHUI_CATE_ID} emptyImage={fafa_3} />
 			</TabPanel>
 			<TabPanel value={value} index={3}>
-				游戏视频
+				{/* 游戏视频 */}
+				<VideoList cateId={process.env.REACT_APP_VOD_YOUXI_CATE_ID} emptyImage={fafa_4} />
 			</TabPanel>
 			<TabPanel value={value} index={4}>
-				日常
+				{/* 日常 */}
+				<VideoList cateId={process.env.REACT_APP_VOD_RICHANG_CATE_ID} emptyImage={fafa_5} />
 			</TabPanel>
 		</>
 	)
