@@ -1,5 +1,15 @@
 import axios from 'axios'
-import { IVideoList, IVideoPlayDetail } from './interfaces'
+import { IVideo } from './interfaces'
+
+interface IVideoList {
+	total: number
+	videoList: Array<IVideo>
+}
+
+interface IVideoPlayDetail {
+	playInfoList: Array<{ playURL: string }>
+	videoBase: { title: string }
+}
 
 const API = axios.create({
 	baseURL:
