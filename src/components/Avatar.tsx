@@ -6,10 +6,16 @@ interface IAvatar {
 	className?: string
 	size?: number
 	src?: string
+	shadow?: boolean
 }
 
-const Avatar: FC<IAvatar> = ({ className, size, src }: IAvatar) => (
-	<AntdAvatar className={className} style={{ boxShadow: 'gray 0 0 10px' }} size={size || 50} src={src || cat} />
+const Avatar: FC<IAvatar> = ({ className, size, src, shadow }: IAvatar) => (
+	<AntdAvatar
+		className={className}
+		style={{ boxShadow: shadow ? 'gray 0 0 10px' : undefined }}
+		size={size || 50}
+		src={src || cat}
+	/>
 )
 
 export default Avatar
