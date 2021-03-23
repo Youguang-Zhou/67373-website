@@ -11,17 +11,16 @@ const VideoPlayPage: FC = () => {
 	const { id } = useParams<{ id: string }>()
 
 	useEffect(() => {
-		getPlayURL(id).then(({ data }) => {
-			const options = {
+		getPlayURL(id).then(({ videoBase, playInfoList }) => {
+			setTitle(videoBase.title)
+			setPlayOptions({
 				sources: [
 					{
-						src: data.PlayInfoList.PlayInfo[2].PlayURL,
+						src: playInfoList[0].playURL,
 						type: 'video/mp4',
 					},
 				],
-			}
-			setTitle(data.VideoBase.Title)
-			setPlayOptions(options)
+			})
 		})
 	}, [id])
 
