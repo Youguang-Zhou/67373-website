@@ -1,4 +1,6 @@
 import { Tab, Tabs, Typography } from '@material-ui/core'
+import { useTheme } from '@material-ui/core/styles'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import { Row } from 'antd'
 import React, { ChangeEvent, FC, ReactNode, useState } from 'react'
@@ -19,19 +21,14 @@ interface TabPanelProps {
 }
 
 const TabPanel = ({ children, value, index }: TabPanelProps) => (
-	<div
-		role="tabpanel"
-		hidden={value !== index}
-		id={`simple-tabpanel-${index}`}
-		aria-labelledby={`simple-tab-${index}`}
-		style={{ backgroundColor: 'whitesmoke' }}
-	>
+	<div role="tabpanel" hidden={value !== index} style={{ backgroundColor: 'whitesmoke' }}>
 		{value === index && <div style={{ padding: '1vw 5vw' }}>{children}</div>}
 	</div>
 )
 
 const ChannelPage: FC = () => {
 	const [value, setValue] = useState(0)
+	const scrollableTabs = useMediaQuery(useTheme().breakpoints.down('sm'))
 
 	const handleChange = (event: ChangeEvent<Record<string, never>>, value: number) => setValue(value)
 
@@ -51,7 +48,15 @@ const ChannelPage: FC = () => {
 					<img src={xiruisi} alt="喜瑞斯" style={{ border: '1px solid rgb(4,7,110)', borderRadius: '5px' }} />
 				</a>
 			</Row>
-			<Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary" centered>
+			<Tabs
+				value={value}
+				scrollButtons="on"
+				centered={!scrollableTabs}
+				variant={scrollableTabs ? 'scrollable' : 'standard'}
+				textColor="primary"
+				indicatorColor="primary"
+				onChange={handleChange}
+			>
 				<Tab label="唱歌视频" />
 				<Tab label="直播剪辑" />
 				<Tab label="茶话会文字视频" />
