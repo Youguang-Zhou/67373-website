@@ -3,7 +3,7 @@ import { IVideo } from './interfaces'
 
 interface IVideoList {
 	total: number
-	videoList: Array<IVideo>
+	videoList: IVideo[]
 }
 
 interface IVideoPlayDetail {
