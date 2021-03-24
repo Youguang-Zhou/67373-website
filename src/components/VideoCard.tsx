@@ -3,8 +3,8 @@ import moment from 'moment'
 import React, { FC } from 'react'
 import { Card as BootStrapCard } from 'react-bootstrap'
 import { useDimensions } from 'react-dimensions-hook'
-import { Link as RouterLink } from 'react-router-dom'
 import styled from 'styled-components'
+import Link from '../components/Link'
 import { IVideo } from '../utils/interfaces'
 
 const Card = styled(BootStrapCard)`
@@ -13,16 +13,6 @@ const Card = styled(BootStrapCard)`
 
 	&:hover {
 		box-shadow: gray 0 0 10px;
-	}
-`
-
-const Link = styled(RouterLink)`
-	color: black;
-	text-decoration: none;
-
-	&:hover {
-		color: black;
-		text-decoration: none;
 	}
 `
 
