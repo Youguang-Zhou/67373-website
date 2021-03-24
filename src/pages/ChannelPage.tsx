@@ -1,18 +1,50 @@
 import { Tab, Tabs, Typography } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
+import LibraryMusicIcon from '@material-ui/icons/LibraryMusic'
 import MusicNoteIcon from '@material-ui/icons/MusicNote'
-import { Row } from 'antd'
+import { Col, Row } from 'antd'
 import React, { ChangeEvent, FC, ReactNode, useState } from 'react'
+import { Carousel } from 'react-bootstrap'
+import styled from 'styled-components'
+import aposhuo from '../assets/aposhuo.jpeg'
 import banner from '../assets/banner.jpeg'
 import fafa_1 from '../assets/fafa_1.png'
 import fafa_2 from '../assets/fafa_2.png'
 import fafa_3 from '../assets/fafa_3.png'
 import fafa_4 from '../assets/fafa_4.png'
 import fafa_5 from '../assets/fafa_5.png'
+import fafa_rose from '../assets/fafa_rose.png'
+import tonghuazhen from '../assets/tonghuazhen.jpeg'
+import xianshangyouchunqiu from '../assets/xianshangyouchunqiu.jpeg'
 import xiruisi from '../assets/xiruisi.png'
 import Avatar from '../components/Avatar'
+import Link from '../components/Link'
 import VideoList from '../components/VideoList'
+
+const {
+	REACT_APP_VOD_TONGHUAZHEN_VIDEO_ID,
+	REACT_APP_VOD_APOSHUO_VIDEO_ID,
+	REACT_APP_VOD_XIANSHANGYOUCHUNQIU_VIDEO_ID,
+	REACT_APP_VOD_CHANGGE_CATE_ID,
+	REACT_APP_VOD_ZHIBO_CATE_ID,
+	REACT_APP_VOD_CHAHUAHUI_CATE_ID,
+	REACT_APP_VOD_YOUXI_CATE_ID,
+	REACT_APP_VOD_RICHANG_CATE_ID,
+} = process.env
+
+const { Item } = Carousel
+
+const CarouselLink = styled(Link)`
+	display: flex;
+	justify-content: center;
+`
+
+const FaFaAndRose = styled.img`
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+`
 
 interface TabPanelProps {
 	children?: ReactNode
@@ -64,24 +96,54 @@ const ChannelPage: FC = () => {
 				<Tab label="日常" />
 			</Tabs>
 			<TabPanel value={value} index={0}>
+				<Row>
+					{/* 主题曲置顶 */}
+					<Col xs={24} sm={20} md={16} lg={12} xl={8}>
+						<Carousel>
+							<Item>
+								<CarouselLink to={`/watch/${REACT_APP_VOD_TONGHUAZHEN_VIDEO_ID}`}>
+									<img src={tonghuazhen} alt="童话镇" />
+								</CarouselLink>
+							</Item>
+							<Item>
+								<CarouselLink to={`/watch/${REACT_APP_VOD_APOSHUO_VIDEO_ID}`}>
+									<img src={aposhuo} alt="阿婆说" />
+								</CarouselLink>
+							</Item>
+							<Item>
+								<CarouselLink to={`/watch/${REACT_APP_VOD_XIANSHANGYOUCHUNQIU_VIDEO_ID}`}>
+									<img src={xianshangyouchunqiu} alt="弦上有春秋" />
+								</CarouselLink>
+							</Item>
+						</Carousel>
+					</Col>
+					<Col xs={0} sm={4}>
+						<FaFaAndRose src={fafa_rose} alt="发发与玫瑰" />
+					</Col>
+				</Row>
+				<hr />
+				<Row align="middle">
+					<Typography variant="h5">歌曲集</Typography>
+					<LibraryMusicIcon />
+				</Row>
 				{/* 唱歌视频 */}
-				<VideoList cateId={process.env.REACT_APP_VOD_CHANGGE_CATE_ID} emptyImage={fafa_1} />
+				<VideoList cateId={REACT_APP_VOD_CHANGGE_CATE_ID} emptyImage={fafa_1} />
 			</TabPanel>
 			<TabPanel value={value} index={1}>
 				{/* 直播剪辑 */}
-				<VideoList cateId={process.env.REACT_APP_VOD_ZHIBO_CATE_ID} emptyImage={fafa_2} />
+				<VideoList cateId={REACT_APP_VOD_ZHIBO_CATE_ID} emptyImage={fafa_2} />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
 				{/* 茶话会文字视频 */}
-				<VideoList cateId={process.env.REACT_APP_VOD_CHAHUAHUI_CATE_ID} emptyImage={fafa_3} />
+				<VideoList cateId={REACT_APP_VOD_CHAHUAHUI_CATE_ID} emptyImage={fafa_3} />
 			</TabPanel>
 			<TabPanel value={value} index={3}>
 				{/* 游戏视频 */}
-				<VideoList cateId={process.env.REACT_APP_VOD_YOUXI_CATE_ID} emptyImage={fafa_4} />
+				<VideoList cateId={REACT_APP_VOD_YOUXI_CATE_ID} emptyImage={fafa_4} />
 			</TabPanel>
 			<TabPanel value={value} index={4}>
 				{/* 日常 */}
-				<VideoList cateId={process.env.REACT_APP_VOD_RICHANG_CATE_ID} emptyImage={fafa_5} />
+				<VideoList cateId={REACT_APP_VOD_RICHANG_CATE_ID} emptyImage={fafa_5} />
 			</TabPanel>
 		</>
 	)
