@@ -1,6 +1,7 @@
 import { Tab, Tabs, Typography } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
+import FavoriteIcon from '@material-ui/icons/Favorite'
 import LibraryMusicIcon from '@material-ui/icons/LibraryMusic'
 import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import { Col, Row } from 'antd'
@@ -69,7 +70,7 @@ const ChannelPage: FC = () => {
 			<img src={banner} alt="banner" style={{ width: '100%' }} />
 			<Row align="middle" justify="center" style={{ margin: '16px 0px 4px 0px' }}>
 				<Avatar size={80} style={{ marginRight: '2vw' }} />
-				<div style={{ marginRight: '20vw' }}>
+				<div style={{ marginRight: '14vw' }}>
 					<Row align="middle">
 						<Typography variant="h5">陈一发儿</Typography>
 						<MusicNoteIcon color="primary" fontSize="small" style={{ marginBottom: '5px' }} />
@@ -96,6 +97,12 @@ const ChannelPage: FC = () => {
 				<Tab label="日常" />
 			</Tabs>
 			<TabPanel value={value} index={0}>
+				<Row align="middle">
+					<Typography variant="h5" gutterBottom>
+						作品集
+					</Typography>
+					<FavoriteIcon style={{ color: 'crimson', marginBottom: '8px' }} />
+				</Row>
 				<Row>
 					{/* 主题曲置顶 */}
 					<Col xs={24} sm={20} md={16} lg={12} xl={8}>
