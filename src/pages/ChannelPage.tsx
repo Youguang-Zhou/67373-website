@@ -134,23 +134,23 @@ const ChannelPage: FC = () => {
 					<LibraryMusicIcon />
 				</Row>
 				{/* 唱歌视频 */}
-				<VideoList cateId={REACT_APP_VOD_CHANGGE_CATE_ID} emptyImage={fafa_1} />
+				<VideoList cateId={REACT_APP_VOD_CHANGGE_CATE_ID} emptyImage={fafa_1} pagination />
 			</TabPanel>
 			<TabPanel value={value} index={1}>
 				{/* 直播剪辑 */}
-				<VideoList cateId={REACT_APP_VOD_ZHIBO_CATE_ID} emptyImage={fafa_2} />
+				<VideoList cateId={REACT_APP_VOD_ZHIBO_CATE_ID} emptyImage={fafa_2} pagination />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
 				{/* 茶话会文字视频 */}
-				<VideoList cateId={REACT_APP_VOD_CHAHUAHUI_CATE_ID} emptyImage={fafa_3} />
+				<VideoList cateId={REACT_APP_VOD_CHAHUAHUI_CATE_ID} emptyImage={fafa_3} pagination />
 			</TabPanel>
 			<TabPanel value={value} index={3}>
 				{/* 游戏视频 */}
-				<VideoList cateId={REACT_APP_VOD_YOUXI_CATE_ID} emptyImage={fafa_4} />
+				<VideoList cateId={REACT_APP_VOD_YOUXI_CATE_ID} emptyImage={fafa_4} pagination />
 			</TabPanel>
 			<TabPanel value={value} index={4}>
 				{/* 日常 */}
-				<VideoList cateId={REACT_APP_VOD_RICHANG_CATE_ID} emptyImage={fafa_5} />
+				<VideoList cateId={REACT_APP_VOD_RICHANG_CATE_ID} emptyImage={fafa_5} pagination />
 			</TabPanel>
 		</>
 	)
