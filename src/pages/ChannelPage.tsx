@@ -36,9 +36,13 @@ const {
 
 const { Item } = Carousel
 
-const CarouselLink = styled(Link)`
+const CLink = styled(Link)`
 	display: flex;
 	justify-content: center;
+`
+const CImage = styled.img`
+	height: intrinsic;
+	width: 100%;
 `
 
 const FaFaAndRose = styled.img`
@@ -108,19 +112,19 @@ const ChannelPage: FC = () => {
 					<Col xs={24} sm={20} md={16} lg={12} xl={8}>
 						<Carousel>
 							<Item>
-								<CarouselLink to={`/watch/${REACT_APP_VOD_TONGHUAZHEN_VIDEO_ID}`}>
-									<img src={tonghuazhen} alt="童话镇" />
-								</CarouselLink>
+								<CLink to={`/watch/${REACT_APP_VOD_TONGHUAZHEN_VIDEO_ID}`} target="_blank">
+									<CImage src={tonghuazhen} alt="童话镇" />
+								</CLink>
 							</Item>
 							<Item>
-								<CarouselLink to={`/watch/${REACT_APP_VOD_APOSHUO_VIDEO_ID}`}>
-									<img src={aposhuo} alt="阿婆说" />
-								</CarouselLink>
+								<CLink to={`/watch/${REACT_APP_VOD_APOSHUO_VIDEO_ID}`} target="_blank">
+									<CImage src={aposhuo} alt="阿婆说" />
+								</CLink>
 							</Item>
 							<Item>
-								<CarouselLink to={`/watch/${REACT_APP_VOD_XIANSHANGYOUCHUNQIU_VIDEO_ID}`}>
-									<img src={xianshangyouchunqiu} alt="弦上有春秋" />
-								</CarouselLink>
+								<CLink to={`/watch/${REACT_APP_VOD_XIANSHANGYOUCHUNQIU_VIDEO_ID}`} target="_blank">
+									<CImage src={xianshangyouchunqiu} alt="弦上有春秋" />
+								</CLink>
 							</Item>
 						</Carousel>
 					</Col>

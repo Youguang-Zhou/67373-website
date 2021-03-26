@@ -64,7 +64,7 @@ const VideoCard: FC<IVideoCard> = ({ info }: IVideoCard) => {
 	return (
 		<Col xs={24} sm={12} md={12} lg={8} xl={6}>
 			<Card ref={ref}>
-				<Link to={`/watch/${videoId}`}>
+				<Link to={`/watch/${videoId}`} target="_blank">
 					{/* 统一视频封面高度，由其宽度决定，按照16:9的尺寸 */}
 					<div style={{ position: 'relative', height: (9 / 16) * width }}>
 						<Cover variant="top" src={coverURL} />
