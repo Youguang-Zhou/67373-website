@@ -81,6 +81,8 @@ const VideoList: FC<IVideoList> = ({ cateId, emptyImage, pagination }: IVideoLis
 						setVideos(videoList)
 						if (total % PAGE_SIZE === videoList.length) {
 							setHasMore(false)
+						} else {
+							setHasMore(true)
 						}
 					} else {
 						// 如果是滚动模式，则把新视频加在原有的视频的后面
