@@ -6,6 +6,7 @@ import moment from 'moment'
 import 'moment/locale/zh-cn'
 import React, { FC } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import Footer from './components/Footer'
 import Header from './components/Header'
 import ChannelPage from './pages/ChannelPage'
 import HomePage from './pages/HomePage'
@@ -28,6 +29,7 @@ const App: FC = () => (
 					<Route exact path="/67373" component={LivePage} />
 					<Route path="/" component={HomePage} />
 				</Switch>
+				<Footer />
 			</BrowserRouter>
 		</ConfigProvider>
 	</ThemeProvider>
