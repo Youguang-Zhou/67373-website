@@ -17,6 +17,7 @@ const SpinContainer = styled.div`
 const BackTop = styled(AntdBackTop)`
 	height: auto;
 	width: auto;
+	margin-bottom: 6rem;
 `
 
 const Pagination = styled(AntdPagination)`
