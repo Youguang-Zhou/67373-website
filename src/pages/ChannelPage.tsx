@@ -109,7 +109,7 @@ const ChannelPage: FC = () => {
 				</Row>
 				<Row>
 					{/* 主题曲置顶 */}
-					<Col xs={24} sm={20} md={16} lg={12} xl={8}>
+					<Col sm={24} md={16} lg={12} xl={8}>
 						<Carousel>
 							<Item>
 								<CLink to={`/watch/${REACT_APP_VOD_TONGHUAZHEN_VIDEO_ID}`} target="_blank">
@@ -128,7 +128,7 @@ const ChannelPage: FC = () => {
 							</Item>
 						</Carousel>
 					</Col>
-					<Col xs={0} sm={4}>
+					<Col sm={0} md={8}>
 						<FaFaAndRose src={fafa_rose} alt="发发与玫瑰" />
 					</Col>
 				</Row>
