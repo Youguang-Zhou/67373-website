@@ -12,7 +12,7 @@ const VideoPlayPage: FC = () => {
 
 	useEffect(() => {
 		getPlayURL(id).then(({ videoBase, playInfoList }) => {
-			document.title = `${videoBase.title}_67373UPUP ٩(˃̶͈̀௰˂̶͈́)و`
+			document.title = `${videoBase.title}_67373UPUP (=^ェ^=)`
 			setTitle(videoBase.title)
 			setPlayOptions({
 				sources: [
