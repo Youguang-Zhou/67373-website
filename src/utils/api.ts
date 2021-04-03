@@ -28,4 +28,6 @@ const getVideoList = async (cateId: number | undefined, pageNo = 1, pageSize = 1
 
 const getPlayURL = (id: string): Promise<IVideoPlayDetail> => API.get(`videos/${id}`).then(({ data }) => data)
 
-export { getVideoList, getPlayURL }
+const getLiveURL = (): Promise<{ liveURL: string }> => API.get('live').then(({ data }) => data)
+
+export { getVideoList, getPlayURL, getLiveURL }
