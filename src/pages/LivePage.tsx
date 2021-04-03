@@ -1,4 +1,3 @@
-import Typography from '@material-ui/core/Typography'
 import { Col, Empty, Row } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
@@ -29,16 +28,8 @@ const LivePage: FC = () => {
 		<main className="mt-3">
 			<Row justify="center">
 				<Col xs={24} sm={24} md={24} lg={16} xl={16}>
-					{isLive ? (
-						<>
-							{playOptions && <VideoPlayer options={playOptions} onLoad={handlePlayerLoad} />}
-							<Typography variant="h5" gutterBottom style={{ marginTop: '10px' }}>
-								内部测试中...
-							</Typography>
-							<Typography variant="h5" gutterBottom>
-								直播原地址：https://www.youtube.com/watch?v=2YkIEOFlKOk
-							</Typography>
-						</>
+					{isLive && playOptions ? (
+						<VideoPlayer options={playOptions} onLoad={handlePlayerLoad} />
 					) : (
 						<Empty
 							image={goodnight67373}
