@@ -2,7 +2,7 @@ import { Col, Typography } from 'antd'
 import moment from 'moment'
 import React, { FC } from 'react'
 import { Card as BootStrapCard } from 'react-bootstrap'
-import { useDimensions } from 'react-dimensions-hook'
+import { useMeasure } from 'react-use'
 import styled from 'styled-components'
 import Link from '../components/Link'
 import { IVideo } from '../utils/interfaces'
@@ -24,10 +24,17 @@ const Title = styled(Typography.Paragraph)`
 `
 
 const Cover = styled(Card.Img)`
-	background-color: black;
 	max-height: 100%;
 	max-width: 100%;
 	object-fit: contain;
+`
+
+const CoverContainer = styled.div`
+	background-color: black;
+	border-top-left-radius: calc(0.25rem - 1px);
+	border-top-right-radius: calc(0.25rem - 1px);
+	height: ${({ height }: { height: number }) => height}px;
+	position: relative;
 `
 
 const DurationTag = styled.span`
@@ -35,7 +42,6 @@ const DurationTag = styled.span`
 	bottom: 0;
 	color: #fff;
 	font-size: 0.8rem;
-	margin: 1px 0px;
 	padding: 0 5px;
 	position: absolute;
 	right: 0;
@@ -50,10 +56,7 @@ interface IVideoCard {
 
 const VideoCard: FC<IVideoCard> = ({ info }: IVideoCard) => {
 	const { videoId, createTime, title, duration, coverURL } = info
-	const {
-		ref,
-		dimensions: { width },
-	} = useDimensions()
+	const [ref, { width }] = useMeasure()
 
 	// 格式化duration，单位是秒
 	const formatDuration = (duration: number) => {
@@ -66,10 +69,10 @@ const VideoCard: FC<IVideoCard> = ({ info }: IVideoCard) => {
 			<Card ref={ref}>
 				<Link to={`/watch/${videoId}`} target="_blank">
 					{/* 统一视频封面高度，由其宽度决定，按照16:9的尺寸 */}
-					<div style={{ position: 'relative', height: (9 / 16) * width }}>
+					<CoverContainer height={(9 / 16) * width || 200}>
 						<Cover variant="top" src={coverURL} />
 						<DurationTag>{formatDuration(duration)}</DurationTag>
-					</div>
+					</CoverContainer>
 					<Body>
 						<Title ellipsis={{ rows: 2, tooltip: true }}>{title}</Title>
 						<small className="text-muted">{moment().to(createTime)}</small>

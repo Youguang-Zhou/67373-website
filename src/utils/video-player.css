@@ -17,7 +17,7 @@
        Try increasing it to 15px and see what happens. */
 	font-size: 17px;
 	/* The main font color changes the ICON COLORS as well as the text */
-	color: orange;
+	color: #eee;
 }
 
 /* The default color of control backgrounds is mostly black but with a little
@@ -28,34 +28,31 @@
 	/* IE8 - has no alpha support */
 	background-color: #000;
 	/* Opacity: 1.0 = 100%, 0.0 = 0% */
-	background-color: rgba(0, 0, 0, 0.7);
-}
-
-/* Slider - used for Volume bar and Progress bar */
-.video-js .vjs-slider {
-	background-color: #545454;
-	background-color: rgba(84, 84, 84, 0.5);
+	background: linear-gradient(to top, rgb(0 0 0 / 27%), transparent 73%);
 }
 
 /* The slider bar color is used for the progress bar and the volume bar
-     (the first two can be removed after a fix that's coming) */
+(the first two can be removed after a fix that's coming) */
 .video-js .vjs-volume-level,
 .video-js .vjs-play-progress,
 .video-js .vjs-slider-bar {
 	background: orange;
 }
 
-/* 声音进度条右部分的颜色 */
-.video-js .vjs-volume-bar.vjs-slider-bar.vjs-slider {
-	background-color: rgba(84, 84, 84, 0.5);
+/* Slider - used for Volume bar and Progress bar */
+.video-js .vjs-slider {
+	/* For IE8 we'll lighten the color */
+	background-color: #fff;
+	/* Otherwise we'll rely on stacked opacities */
+	background-color: rgb(255 255 255 / 27%);
 }
 
 /* The main progress bar also has a bar that shows how much has been loaded. */
 .video-js .vjs-load-progress {
 	/* For IE8 we'll lighten the color */
-	background: #949494;
+	background: #fff;
 	/* Otherwise we'll rely on stacked opacities */
-	background: rgba(84, 84, 84, 0.5);
+	background: rgb(255 255 255 / 27%);
 }
 
 /* The load progress bar also has internal divs that represent
@@ -64,7 +61,7 @@
 	/* For IE8 we'll lighten the color */
 	background: #d4d4d4;
 	/* Otherwise we'll rely on stacked opacities */
-	background: rgba(84, 84, 84, 0.75);
+	background: #d4d4d473;
 }
 
 /* 默认显示进度条 */
@@ -101,4 +98,13 @@
 /* 隐藏按钮的边框 */
 .video-js button:focus {
 	outline: 0;
+}
+
+.vjs-play-progress.vjs-slider-bar .vjs-time-tooltip {
+	display: none !important;
+}
+
+.vjs-mouse-display .vjs-time-tooltip {
+	background: transparent;
+	top: -2.3em;
 }
