@@ -52,6 +52,7 @@ const VideoPlayer: FC<IVideoPlayer> = ({ options, onLoad }: IVideoPlayer) => {
 				hotkeys: ({ which }) => setupHotkeys(which),
 			},
 		})
+		playerRef.current.volume(0.7)
 		onLoad && onLoad(playerRef.current)
 		return () => {
 			if (playerRef.current) {
