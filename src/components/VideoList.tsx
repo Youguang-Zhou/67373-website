@@ -72,11 +72,8 @@ const VideoList: FC<IVideoList> = ({ cateId, emptyImage, pagination }: IVideoLis
 
 	useEffect(() => {
 		getVideoList(Number(cateId), pageNo, PAGE_SIZE)
-			.then((res) => {
-				if (!res) {
-					setHasMore(false)
-				} else {
-					const { videoList, total } = res
+			.then(({ requestId, total, videoList }) => {
+				if (requestId) {
 					if (pagination) {
 						// 如果是分页模式，则直接覆盖原有的视频
 						setVideos(videoList)
@@ -90,13 +87,12 @@ const VideoList: FC<IVideoList> = ({ cateId, emptyImage, pagination }: IVideoLis
 						setVideos(videos.concat(videoList))
 					}
 					setTotal(total)
+				} else {
+					setHasMore(false)
 				}
 				setIsLoading(false)
 			})
-			.catch(() => {
-				console.log('没有更多视频了')
-				setHasMore(false)
-			})
+			.catch(() => setHasMore(false))
 	}, [pageNo])
 
 	const handleInfiniteOnLoad = () => {
