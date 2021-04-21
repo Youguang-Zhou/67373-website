@@ -2,6 +2,7 @@ import axios from 'axios'
 import { IVideo } from './interfaces'
 
 interface IVideoList {
+	requestId: string
 	total: number
 	videoList: IVideo[]
 }
