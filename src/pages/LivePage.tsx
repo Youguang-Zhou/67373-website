@@ -4,6 +4,7 @@ import moment from 'moment'
 import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
+import beautiful_fafa from '../assets/images/beautiful_fafa.png'
 import goodnight67373 from '../assets/images/goodnight67373.jpg'
 import VideoPlayer from '../components/VideoPlayer'
 import { getLiveTime, getLiveURL } from '../utils/api'
@@ -23,7 +24,7 @@ const CounterBox = styled.div`
 
 const useStyles = makeStyles({
 	text: { color: '#fafafafa', fontFamily: 'MFYueYuan', margin: '1vw' },
-	image: { height: '650px' },
+	image: { height: '740px' },
 })
 
 const LivePage: FC = () => {
@@ -80,42 +81,55 @@ const LivePage: FC = () => {
 
 	return (
 		<main className="mt-3">
-			{youtubeURL && liveCover ? (
-				<>
-					<BackGround className={classes.image} src={liveCover} alt="background" />
-					<CounterBox className={classes.image}>
-						<h2 className={classes.text} style={{ fontSize: '5vw' }}>
-							好久不见
-						</h2>
-						<Row align="middle" justify="center">
-							{counter.map((value, index) => (
-								<h1
-									key={index}
-									className={classes.text}
-									style={{ fontSize: index % 2 == 0 ? '10vw' : '3vw' }}
-								>
-									{value}
-								</h1>
-							))}
-						</Row>
-						<h5 className={classes.text}>{liveTime}</h5>
-						<h5 className={classes.text}>{youtubeURL}</h5>
-					</CounterBox>
-				</>
-			) : (
+			{isLive && playOptions ? (
 				<Row justify="center">
 					<Col xs={24} sm={24} md={24} lg={16} xl={16}>
-						{isLive && playOptions ? (
-							<VideoPlayer options={playOptions} onLoad={handlePlayerLoad} />
-						) : (
+						<VideoPlayer options={playOptions} onLoad={handlePlayerLoad} />
+						<div>转播功能内测中，如有卡顿或掉线，敬请谅解: )</div>
+						<div>{`直播原地址: ${youtubeURL}`}</div>
+					</Col>
+				</Row>
+			) : (
+				<>
+					{youtubeURL && liveCover ? (
+						<>
+							<BackGround className={classes.image} src={liveCover} alt="background" />
+							<CounterBox className={classes.image}>
+								<h2 className={classes.text} style={{ fontSize: '5vw' }}>
+									好久不见
+								</h2>
+								<Row align="middle" justify="center">
+									{counter.map((value, index) => (
+										<h1
+											key={index}
+											className={classes.text}
+											style={{ fontSize: index % 2 == 0 ? '10vw' : '3vw' }}
+										>
+											{value}
+										</h1>
+									))}
+								</Row>
+								<Row align="middle" justify="center">
+									<Col>
+										<img src={beautiful_fafa} alt="beautiful_fafa" style={{ height: '10vw' }} />
+									</Col>
+									<Col>
+										<h5 className={classes.text}>{liveTime}</h5>
+										<h5 className={classes.text}>{youtubeURL}</h5>
+									</Col>
+								</Row>
+							</CounterBox>
+						</>
+					) : (
+						<Row justify="center">
 							<Empty
 								image={goodnight67373}
 								imageStyle={{ height: '15rem' }}
 								description={<span style={{ fontSize: 'xx-large' }}>See you next time~</span>}
 							/>
-						)}
-					</Col>
-				</Row>
+						</Row>
+					)}
+				</>
 			)}
 		</main>
 	)
