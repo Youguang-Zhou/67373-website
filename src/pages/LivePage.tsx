@@ -1,11 +1,10 @@
-import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Col, Empty, Row } from 'antd'
 import moment from 'moment'
 import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
-import goodnight67373 from '../assets/goodnight67373.jpg'
+import goodnight67373 from '../assets/images/goodnight67373.jpg'
 import VideoPlayer from '../components/VideoPlayer'
 import { getLiveTime, getLiveURL } from '../utils/api'
 
@@ -18,12 +17,12 @@ const BackGround = styled.img`
 `
 
 const CounterBox = styled.div`
-	padding-top: 12vw;
+	padding-top: 3vw;
 	text-align: center;
 `
 
 const useStyles = makeStyles({
-	text: { color: '#fafafafa' },
+	text: { color: '#fafafafa', fontFamily: 'MFYueYuan', margin: '1vw' },
 	image: { height: '650px' },
 })
 
@@ -51,7 +50,7 @@ const LivePage: FC = () => {
 		getLiveTime()
 			.then(({ time, url, cover }) => {
 				setLiveTime(time)
-				setYoutubeURL(url)
+				setYoutubeURL(url.slice(12))
 				setLiveCover(cover)
 				timer = window.setInterval(() => {
 					const currTime = moment(new Date())
@@ -85,25 +84,22 @@ const LivePage: FC = () => {
 				<>
 					<BackGround className={classes.image} src={liveCover} alt="background" />
 					<CounterBox className={classes.image}>
+						<h2 className={classes.text} style={{ fontSize: '5vw' }}>
+							好久不见
+						</h2>
 						<Row align="middle" justify="center">
 							{counter.map((value, index) => (
-								<Typography
+								<h1
 									key={index}
-									variant="h1"
 									className={classes.text}
 									style={{ fontSize: index % 2 == 0 ? '10vw' : '3vw' }}
-									gutterBottom
 								>
 									{value}
-								</Typography>
+								</h1>
 							))}
 						</Row>
-						<Typography variant="h5" className={classes.text} gutterBottom>
-							{liveTime}
-						</Typography>
-						<Typography variant="h5" className={classes.text} gutterBottom>
-							{youtubeURL}
-						</Typography>
+						<h5 className={classes.text}>{liveTime}</h5>
+						<h5 className={classes.text}>{youtubeURL}</h5>
 					</CounterBox>
 				</>
 			) : (
