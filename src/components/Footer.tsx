@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-// import beian_icon from '../assets/beian_icon.png'
+// import beian_icon from '../assets/images/beian_icon.png'
 
 const StyledFooter = styled.footer`
 	padding: 15px;

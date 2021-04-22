@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { Nav, Navbar } from 'react-bootstrap'
 import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
-import logo from '../assets/logo_v2.jpg'
+import logo from '../assets/images/logo_v2.jpg'
 
 const { Brand, Toggle, Collapse } = Navbar
 

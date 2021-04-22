@@ -1,6 +1,6 @@
 import { Avatar as AntdAvatar } from 'antd'
 import React, { CSSProperties, FC } from 'react'
-import cat from '../assets/cat.jpeg'
+import cat from '../assets/images/cat.jpeg'
 
 interface IAvatar {
 	className?: string
