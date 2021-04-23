@@ -9,6 +9,11 @@ const { Brand, Toggle, Collapse } = Navbar
 const Logo = styled.img`
 	height: 56.5px;
 	width: 233.2px;
+
+	@media (max-width: 360px) {
+		height: 45.2px;
+		width: 186.56px;
+	}
 `
 
 const Link = styled(Nav.Link)`
