@@ -99,7 +99,7 @@ const LivePage: FC = () => {
 						<>
 							<BackGround className={classes.image} src={liveCover} alt="background" />
 							<CounterBox className={classes.image}>
-								<h2 className={classes.text} style={{ fontSize: 'calc(3vw + 3rem)' }}>
+								<h2 className={classes.text} style={{ fontSize: 'calc(3vw + 2rem)' }}>
 									好久不见
 								</h2>
 								<Row align="middle" justify="center">
@@ -107,7 +107,7 @@ const LivePage: FC = () => {
 										<h1
 											key={index}
 											className={classes.text}
-											style={{ fontSize: index % 2 == 0 ? 'calc(5vw + 3rem)' : '3vw' }}
+											style={{ fontSize: index % 2 == 0 ? 'calc(5vw + 2rem)' : '3vw' }}
 										>
 											{value}
 										</h1>
@@ -115,7 +115,7 @@ const LivePage: FC = () => {
 								</Row>
 								<Row align="middle" justify="center">
 									<Col xs={24} sm={24} md={24} lg={3} xl={3}>
-										<img src={beautiful_fafa} alt="beautiful_fafa" style={{ height: '12rem' }} />
+										<img src={beautiful_fafa} alt="beautiful_fafa" style={{ height: '10rem' }} />
 									</Col>
 									<Col xs={24} sm={24} md={24} lg={6} xl={6}>
 										<h4 className={classes.text}>{liveTime}</h4>
