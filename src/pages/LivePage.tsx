@@ -23,7 +23,7 @@ const CounterBox = styled.div`
 `
 
 const useStyles = makeStyles({
-	text: { color: '#fafafafa', fontFamily: 'MFYueYuan', margin: '1vw' },
+	text: { color: '#fafafafa', fontFamily: 'MFYueYuan', margin: '1rem 1vw' },
 	image: { height: '740px' },
 })
 
@@ -60,7 +60,11 @@ const LivePage: FC = () => {
 					currTime.isBefore(liveTime) ? setIsLive(false) : setIsLive(true)
 					// 计算倒计时
 					const diff = liveTime.diff(currTime)
-					const duration = moment.duration(diff).format('d:hh:mm:ss').split(':')
+					let duration = moment.duration(diff).format('d:hh:mm:ss').split(':')
+					// 判断当时间不足一天的时候就在最前面补上0（天）
+					if (duration.length === 3) {
+						duration = ['0', ...duration]
+					}
 					setCounter([
 						`${duration[0]}`,
 						'天',
@@ -95,7 +99,7 @@ const LivePage: FC = () => {
 						<>
 							<BackGround className={classes.image} src={liveCover} alt="background" />
 							<CounterBox className={classes.image}>
-								<h2 className={classes.text} style={{ fontSize: '5vw' }}>
+								<h2 className={classes.text} style={{ fontSize: 'calc(3vw + 3rem)' }}>
 									好久不见
 								</h2>
 								<Row align="middle" justify="center">
@@ -103,19 +107,19 @@ const LivePage: FC = () => {
 										<h1
 											key={index}
 											className={classes.text}
-											style={{ fontSize: index % 2 == 0 ? '10vw' : '3vw' }}
+											style={{ fontSize: index % 2 == 0 ? 'calc(5vw + 3rem)' : '3vw' }}
 										>
 											{value}
 										</h1>
 									))}
 								</Row>
 								<Row align="middle" justify="center">
-									<Col>
-										<img src={beautiful_fafa} alt="beautiful_fafa" style={{ height: '10vw' }} />
+									<Col xs={24} sm={24} md={24} lg={3} xl={3}>
+										<img src={beautiful_fafa} alt="beautiful_fafa" style={{ height: '12rem' }} />
 									</Col>
-									<Col>
-										<h5 className={classes.text}>{liveTime}</h5>
-										<h5 className={classes.text}>{youtubeURL}</h5>
+									<Col xs={24} sm={24} md={24} lg={6} xl={6}>
+										<h4 className={classes.text}>{liveTime}</h4>
+										<h4 className={classes.text}>{youtubeURL}</h4>
 									</Col>
 								</Row>
 							</CounterBox>
