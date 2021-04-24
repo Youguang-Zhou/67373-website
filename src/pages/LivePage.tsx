@@ -60,11 +60,7 @@ const LivePage: FC = () => {
 					currTime.isBefore(liveTime) ? setIsLive(false) : setIsLive(true)
 					// 计算倒计时
 					const diff = liveTime.diff(currTime)
-					let duration = moment.duration(diff).format('d:hh:mm:ss').split(':')
-					// 判断当时间不足一天的时候就在最前面补上0（天）
-					if (duration.length === 3) {
-						duration = ['0', ...duration]
-					}
+					const duration = moment.duration(diff).format('d:hh:mm:ss', { trim: false }).split(':')
 					setCounter([
 						`${duration[0]}`,
 						'天',
