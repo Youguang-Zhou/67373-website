@@ -37,6 +37,7 @@ const LivePage: FC = () => {
 	const [playOptions, setPlayOptions] = useState<VideoJsPlayerOptions>()
 
 	useEffect(() => {
+		// 获取转播地址
 		getLiveURL().then(({ liveURL }) =>
 			setPlayOptions({
 				sources: [
@@ -47,6 +48,7 @@ const LivePage: FC = () => {
 				],
 			})
 		)
+		// 获取直播时间，封面和地址
 		let timer = 0
 		getLiveTime()
 			.then(({ time, url, cover }) => {
