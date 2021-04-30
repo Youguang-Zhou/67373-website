@@ -1,8 +1,11 @@
-import React, { FC } from 'react'
+import { BellOutlined } from '@ant-design/icons'
+import { Row } from 'antd'
+import React, { FC, useEffect, useState } from 'react'
 import { Nav, Navbar } from 'react-bootstrap'
 import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import logo from '../assets/images/logo_v2.jpg'
+import { getLiveTime } from '../utils/api'
 
 const { Brand, Toggle, Collapse } = Navbar
 
@@ -24,6 +27,13 @@ const Link = styled(Nav.Link)`
 
 const Header: FC = () => {
 	const { pathname } = useLocation()
+	const [hasLive, setHasLive] = useState(false)
+
+	useEffect(() => {
+		getLiveTime()
+			.then((data) => data && setHasLive(true))
+			.catch(() => setHasLive(false))
+	}, [])
 
 	return (
 		<Navbar bg="white" expand="lg">
@@ -35,7 +45,12 @@ const Header: FC = () => {
 				<Nav activeKey={pathname}>
 					<Link href="/">首页</Link>
 					<Link href="/channel">频道</Link>
-					<Link href="/67373">67373</Link>
+					<Link href="/67373">
+						<Row align="middle" justify="center">
+							<span>67373</span>
+							{hasLive && <BellOutlined style={{ color: '#164080c1' }} />}
+						</Row>
+					</Link>
 				</Nav>
 			</Collapse>
 		</Navbar>
