@@ -28,7 +28,7 @@
 	/* IE8 - has no alpha support */
 	background-color: #000;
 	/* Opacity: 1.0 = 100%, 0.0 = 0% */
-	background: linear-gradient(to top, rgb(0 0 0 / 27%), transparent 73%);
+	background: linear-gradient(to top, rgb(0 0 0 / 67%), transparent);
 }
 
 /* The slider bar color is used for the progress bar and the volume bar
