@@ -55,7 +55,7 @@ interface IVideoCard {
 }
 
 const VideoCard: FC<IVideoCard> = ({ info }: IVideoCard) => {
-	const { videoId, createTime, title, duration, coverURL } = info
+	const { videoId, creationTime, title, duration, coverURL } = info
 	const [ref, { width }] = useMeasure()
 
 	// 格式化duration，单位是秒
@@ -75,7 +75,7 @@ const VideoCard: FC<IVideoCard> = ({ info }: IVideoCard) => {
 					</CoverContainer>
 					<Body>
 						<Title ellipsis={{ rows: 2, tooltip: true }}>{title}</Title>
-						<small className="text-muted">{moment().to(createTime)}</small>
+						<small className="text-muted">{moment().to(creationTime)}</small>
 					</Body>
 				</Link>
 			</Card>

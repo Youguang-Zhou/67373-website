@@ -4,11 +4,11 @@ import { IVideo } from './interfaces'
 interface IVideoList {
 	requestId: string
 	total: number
-	videoList: IVideo[]
+	videoList: { video: IVideo[] }
 }
 
 interface IVideoPlayDetail {
-	playInfoList: Array<{ playURL: string }>
+	playInfoList: { playInfo: Array<{ playURL: string }> }
 	videoBase: { title: string }
 }
 
