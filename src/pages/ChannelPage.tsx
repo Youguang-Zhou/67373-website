@@ -15,6 +15,7 @@ import fafa_2 from '../assets/images/fafa_2.png'
 import fafa_3 from '../assets/images/fafa_3.png'
 import fafa_4 from '../assets/images/fafa_4.png'
 import fafa_5 from '../assets/images/fafa_5.png'
+import fafa_6 from '../assets/images/fafa_6.png'
 import fafa_rose from '../assets/images/fafa_rose.png'
 import tonghuazhen from '../assets/images/tonghuazhen.jpeg'
 import xianshangyouchunqiu from '../assets/images/xianshangyouchunqiu.jpeg'
@@ -28,7 +29,8 @@ const {
 	REACT_APP_VOD_APOSHUO_VIDEO_ID,
 	REACT_APP_VOD_XIANSHANGYOUCHUNQIU_VIDEO_ID,
 	REACT_APP_VOD_CHANGGE_CATE_ID,
-	REACT_APP_VOD_ZHIBO_CATE_ID,
+	REACT_APP_VOD_ZHIBOHUIFANG_CATE_ID,
+	REACT_APP_VOD_ZHIBOJIANJI_CATE_ID,
 	REACT_APP_VOD_CHAHUAHUI_CATE_ID,
 	REACT_APP_VOD_YOUXI_CATE_ID,
 	REACT_APP_VOD_RICHANG_CATE_ID,
@@ -95,6 +97,7 @@ const ChannelPage: FC = () => {
 				onChange={handleChange}
 			>
 				<Tab label="唱歌视频" />
+				<Tab label="直播回放" />
 				<Tab label="直播剪辑" />
 				<Tab label="茶话会文字视频" />
 				<Tab label="游戏视频" />
@@ -141,20 +144,24 @@ const ChannelPage: FC = () => {
 				<VideoList cateId={REACT_APP_VOD_CHANGGE_CATE_ID} emptyImage={fafa_1} pagination />
 			</TabPanel>
 			<TabPanel value={value} index={1}>
-				{/* 直播剪辑 */}
-				<VideoList cateId={REACT_APP_VOD_ZHIBO_CATE_ID} emptyImage={fafa_2} pagination />
+				{/* 油管回放 */}
+				<VideoList cateId={REACT_APP_VOD_ZHIBOHUIFANG_CATE_ID} emptyImage={fafa_2} pagination />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
-				{/* 茶话会文字视频 */}
-				<VideoList cateId={REACT_APP_VOD_CHAHUAHUI_CATE_ID} emptyImage={fafa_3} pagination />
+				{/* 直播剪辑 */}
+				<VideoList cateId={REACT_APP_VOD_ZHIBOJIANJI_CATE_ID} emptyImage={fafa_3} pagination />
 			</TabPanel>
 			<TabPanel value={value} index={3}>
-				{/* 游戏视频 */}
-				<VideoList cateId={REACT_APP_VOD_YOUXI_CATE_ID} emptyImage={fafa_4} pagination />
+				{/* 茶话会文字视频 */}
+				<VideoList cateId={REACT_APP_VOD_CHAHUAHUI_CATE_ID} emptyImage={fafa_4} pagination />
 			</TabPanel>
 			<TabPanel value={value} index={4}>
+				{/* 游戏视频 */}
+				<VideoList cateId={REACT_APP_VOD_YOUXI_CATE_ID} emptyImage={fafa_5} pagination />
+			</TabPanel>
+			<TabPanel value={value} index={5}>
 				{/* 日常 */}
-				<VideoList cateId={REACT_APP_VOD_RICHANG_CATE_ID} emptyImage={fafa_5} pagination />
+				<VideoList cateId={REACT_APP_VOD_RICHANG_CATE_ID} emptyImage={fafa_6} pagination />
 			</TabPanel>
 		</>
 	)
