@@ -26,7 +26,7 @@ const VideoPlayPage: FC = () => {
 	}, [id])
 
 	return (
-		<main style={{ margin: '1% 3%' }}>
+		<main style={{ margin: '0vw 2vw' }}>
 			<Row>
 				<Col xs={24} sm={24} md={24} lg={16} xl={16}>
 					<h1 style={{ fontSize: 'calc(0.8em + 1.2vw)' }}>{title}</h1>
