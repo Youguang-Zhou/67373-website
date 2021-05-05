@@ -37,7 +37,7 @@ const Videos = ({ videos }: { videos: IVideo[] }) => (
 		{videos.map((video) => {
 			const info = {
 				videoId: video.videoId,
-				createTime: video.createTime,
+				creationTime: video.creationTime,
 				title: video.title,
 				duration: video.duration,
 				coverURL: video.coverURL,
@@ -72,19 +72,19 @@ const VideoList: FC<IVideoList> = ({ cateId, emptyImage, pagination }: IVideoLis
 
 	useEffect(() => {
 		getVideoList(Number(cateId), pageNo, PAGE_SIZE)
-			.then(({ requestId, total, videoList }) => {
+			.then(({ requestId, total, videoList: { video } }) => {
 				if (requestId) {
 					if (pagination) {
 						// 如果是分页模式，则直接覆盖原有的视频
-						setVideos(videoList)
-						if (total % PAGE_SIZE === videoList.length) {
+						setVideos(video)
+						if (total % PAGE_SIZE === video.length) {
 							setHasMore(false)
 						} else {
 							setHasMore(true)
 						}
 					} else {
 						// 如果是滚动模式，则把新视频加在原有的视频的后面
-						setVideos(videos.concat(videoList))
+						setVideos(videos.concat(video))
 					}
 					setTotal(total)
 				} else {

@@ -1,6 +1,6 @@
 export interface IVideo {
 	coverURL: string
-	createTime: string
+	creationTime: string
 	duration: number
 	title: string
 	videoId: string
