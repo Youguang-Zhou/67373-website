@@ -23,7 +23,12 @@ const CounterBox = styled.div`
 `
 
 const useStyles = makeStyles({
-	text: { color: '#fafafafa', fontFamily: 'MFYueYuan', margin: '1rem 1vw' },
+	text: {
+		color: '#fafafafa',
+		fontFamily: 'MFYueYuan',
+		margin: '1rem 1vw',
+		textShadow: 'black 0.1em 0.1em 0.2em',
+	},
 	image: { height: '740px' },
 })
 
