@@ -45,6 +45,7 @@ const Header: FC = () => {
 				<Nav activeKey={pathname}>
 					<Link href="/">首页</Link>
 					<Link href="/channel">频道</Link>
+					<Link href="/music">音乐</Link>
 					<Link href="/67373">
 						<Row align="middle" justify="center">
 							<span>67373</span>
