@@ -9,7 +9,7 @@ import React, { ChangeEvent, FC, ReactNode, useState } from 'react'
 import { Carousel } from 'react-bootstrap'
 import styled from 'styled-components'
 import aposhuo from '../assets/images/aposhuo.jpeg'
-import banner from '../assets/images/banner.jpeg'
+import channel_banner from '../assets/images/channel_banner.jpeg'
 import fafa_1 from '../assets/images/fafa_1.png'
 import fafa_2 from '../assets/images/fafa_2.png'
 import fafa_3 from '../assets/images/fafa_3.png'
@@ -21,6 +21,7 @@ import tonghuazhen from '../assets/images/tonghuazhen.jpeg'
 import xianshangyouchunqiu from '../assets/images/xianshangyouchunqiu.jpeg'
 import xiruisi from '../assets/images/xiruisi.png'
 import Avatar from '../components/Avatar'
+import Banner from '../components/Banner'
 import Link from '../components/Link'
 import VideoList from '../components/VideoList'
 
@@ -73,7 +74,7 @@ const ChannelPage: FC = () => {
 
 	return (
 		<>
-			<img src={banner} alt="banner" style={{ width: '100%' }} />
+			<Banner src={channel_banner} alt="channel_banner" />
 			<Row align="middle" justify="center" style={{ margin: '16px 0px 4px 0px' }}>
 				<Avatar size={80} style={{ marginRight: '2vw' }} />
 				<div style={{ marginRight: '14vw' }}>
