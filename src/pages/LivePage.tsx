@@ -92,7 +92,7 @@ const LivePage: FC = () => {
 				<Row justify="center">
 					<Col xs={24} sm={24} md={24} lg={16} xl={16}>
 						<VideoPlayer options={playOptions} onLoad={handlePlayerLoad} />
-						<div>转播功能内测中，如有卡顿或掉线，敬请谅解: )</div>
+						<div>转播功能内测中，如有卡顿或掉线，微博联系@青山多妩媚67373</div>
 						<div>{`直播原地址: ${youtubeURL}`}</div>
 					</Col>
 				</Row>
