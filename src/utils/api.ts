@@ -1,16 +1,5 @@
 import axios from 'axios'
-import { IVideo } from './interfaces'
-
-interface IVideoList {
-	requestId: string
-	total: number
-	videoList: { video: IVideo[] }
-}
-
-interface IVideoPlayDetail {
-	playInfoList: { playInfo: Array<{ playURL: string }> }
-	videoBase: { title: string }
-}
+import { IVideoList, IVideoPlayDetail } from './interfaces'
 
 const { NODE_ENV, REACT_APP_API_BASE_URL_PROD, REACT_APP_API_BASE_URL_DEV, REACT_APP_LIVE_TIME_URL } = process.env
 
@@ -26,7 +15,11 @@ const getVideoList = async (cateId: number | undefined, pageNo = 1, pageSize = 1
 	return data
 }
 
-const getPlayURL = (id: string): Promise<IVideoPlayDetail> => API.get(`videos/${id}`).then(({ data }) => data)
+const getAudioList = (): Promise<IVideoList> => API.get('audios').then(({ data }) => data)
+
+const getVideoPlayURL = (id: string): Promise<IVideoPlayDetail> => API.get(`videos/${id}`).then(({ data }) => data)
+
+const getAudioPlayURL = (id: string): Promise<IVideoPlayDetail> => API.get(`audios/${id}`).then(({ data }) => data)
 
 const getLiveURL = (): Promise<{ liveURL: string }> => API.get('live').then(({ data }) => data)
 
@@ -35,4 +28,4 @@ const getLiveTime = (): Promise<{ time: string; url: string; cover: string }> =>
 	// eslint-disable-next-line
 	API.get(REACT_APP_LIVE_TIME_URL!).then(({ data }) => data)
 
-export { getVideoList, getPlayURL, getLiveURL, getLiveTime }
+export { getVideoList, getAudioList, getVideoPlayURL, getAudioPlayURL, getLiveURL, getLiveTime }

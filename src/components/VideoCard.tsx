@@ -5,6 +5,7 @@ import { Card as BootStrapCard } from 'react-bootstrap'
 import { useMeasure } from 'react-use'
 import styled from 'styled-components'
 import Link from '../components/Link'
+import { formatDuration } from '../utils/functions'
 import { IVideo } from '../utils/interfaces'
 
 const Card = styled(BootStrapCard)`
@@ -57,12 +58,6 @@ interface IVideoCard {
 const VideoCard: FC<IVideoCard> = ({ info }: IVideoCard) => {
 	const { videoId, creationTime, title, duration, coverURL } = info
 	const [ref, { width }] = useMeasure()
-
-	// 格式化duration，单位是秒
-	const formatDuration = (duration: number) => {
-		const time = moment.utc(duration * 1000)
-		return time.hour() == 0 ? time.format('mm:ss') : time.format('HH:mm:ss')
-	}
 
 	return (
 		<Col xs={24} sm={12} md={12} lg={8} xl={6}>

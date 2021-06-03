@@ -1,12 +1,12 @@
-import { BackTop as AntdBackTop, Empty, Pagination as AntdPagination, Spin } from 'antd'
+import { BackTop as AntdBackTop, Pagination as AntdPagination, Spin } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import CardDeck from 'react-bootstrap/CardDeck'
 import InfiniteScroll from 'react-infinite-scroller'
 import styled from 'styled-components'
-import love_you from '../assets/images/love_you.png'
 import { getVideoList } from '../utils/api'
 import { IVideo } from '../utils/interfaces'
 import Avatar from './Avatar'
+import Empty from './Empty'
 import VideoCard from './VideoCard'
 
 const SpinContainer = styled.div`
@@ -45,15 +45,6 @@ const Videos = ({ videos }: { videos: IVideo[] }) => (
 			return <VideoCard key={video.videoId} info={info} />
 		})}
 	</CardDeck>
-)
-
-// 没有更多视频的提示
-const NoMoreVideos = ({ emptyImage }: { emptyImage?: string }) => (
-	<Empty
-		image={emptyImage || love_you}
-		imageStyle={{ height: 230 }}
-		description={<span style={{ fontSize: 'x-large' }}>没有更多视频啦</span>}
-	/>
 )
 
 interface IVideoList {
@@ -105,7 +96,7 @@ const VideoList: FC<IVideoList> = ({ cateId, emptyImage, pagination }: IVideoLis
 			{pagination ? (
 				<>
 					<Videos videos={videos} />
-					{!hasMore && <NoMoreVideos emptyImage={emptyImage} />}
+					{!hasMore && <Empty image={emptyImage} description="没有更多视频啦" />}
 					{isLoading || (
 						<Pagination
 							total={total}
@@ -125,7 +116,7 @@ const VideoList: FC<IVideoList> = ({ cateId, emptyImage, pagination }: IVideoLis
 							<Spin size="large" />
 						</SpinContainer>
 					)}
-					{!hasMore && <NoMoreVideos emptyImage={emptyImage} />}
+					{!hasMore && <Empty image={emptyImage} description="没有更多视频啦" />}
 				</InfiniteScroll>
 			)}
 			<BackTop>

@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { VideoJsPlayerOptions } from 'video.js'
 import VideoPlayer from '../components/VideoPlayer'
-import { getPlayURL } from '../utils/api'
+import { getVideoPlayURL } from '../utils/api'
 
 const VideoPlayPage: FC = () => {
 	const [title, setTitle] = useState('')
@@ -11,7 +11,7 @@ const VideoPlayPage: FC = () => {
 	const { id } = useParams<{ id: string }>()
 
 	useEffect(() => {
-		getPlayURL(id).then(({ videoBase, playInfoList: { playInfo } }) => {
+		getVideoPlayURL(id).then(({ videoBase, playInfoList: { playInfo } }) => {
 			document.title = `${videoBase.title}_67373UPUP (=^ェ^=)`
 			setTitle(videoBase.title)
 			setPlayOptions({
