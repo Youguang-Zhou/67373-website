@@ -19,7 +19,12 @@ import VideoPlayPage from './pages/VideoPlayPage'
 moment.locale('zh-cn')
 
 // material-ui的主题
-const theme = createMuiTheme({ palette: { primary: orange } })
+const theme = createMuiTheme({
+	palette: {
+		primary: orange,
+		secondary: { main: '#fafafafa' },
+	},
+})
 
 const App: FC = () => (
 	<ThemeProvider theme={theme}>
