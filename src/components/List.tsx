@@ -1,6 +1,5 @@
 import { BackTop as AntdBackTop, Pagination as AntdPagination, Spin } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
-import CardDeck from 'react-bootstrap/CardDeck'
 import InfiniteScroll from 'react-infinite-scroller'
 import styled from 'styled-components'
 import { getVideoList } from '../utils/api'
@@ -33,7 +32,7 @@ const Pagination = styled(AntdPagination)`
 
 // 视频列表
 const Videos = ({ videos }: { videos: IVideo[] }) => (
-	<CardDeck>
+	<div className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
 		{videos.map((video) => {
 			const info = {
 				videoId: video.videoId,
@@ -44,16 +43,16 @@ const Videos = ({ videos }: { videos: IVideo[] }) => (
 			}
 			return <VideoCard key={video.videoId} info={info} />
 		})}
-	</CardDeck>
+	</div>
 )
 
-interface IVideoList {
+interface IList {
 	cateId?: string
 	emptyImage?: string
 	pagination?: boolean
 }
 
-const VideoList: FC<IVideoList> = ({ cateId, emptyImage, pagination }: IVideoList) => {
+const List: FC<IList> = ({ cateId, emptyImage, pagination }: IList) => {
 	const [videos, setVideos] = useState<IVideo[]>([])
 	const [isLoading, setIsLoading] = useState(true)
 	const [hasMore, setHasMore] = useState(true)
@@ -126,4 +125,4 @@ const VideoList: FC<IVideoList> = ({ cateId, emptyImage, pagination }: IVideoLis
 	)
 }
 
-export default VideoList
+export default List

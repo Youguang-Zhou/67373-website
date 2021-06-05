@@ -7,6 +7,7 @@ import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import { Col, Row } from 'antd'
 import React, { ChangeEvent, FC, ReactNode, useState } from 'react'
 import { Carousel } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import aposhuo from '../assets/images/aposhuo.jpeg'
 import channel_banner from '../assets/images/channel_banner.jpeg'
@@ -22,8 +23,7 @@ import xianshangyouchunqiu from '../assets/images/xianshangyouchunqiu.jpeg'
 import xiruisi from '../assets/images/xiruisi.png'
 import Avatar from '../components/Avatar'
 import Banner from '../components/Banner'
-import Link from '../components/Link'
-import VideoList from '../components/VideoList'
+import List from '../components/List'
 
 const {
 	REACT_APP_VOD_TONGHUAZHEN_VIDEO_ID,
@@ -142,27 +142,27 @@ const ChannelPage: FC = () => {
 					<LibraryMusicIcon />
 				</Row>
 				{/* 唱歌视频 */}
-				<VideoList cateId={REACT_APP_VOD_CHANGGE_CATE_ID} emptyImage={fafa_1} pagination />
+				<List cateId={REACT_APP_VOD_CHANGGE_CATE_ID} emptyImage={fafa_1} pagination />
 			</TabPanel>
 			<TabPanel value={value} index={1}>
 				{/* 油管回放 */}
-				<VideoList cateId={REACT_APP_VOD_ZHIBOHUIFANG_CATE_ID} emptyImage={fafa_2} pagination />
+				<List cateId={REACT_APP_VOD_ZHIBOHUIFANG_CATE_ID} emptyImage={fafa_2} pagination />
 			</TabPanel>
 			<TabPanel value={value} index={2}>
 				{/* 直播剪辑 */}
-				<VideoList cateId={REACT_APP_VOD_ZHIBOJIANJI_CATE_ID} emptyImage={fafa_3} pagination />
+				<List cateId={REACT_APP_VOD_ZHIBOJIANJI_CATE_ID} emptyImage={fafa_3} pagination />
 			</TabPanel>
 			<TabPanel value={value} index={3}>
 				{/* 茶话会文字视频 */}
-				<VideoList cateId={REACT_APP_VOD_CHAHUAHUI_CATE_ID} emptyImage={fafa_4} pagination />
+				<List cateId={REACT_APP_VOD_CHAHUAHUI_CATE_ID} emptyImage={fafa_4} pagination />
 			</TabPanel>
 			<TabPanel value={value} index={4}>
 				{/* 游戏视频 */}
-				<VideoList cateId={REACT_APP_VOD_YOUXI_CATE_ID} emptyImage={fafa_5} pagination />
+				<List cateId={REACT_APP_VOD_YOUXI_CATE_ID} emptyImage={fafa_5} pagination />
 			</TabPanel>
 			<TabPanel value={value} index={5}>
 				{/* 日常 */}
-				<VideoList cateId={REACT_APP_VOD_RICHANG_CATE_ID} emptyImage={fafa_6} pagination />
+				<List cateId={REACT_APP_VOD_RICHANG_CATE_ID} emptyImage={fafa_6} pagination />
 			</TabPanel>
 		</>
 	)
