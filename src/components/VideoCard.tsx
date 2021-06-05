@@ -1,15 +1,15 @@
-import { Col, Typography } from 'antd'
+import { Typography } from 'antd'
 import moment from 'moment'
 import React, { FC } from 'react'
-import { Card as BootStrapCard } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import { useMeasure } from 'react-use'
 import styled from 'styled-components'
-import Link from '../components/Link'
 import { formatDuration } from '../utils/functions'
 import { IVideo } from '../utils/interfaces'
 
-const Card = styled(BootStrapCard)`
-	margin: 15px !important;
+const { Title } = Typography
+
+const Card = styled.div`
 	transition: box-shadow 0.3s;
 
 	&:hover {
@@ -17,38 +17,15 @@ const Card = styled(BootStrapCard)`
 	}
 `
 
-const Title = styled(Typography.Paragraph)`
-	font-size: 1.25rem;
-	height: 3rem;
-	line-height: 1.5rem;
-	margin-bottom: 0.5rem !important;
+const Box = styled.div`
+	background-color: black;
+	height: ${({ height }: { height: number }) => height}px;
 `
 
-const Cover = styled(Card.Img)`
-	max-height: 100%;
-	max-width: 100%;
+const Cover = styled.img`
+	height: inherit;
 	object-fit: contain;
 `
-
-const CoverContainer = styled.div`
-	background-color: black;
-	border-top-left-radius: calc(0.25rem - 1px);
-	border-top-right-radius: calc(0.25rem - 1px);
-	height: ${({ height }: { height: number }) => height}px;
-	position: relative;
-`
-
-const DurationTag = styled.span`
-	background-color: rgba(0, 0, 0, 0.8);
-	bottom: 0;
-	color: #fff;
-	font-size: 0.8rem;
-	padding: 0 5px;
-	position: absolute;
-	right: 0;
-`
-
-const { Body } = Card
 
 interface IVideoCard {
 	key?: string
@@ -57,24 +34,30 @@ interface IVideoCard {
 
 const VideoCard: FC<IVideoCard> = ({ info }: IVideoCard) => {
 	const { videoId, creationTime, title, duration, coverURL } = info
-	const [ref, { width }] = useMeasure()
+	const [ref, { width }] = useMeasure<HTMLDivElement>()
 
 	return (
-		<Col xs={24} sm={12} md={12} lg={8} xl={6}>
-			<Card ref={ref}>
-				<Link to={`/watch/${videoId}`} target="_blank">
+		<div className="col">
+			<Link className="text-decoration-none" to={`/watch/${videoId}`} target="_blank">
+				<Card className="card h-100" ref={ref}>
 					{/* 统一视频封面高度，由其宽度决定，按照16:9的尺寸 */}
-					<CoverContainer height={(9 / 16) * width || 200}>
-						<Cover variant="top" src={coverURL} />
-						<DurationTag>{formatDuration(duration)}</DurationTag>
-					</CoverContainer>
-					<Body>
-						<Title ellipsis={{ rows: 2, tooltip: true }}>{title}</Title>
+					<Box className="position-relative" height={(9 / 16) * width}>
+						<Cover className="card-img-top" src={coverURL} alt={title} />
+						<span className="position-absolute text-light bg-dark bottom-0 end-0 px-1 m-1 rounded">
+							{formatDuration(duration)}
+						</span>
+					</Box>
+					<div className="card-body pb-0">
+						<Title className="fs-5 fw-normal" level={5} ellipsis={{ rows: 2, tooltip: true }}>
+							{title}
+						</Title>
+					</div>
+					<div className="card-footer border-0 bg-white">
 						<small className="text-muted">{moment().to(creationTime)}</small>
-					</Body>
-				</Link>
-			</Card>
-		</Col>
+					</div>
+				</Card>
+			</Link>
+		</div>
 	)
 }
 

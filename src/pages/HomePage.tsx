@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
-import VideoList from '../components/VideoList'
+import List from '../components/List'
 
 const Container = styled.main`
 	background: whitesmoke;
@@ -9,9 +9,9 @@ const Container = styled.main`
 
 const HomePage: FC = () => (
 	<Container>
-		<span style={{ fontSize: 'xx-large' }}>今日推荐</span>
-		<hr className="m-0" />
-		<VideoList />
+		<h1 className="fw-normal">今日推荐</h1>
+		<hr />
+		<List />
 	</Container>
 )
 
