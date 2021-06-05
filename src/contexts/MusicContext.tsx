@@ -1,4 +1,4 @@
-import React, { createContext, FC, useEffect, useRef, useState } from 'react'
+import React, { createContext, FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { usePrevious } from 'react-use'
 import { getAudioPlayURL } from '../utils/api'
 import { PlayOrder } from '../utils/enums'
@@ -23,7 +23,8 @@ const MusicProvider: FC = ({ children }) => {
 	const prevSong = usePrevious(playlist[currIndex])
 
 	// 通过改变currSongId的值来切歌
-	useEffect(() => {
+	// 使用useLayoutEffect目的是解决Safari自动播放问题（Safari只能通过onClick事件播放音频）
+	useLayoutEffect(() => {
 		if (audioRef.current) {
 			audioRef.current.currentTime = 0
 			setCurrTime(0)
@@ -46,7 +47,7 @@ const MusicProvider: FC = ({ children }) => {
 	}, [playlist[currIndex]])
 
 	// 通过改变isPlaying的值来播放或暂停
-	useEffect(() => {
+	useLayoutEffect(() => {
 		isPlaying ? audioRef.current?.play() : audioRef.current?.pause()
 	}, [isPlaying])
 
