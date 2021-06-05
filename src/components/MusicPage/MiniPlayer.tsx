@@ -42,15 +42,14 @@ const DownloadLink = styled.a`
 
 const MiniPlayer: FC = () => {
 	const {
-		audioRef,
 		isPlaying,
 		currTime,
 		currOrder,
 		currPlayURL,
 		setIsPlaying,
-		setCurrTime,
 		setCurrOrder,
 		getCurrSongInfo,
+		syncPlayTime,
 		switchSong,
 	} = useContext(MusicContext)
 	const { coverURL, duration, title } = getCurrSongInfo()
@@ -67,8 +66,7 @@ const MiniPlayer: FC = () => {
 
 	// 拖拽进度条后松开鼠标的调用
 	const handleSliderValueAfterChanged = (value: number) => {
-		audioRef.current.currentTime = value
-		setCurrTime(value)
+		syncPlayTime(value)
 		setDraggingValue(0)
 	}
 
@@ -142,7 +140,7 @@ const MiniPlayer: FC = () => {
 			</Col>
 			<Col xs={0} sm={0} md={4} lg={4} xl={4}>
 				<Button onClick={handlePlayOrderBtnClicked}>{renderPlayOrderBtn()}</Button>
-				<DownloadLink href={currPlayURL} download>
+				<DownloadLink href={currPlayURL} target="_blank">
 					<DownloadOutlined style={{ fontSize: '2.1875rem' }} />
 				</DownloadLink>
 			</Col>

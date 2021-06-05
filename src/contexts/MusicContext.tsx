@@ -25,11 +25,8 @@ const MusicProvider: FC = ({ children }) => {
 	// 通过改变currSongId的值来切歌
 	// 使用useLayoutEffect目的是解决Safari自动播放问题（Safari只能通过onClick事件播放音频）
 	useLayoutEffect(() => {
-		if (audioRef.current) {
-			audioRef.current.currentTime = 0
-			setCurrTime(0)
-			setIsPlaying(false)
-		}
+		syncPlayTime(0)
+		setIsPlaying(false)
 		if (playlist[currIndex]) {
 			getAudioPlayURL(playlist[currIndex].videoId).then(({ playInfoList }) => {
 				const { playURL } = playInfoList.playInfo[0]
@@ -65,6 +62,14 @@ const MusicProvider: FC = ({ children }) => {
 	// 获取当前歌曲的详细信息
 	const getCurrSongInfo = () => playlist[currIndex] || emptyData
 
+	// 同步当前时间
+	const syncPlayTime = (time: number) => {
+		if (audioRef.current) {
+			audioRef.current.currentTime = time
+			setCurrTime(time)
+		}
+	}
+
 	// 切歌（+1表示切到下一首，-1表示切到上一首）
 	const switchSong = (offset: number) => {
 		if (orderRef.current === PlayOrder.Repeat) {
@@ -96,7 +101,6 @@ const MusicProvider: FC = ({ children }) => {
 	return (
 		<Provider
 			value={{
-				audioRef,
 				playlist,
 				isPlaying,
 				currTime,
@@ -110,6 +114,7 @@ const MusicProvider: FC = ({ children }) => {
 				setCurrOrder,
 				setCurrPlayURL,
 				getCurrSongInfo,
+				syncPlayTime,
 				switchSong,
 			}}
 		>
