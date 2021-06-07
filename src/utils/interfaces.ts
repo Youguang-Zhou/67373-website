@@ -1,4 +1,4 @@
-export interface IVideo {
+export interface IVod {
 	coverURL: string
 	creationTime: string
 	duration: number
@@ -6,13 +6,13 @@ export interface IVideo {
 	videoId: string
 }
 
-export interface IVideoList {
-	requestId: string
-	total: number
-	videoList: { video: IVideo[] }
+export interface IPlayList {
+	requestId: string | null
+	total: number | null
+	videoList: { video: IVod[] } | null
 }
 
-export interface IVideoPlayDetail {
+export interface IPlayInfo {
 	playInfoList: { playInfo: Array<{ playURL: string }> }
-	videoBase: IVideo
+	videoBase: IVod
 }
