@@ -4,49 +4,39 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import LibraryMusicIcon from '@material-ui/icons/LibraryMusic'
 import MusicNoteIcon from '@material-ui/icons/MusicNote'
-import { Col, Row } from 'antd'
-import React, { ChangeEvent, FC, ReactNode, useState } from 'react'
-import { Carousel } from 'react-bootstrap'
+import { Avatar, Carousel, Col, Empty, Pagination, Row } from 'antd'
+import React, { ChangeEvent, FC, ReactNode, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import aposhuo from '../assets/images/aposhuo.jpeg'
+import cat from '../assets/images/cat.jpeg'
 import channel_banner from '../assets/images/channel_banner.jpeg'
+import fafa_0 from '../assets/images/fafa_0.png'
 import fafa_1 from '../assets/images/fafa_1.png'
 import fafa_2 from '../assets/images/fafa_2.png'
 import fafa_3 from '../assets/images/fafa_3.png'
 import fafa_4 from '../assets/images/fafa_4.png'
 import fafa_5 from '../assets/images/fafa_5.png'
-import fafa_6 from '../assets/images/fafa_6.png'
 import fafa_rose from '../assets/images/fafa_rose.png'
 import tonghuazhen from '../assets/images/tonghuazhen.jpeg'
 import xianshangyouchunqiu from '../assets/images/xianshangyouchunqiu.jpeg'
 import xiruisi from '../assets/images/xiruisi.png'
-import Avatar from '../components/Avatar'
 import Banner from '../components/Banner'
-import List from '../components/List'
+import Error from '../components/Error'
+import VideoCard from '../components/VideoCard'
+import useGetPlayListRequest from '../hooks/useGetPlayListRequest'
+import { IVod } from '../utils/interfaces'
 
-const {
-	REACT_APP_VOD_TONGHUAZHEN_VIDEO_ID,
-	REACT_APP_VOD_APOSHUO_VIDEO_ID,
-	REACT_APP_VOD_XIANSHANGYOUCHUNQIU_VIDEO_ID,
-	REACT_APP_VOD_CHANGGE_CATE_ID,
-	REACT_APP_VOD_ZHIBOHUIFANG_CATE_ID,
-	REACT_APP_VOD_ZHIBOJIANJI_CATE_ID,
-	REACT_APP_VOD_CHAHUAHUI_CATE_ID,
-	REACT_APP_VOD_YOUXI_CATE_ID,
-	REACT_APP_VOD_RICHANG_CATE_ID,
-} = process.env
+const categories = [
+	process.env.REACT_APP_VOD_CATE_ID_CHANGGE,
+	process.env.REACT_APP_VOD_CATE_ID_ZHIBOHUIFANG,
+	process.env.REACT_APP_VOD_CATE_ID_ZHIBOJIANJI,
+	process.env.REACT_APP_VOD_CATE_ID_CHAHUAHUI,
+	process.env.REACT_APP_VOD_CATE_ID_YOUXI,
+	process.env.REACT_APP_VOD_CATE_ID_RICHANG,
+]
 
-const { Item } = Carousel
-
-const CLink = styled(Link)`
-	display: flex;
-	justify-content: center;
-`
-const CImage = styled.img`
-	height: intrinsic;
-	width: 100%;
-`
+const emptyImages = [fafa_0, fafa_1, fafa_2, fafa_3, fafa_4, fafa_5]
 
 const FaFaAndRose = styled.img`
 	width: 100%;
@@ -54,42 +44,95 @@ const FaFaAndRose = styled.img`
 	bottom: 0;
 `
 
-interface TabPanelProps {
+interface ITabPanel {
 	children?: ReactNode
 	value: number
 	index: number
 }
 
-const TabPanel = ({ children, value, index }: TabPanelProps) => (
-	<div role="tabpanel" hidden={value !== index} style={{ backgroundColor: 'whitesmoke' }}>
-		{value === index && <div style={{ padding: '1vw 5vw' }}>{children}</div>}
-	</div>
-)
-
 const ChannelPage: FC = () => {
-	const [value, setValue] = useState(0)
+	const [videos, setVideos] = useState<IVod[]>([])
+	const [pageNo, setPageNo] = useState(1)
+	const pageSize = useState(12)[0]
+	const [currTabIndex, setCurrTabIndex] = useState(0)
 	const scrollableTabs = useMediaQuery(useTheme().breakpoints.down('sm'))
+	const { data, hasError, hasMore } = useGetPlayListRequest(categories[currTabIndex], pageNo, pageSize)
 
-	const handleChange = (event: ChangeEvent<Record<string, never>>, value: number) => setValue(value)
+	useEffect(() => {
+		data.videoList && setVideos(data.videoList.video)
+	}, [data])
+
+	const handleChange = (event: ChangeEvent<Record<string, never>>, value: number) => {
+		setCurrTabIndex(value)
+		setPageNo(1)
+	}
+
+	const TabPanel = ({ children, value, index }: ITabPanel) => (
+		<div role="tabpanel" hidden={value !== index} style={{ backgroundColor: 'whitesmoke', padding: '1vw 5vw' }}>
+			{hasError ? (
+				<Error />
+			) : (
+				<>
+					{value === index && (
+						<>
+							{children}
+							<section className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+								{videos.map((video) => (
+									<VideoCard key={video.videoId} video={video} />
+								))}
+							</section>
+							{!hasMore && (
+								<Empty
+									className="fs-3 mt-3"
+									image={emptyImages[currTabIndex]}
+									imageStyle={{ height: '20rem' }}
+									description="没有更多视频啦"
+								/>
+							)}
+							<Pagination
+								className="text-center mt-4"
+								total={data.total || 0}
+								current={pageNo}
+								defaultPageSize={pageSize}
+								showQuickJumper={(data.total || 0) > pageSize}
+								showSizeChanger={false}
+								onChange={(pageNo) => setPageNo(pageNo)}
+							/>
+						</>
+					)}
+				</>
+			)}
+		</div>
+	)
 
 	return (
 		<>
 			<Banner src={channel_banner} alt="channel_banner" />
-			<Row align="middle" justify="center" style={{ margin: '16px 0px 4px 0px' }}>
-				<Avatar size={80} style={{ marginRight: '2vw' }} />
-				<div style={{ marginRight: '14vw' }}>
+			<Row className="my-3" align="middle" justify="center">
+				<Col>
+					<Avatar src={cat} size={80} />
+				</Col>
+				<Col style={{ margin: '0 15vw 0 2vw' }}>
 					<Row align="middle">
 						<Typography variant="h5">陈一发儿</Typography>
-						<MusicNoteIcon color="primary" fontSize="small" style={{ marginBottom: '5px' }} />
+						<MusicNoteIcon color="primary" fontSize="small" />
 					</Row>
-					<Typography variant="caption">673.73万位订阅者</Typography>
-				</div>
-				<a href="https://chenyifaer.taobao.com/" target="_blank" rel="noopener noreferrer">
-					<img src={xiruisi} alt="喜瑞斯" style={{ border: '1px solid rgb(4,7,110)', borderRadius: '5px' }} />
-				</a>
+					<Row>
+						<Typography variant="caption">673.73万位订阅者</Typography>
+					</Row>
+				</Col>
+				<Col>
+					<a href="https://chenyifaer.taobao.com/" target="_blank" rel="noopener noreferrer">
+						<img
+							src={xiruisi}
+							alt="喜瑞斯"
+							style={{ border: '1px solid rgb(4,7,110)', borderRadius: '5px' }}
+						/>
+					</a>
+				</Col>
 			</Row>
 			<Tabs
-				value={value}
+				value={currTabIndex}
 				scrollButtons="on"
 				centered={!scrollableTabs}
 				variant={scrollableTabs ? 'scrollable' : 'standard'}
@@ -104,7 +147,8 @@ const ChannelPage: FC = () => {
 				<Tab label="游戏视频" />
 				<Tab label="日常" />
 			</Tabs>
-			<TabPanel value={value} index={0}>
+			{/* 唱歌视频 */}
+			<TabPanel value={currTabIndex} index={0}>
 				<Row align="middle">
 					<Typography variant="h5" gutterBottom>
 						作品集
@@ -114,22 +158,19 @@ const ChannelPage: FC = () => {
 				<Row>
 					{/* 主题曲置顶 */}
 					<Col sm={24} md={16} lg={12} xl={8}>
-						<Carousel>
-							<Item>
-								<CLink to={`/watch/${REACT_APP_VOD_TONGHUAZHEN_VIDEO_ID}`} target="_blank">
-									<CImage src={tonghuazhen} alt="童话镇" />
-								</CLink>
-							</Item>
-							<Item>
-								<CLink to={`/watch/${REACT_APP_VOD_APOSHUO_VIDEO_ID}`} target="_blank">
-									<CImage src={aposhuo} alt="阿婆说" />
-								</CLink>
-							</Item>
-							<Item>
-								<CLink to={`/watch/${REACT_APP_VOD_XIANSHANGYOUCHUNQIU_VIDEO_ID}`} target="_blank">
-									<CImage src={xianshangyouchunqiu} alt="弦上有春秋" />
-								</CLink>
-							</Item>
+						<Carousel autoplay>
+							<Link to={`/watch/${process.env.REACT_APP_VOD_VIDEO_ID_TONGHUAZHEN}`} target="_blank">
+								<img className="w-100" src={tonghuazhen} alt="童话镇" />
+							</Link>
+							<Link to={`/watch/${process.env.REACT_APP_VOD_VIDEO_ID_APOSHUO}`} target="_blank">
+								<img className="w-100" src={aposhuo} alt="阿婆说" />
+							</Link>
+							<Link
+								to={`/watch/${process.env.REACT_APP_VOD_VIDEO_ID_XIANSHANGYOUCHUNQIU}`}
+								target="_blank"
+							>
+								<img className="w-100" src={xianshangyouchunqiu} alt="弦上有春秋" />
+							</Link>
 						</Carousel>
 					</Col>
 					<Col sm={0} md={8}>
@@ -141,29 +182,17 @@ const ChannelPage: FC = () => {
 					<Typography variant="h5">歌曲集</Typography>
 					<LibraryMusicIcon />
 				</Row>
-				{/* 唱歌视频 */}
-				<List cateId={REACT_APP_VOD_CHANGGE_CATE_ID} emptyImage={fafa_1} pagination />
 			</TabPanel>
-			<TabPanel value={value} index={1}>
-				{/* 油管回放 */}
-				<List cateId={REACT_APP_VOD_ZHIBOHUIFANG_CATE_ID} emptyImage={fafa_2} pagination />
-			</TabPanel>
-			<TabPanel value={value} index={2}>
-				{/* 直播剪辑 */}
-				<List cateId={REACT_APP_VOD_ZHIBOJIANJI_CATE_ID} emptyImage={fafa_3} pagination />
-			</TabPanel>
-			<TabPanel value={value} index={3}>
-				{/* 茶话会文字视频 */}
-				<List cateId={REACT_APP_VOD_CHAHUAHUI_CATE_ID} emptyImage={fafa_4} pagination />
-			</TabPanel>
-			<TabPanel value={value} index={4}>
-				{/* 游戏视频 */}
-				<List cateId={REACT_APP_VOD_YOUXI_CATE_ID} emptyImage={fafa_5} pagination />
-			</TabPanel>
-			<TabPanel value={value} index={5}>
-				{/* 日常 */}
-				<List cateId={REACT_APP_VOD_RICHANG_CATE_ID} emptyImage={fafa_6} pagination />
-			</TabPanel>
+			{/* 油管回放 */}
+			<TabPanel value={currTabIndex} index={1} />
+			{/* 直播剪辑 */}
+			<TabPanel value={currTabIndex} index={2} />
+			{/* 茶话会文字视频 */}
+			<TabPanel value={currTabIndex} index={3} />
+			{/* 游戏视频 */}
+			<TabPanel value={currTabIndex} index={4} />
+			{/* 日常 */}
+			<TabPanel value={currTabIndex} index={5} />
 		</>
 	)
 }

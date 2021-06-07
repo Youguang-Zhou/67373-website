@@ -1,8 +1,8 @@
 import React, { createContext, FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { usePrevious } from 'react-use'
-import { getAudioPlayURL } from '../utils/api'
+import { getPlayInfo } from '../utils/api'
 import { PlayOrder } from '../utils/enums'
-import { IVideo } from '../utils/interfaces'
+import { IVod } from '../utils/interfaces'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const MusicContext = createContext<any>(undefined)
@@ -14,7 +14,7 @@ const emptyData = { coverURL: '', creationTime: '', duration: 0, title: '', vide
 const MusicProvider: FC = ({ children }) => {
 	const audioRef = useRef<HTMLAudioElement>()
 	const orderRef = useRef(PlayOrder.Repeat)
-	const [playlist, setPlaylist] = useState<IVideo[]>([])
+	const [playlist, setPlaylist] = useState<IVod[]>([])
 	const [isPlaying, setIsPlaying] = useState(false)
 	const [currTime, setCurrTime] = useState(0)
 	const [currIndex, setCurrIndex] = useState(0)
@@ -28,7 +28,7 @@ const MusicProvider: FC = ({ children }) => {
 		syncPlayTime(0)
 		setIsPlaying(false)
 		if (playlist[currIndex]) {
-			getAudioPlayURL(playlist[currIndex].videoId).then(({ playInfoList }) => {
+			getPlayInfo(playlist[currIndex].videoId).then(({ playInfoList }) => {
 				const { playURL } = playInfoList.playInfo[0]
 				setCurrPlayURL(playURL)
 				audioRef.current = new Audio(playURL)

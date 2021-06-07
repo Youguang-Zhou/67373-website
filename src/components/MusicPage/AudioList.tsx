@@ -1,13 +1,13 @@
 import { Col, Row } from 'antd'
-import React, { FC, useContext, useEffect, useState } from 'react'
+import React, { FC, useContext, useEffect } from 'react'
 import styled from 'styled-components'
-import fafa_robot from '../../assets/images/fafa_robot.png'
 import { MusicContext } from '../../contexts/MusicContext'
-import { getAudioList } from '../../utils/api'
+import useGetPlayListRequest from '../../hooks/useGetPlayListRequest'
 import { formatDuration } from '../../utils/functions'
-import { IVideo } from '../../utils/interfaces'
-import Empty from '../Empty'
+import { IVod } from '../../utils/interfaces'
 import Cover from './Cover'
+
+const { REACT_APP_VOD_CATE_ID_AUDIO } = process.env
 
 const Song = styled(Row)`
 	color: #fafafafa;
@@ -23,13 +23,11 @@ const Song = styled(Row)`
 
 const AudioList: FC = () => {
 	const { playlist, setPlaylist, setCurrIndex, getCurrSongInfo } = useContext(MusicContext)
-	const [hasMore, setHasMore] = useState(true)
+	const { data } = useGetPlayListRequest(REACT_APP_VOD_CATE_ID_AUDIO, 1, 100)
 
 	useEffect(() => {
-		getAudioList()
-			.then(({ requestId, videoList: { video } }) => (requestId ? setPlaylist(video) : setHasMore(false)))
-			.catch(() => setHasMore(false))
-	}, [])
+		data.videoList && setPlaylist(data.videoList.video)
+	}, [data])
 
 	const handleDoubleClick = (index: number) => setCurrIndex(index)
 
@@ -37,27 +35,17 @@ const AudioList: FC = () => {
 
 	return (
 		<>
-			{hasMore ? (
-				<>
-					{playlist.map((audio: IVideo, index: number) => (
-						<Song align="middle" key={audio.videoId} onDoubleClick={() => handleDoubleClick(index)}>
-							<Col span={8}>
-								<Cover src={audio.coverURL} alt={audio.title} size="3rem" />
-							</Col>
-							<Col span={8}>
-								<span style={{ color: highlightCurrSong(audio.videoId) }}>{audio.title}</span>
-							</Col>
-							<Col span={8}>{formatDuration(audio.duration)}</Col>
-						</Song>
-					))}
-				</>
-			) : (
-				<Empty
-					image={fafa_robot}
-					style={{ color: '#fafafafa' }}
-					description="服务器蚌埠住了，微博联系@青山多妩媚67373"
-				/>
-			)}
+			{playlist.map((audio: IVod, index: number) => (
+				<Song align="middle" key={audio.videoId} onDoubleClick={() => handleDoubleClick(index)}>
+					<Col span={8}>
+						<Cover src={audio.coverURL} alt={audio.title} size="3rem" />
+					</Col>
+					<Col span={8}>
+						<span style={{ color: highlightCurrSong(audio.videoId) }}>{audio.title}</span>
+					</Col>
+					<Col span={8}>{formatDuration(audio.duration)}</Col>
+				</Song>
+			))}
 		</>
 	)
 }
