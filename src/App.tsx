@@ -1,15 +1,15 @@
 import { orange } from '@material-ui/core/colors'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import { ConfigProvider } from 'antd'
-import 'antd/dist/antd.less'
+import 'antd/dist/antd.css'
 import zhCN from 'antd/lib/locale/zh_CN'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.min.js'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import moment from 'moment'
 import 'moment-duration-format'
 import 'moment/locale/zh-cn'
 import React, { FC } from 'react'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
 import './App.css'
 import Footer from './components/Footer'
 import Header from './components/Header'
@@ -39,7 +39,8 @@ const App: FC = () => (
 					<Route exact path="/channel" component={ChannelPage} />
 					<Route exact path="/music" component={MusicPage} />
 					<Route exact path="/67373" component={LivePage} />
-					<Route path="/" component={HomePage} />
+					<Route exact path="/" component={HomePage} />
+					<Redirect to="/" />
 				</Switch>
 				<Footer />
 			</BrowserRouter>
