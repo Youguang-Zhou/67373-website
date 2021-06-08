@@ -1,13 +1,10 @@
 import { BellOutlined } from '@ant-design/icons'
 import { Row } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
-import { Nav, Navbar } from 'react-bootstrap'
 import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import logo from '../assets/images/logo_v2.jpg'
 import { getLiveTime } from '../utils/api'
-
-const { Brand, Toggle, Collapse } = Navbar
 
 const Logo = styled.img`
 	height: 56.5px;
@@ -19,15 +16,10 @@ const Logo = styled.img`
 	}
 `
 
-const Link = styled(Nav.Link)`
-	font-size: 25px;
-	margin: auto 20px;
-	text-align: center;
-`
-
 const Header: FC = () => {
 	const { pathname } = useLocation()
 	const [hasLive, setHasLive] = useState(false)
+	const [currNav, setCurrNav] = useState('/')
 
 	useEffect(() => {
 		getLiveTime()
@@ -35,26 +27,48 @@ const Header: FC = () => {
 			.catch(() => setHasLive(false))
 	}, [])
 
+	useEffect(() => {
+		setCurrNav(pathname)
+	}, [pathname])
+
 	return (
-		<Navbar bg="white" expand="lg">
-			<Brand href="/">
-				<Logo src={logo} alt="chenyifaer" />
-			</Brand>
-			<Toggle aria-controls="basic-navbar-nav" />
-			<Collapse id="basic-navbar-nav">
-				<Nav activeKey={pathname}>
-					<Link href="/">首页</Link>
-					<Link href="/channel">频道</Link>
-					<Link href="/music">音乐</Link>
-					<Link href="/67373">
-						<Row align="middle" justify="center">
-							<span>67373</span>
-							{hasLive && <BellOutlined style={{ color: '#164080c1' }} />}
-						</Row>
-					</Link>
-				</Nav>
-			</Collapse>
-		</Navbar>
+		<nav className="navbar navbar-expand-lg navbar-light">
+			<div className="container-fluid">
+				<a className="navbar-brand" href="/">
+					<Logo src={logo} alt="chenyifaer" />
+				</a>
+				<button
+					className="navbar-toggler"
+					type="button"
+					data-bs-toggle="collapse"
+					data-bs-target="#BootstrapNavbar"
+					aria-controls="BootstrapNavbar"
+					aria-expanded="false"
+					aria-label="Toggle navigation"
+				>
+					<span className="navbar-toggler-icon"></span>
+				</button>
+				<div className="collapse navbar-collapse" id="BootstrapNavbar">
+					<div className="navbar-nav me-auto text-center fs-4">
+						<a className={`nav-link ${currNav === '/' && 'active'} px-4 py-0`} href="/">
+							首页
+						</a>
+						<a className={`nav-link ${currNav === '/channel' && 'active'} px-4 py-0`} href="/channel">
+							频道
+						</a>
+						<a className={`nav-link ${currNav === '/music' && 'active'} px-4 py-0`} href="/music">
+							音乐
+						</a>
+						<a className={`nav-link ${currNav === '/67373' && 'active'} px-4 py-0`} href="/67373">
+							<Row align="middle" justify="center">
+								<span>67373</span>
+								{hasLive && <BellOutlined style={{ color: '#164080c1' }} />}
+							</Row>
+						</a>
+					</div>
+				</div>
+			</div>
+		</nav>
 	)
 }
 

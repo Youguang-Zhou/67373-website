@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { VideoJsPlayerOptions } from 'video.js'
 import VideoPlayer from '../components/VideoPlayer'
 import { getPlayInfo } from '../utils/api'
@@ -9,20 +9,23 @@ const VideoPlayPage: FC = () => {
 	const [title, setTitle] = useState('')
 	const [playOptions, setPlayOptions] = useState<VideoJsPlayerOptions>()
 	const { id } = useParams<{ id: string }>()
+	const history = useHistory()
 
 	useEffect(() => {
-		getPlayInfo(id).then(({ videoBase, playInfoList: { playInfo } }) => {
-			document.title = `${videoBase.title}_67373UPUP (=^ェ^=)`
-			setTitle(videoBase.title)
-			setPlayOptions({
-				sources: [
-					{
-						src: playInfo[0].playURL,
-						type: 'video/mp4',
-					},
-				],
+		getPlayInfo(id)
+			.then(({ videoBase, playInfoList: { playInfo } }) => {
+				document.title = `${videoBase.title}_67373UPUP (=^ェ^=)`
+				setTitle(videoBase.title)
+				setPlayOptions({
+					sources: [
+						{
+							src: playInfo[0].playURL,
+							type: 'video/mp4',
+						},
+					],
+				})
 			})
-		})
+			.catch(() => history.push('/'))
 	}, [id])
 
 	return (
