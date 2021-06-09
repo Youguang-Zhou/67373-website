@@ -19,7 +19,7 @@ const Logo = styled.img`
 const Header: FC = () => {
 	const { pathname } = useLocation()
 	const [hasLive, setHasLive] = useState(false)
-	const [currNav, setCurrNav] = useState('/')
+	const [currNav, setCurrNav] = useState('')
 
 	useEffect(() => {
 		getLiveTime()
@@ -32,43 +32,50 @@ const Header: FC = () => {
 	}, [pathname])
 
 	return (
-		<nav className="navbar navbar-expand-lg navbar-light">
-			<div className="container-fluid">
-				<a className="navbar-brand" href="/">
-					<Logo src={logo} alt="chenyifaer" />
-				</a>
-				<button
-					className="navbar-toggler"
-					type="button"
-					data-bs-toggle="collapse"
-					data-bs-target="#BootstrapNavbar"
-					aria-controls="BootstrapNavbar"
-					aria-expanded="false"
-					aria-label="Toggle navigation"
-				>
-					<span className="navbar-toggler-icon"></span>
-				</button>
-				<div className="collapse navbar-collapse" id="BootstrapNavbar">
-					<div className="navbar-nav me-auto text-center fs-4">
-						<a className={`nav-link ${currNav === '/' && 'active'} px-4 py-0`} href="/">
-							首页
+		<>
+			{currNav && (
+				<nav className="navbar navbar-expand-lg navbar-light">
+					<div className="container-fluid">
+						<a className="navbar-brand" href="/">
+							<Logo src={logo} alt="chenyifaer" />
 						</a>
-						<a className={`nav-link ${currNav === '/channel' && 'active'} px-4 py-0`} href="/channel">
-							频道
-						</a>
-						<a className={`nav-link ${currNav === '/music' && 'active'} px-4 py-0`} href="/music">
-							音乐
-						</a>
-						<a className={`nav-link ${currNav === '/67373' && 'active'} px-4 py-0`} href="/67373">
-							<Row align="middle" justify="center">
-								<span>67373</span>
-								{hasLive && <BellOutlined style={{ color: '#164080c1' }} />}
-							</Row>
-						</a>
+						<button
+							className="navbar-toggler"
+							type="button"
+							data-bs-toggle="collapse"
+							data-bs-target="#BootstrapNavbar"
+							aria-controls="BootstrapNavbar"
+							aria-expanded="false"
+							aria-label="Toggle navigation"
+						>
+							<span className="navbar-toggler-icon"></span>
+						</button>
+						<div className="collapse navbar-collapse" id="BootstrapNavbar">
+							<div className="navbar-nav me-auto text-center fs-4">
+								<a className={`nav-link ${currNav === '/' && 'active'} px-4 py-1`} href="/">
+									首页
+								</a>
+								<a
+									className={`nav-link ${currNav === '/channel' && 'active'} px-4 py-1`}
+									href="/channel"
+								>
+									频道
+								</a>
+								{/* <a className={`nav-link ${currNav === '/music' && 'active'} px-4 py-1`} href="/music">
+									音乐
+								</a> */}
+								<a className={`nav-link ${currNav === '/67373' && 'active'} px-4 py-1`} href="/67373">
+									<Row align="middle" justify="center">
+										<span>67373</span>
+										{hasLive && <BellOutlined style={{ color: '#164080c1' }} />}
+									</Row>
+								</a>
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
-		</nav>
+				</nav>
+			)}
+		</>
 	)
 }
 
