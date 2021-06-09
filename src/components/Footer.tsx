@@ -7,8 +7,11 @@ const Footer: FC = () => {
 
 	return (
 		<footer
-			className="text-center text-black-50 py-3"
-			style={{ backgroundColor: pathname === '/music' ? 'black' : 'white' }}
+			className="text-center py-3"
+			style={{
+				backgroundColor: pathname === '/music' ? '#121212' : 'white',
+				color: pathname === '/music' ? '#fafafafa' : '#00000080',
+			}}
 		>
 			<span className="px-3">{`© 2020-${new Date().getFullYear()} 67373upup.com`}</span>
 			<span className="px-3 d-block d-sm-inline-block">

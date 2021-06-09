@@ -7,7 +7,7 @@ import MiniPlayer from '../components/MiniPlayer'
 import { MusicProvider } from '../contexts/MusicContext'
 
 const Main = styled.main`
-	background: linear-gradient(to bottom, #602560, black);
+	background-color: #121212;
 	padding: 3vw;
 `
 

@@ -17,7 +17,7 @@ import { formatDuration } from '../utils/functions'
 import Cover from './Cover'
 
 const Box = styled(Row)`
-	background-color: black;
+	background-color: #121212;
 	color: #fafafafa;
 	text-align: center;
 `
