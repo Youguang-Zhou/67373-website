@@ -30,12 +30,12 @@ const VideoCard: FC<IVideoCard> = ({ video: { videoId, creationTime, title, dura
 						{formatDuration(duration)}
 					</span>
 				</div>
-				<div className="card-body pb-0">
-					<Title className="fs-5 fw-normal" level={5} ellipsis={{ rows: 2, tooltip: true }}>
+				<div className="card-body p-2 p-lg-3 pb-0">
+					<Title className="fs-5 fw-normal mb-0 mb-lg-2" level={5} ellipsis={{ rows: 2, tooltip: true }}>
 						{title}
 					</Title>
 				</div>
-				<div className="card-footer border-0 bg-white">
+				<div className="card-footer border-0 bg-white p-2 p-lg-3 pt-0">
 					<small className="text-muted">{moment().to(creationTime)}</small>
 				</div>
 			</Card>

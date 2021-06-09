@@ -4,7 +4,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import LibraryMusicIcon from '@material-ui/icons/LibraryMusic'
 import MusicNoteIcon from '@material-ui/icons/MusicNote'
-import { Avatar, Carousel, Col, Empty, Pagination, Row } from 'antd'
+import { Avatar, Carousel, Col, Pagination, Row } from 'antd'
 import React, { ChangeEvent, FC, ReactNode, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -22,7 +22,7 @@ import tonghuazhen from '../assets/images/tonghuazhen.jpeg'
 import xianshangyouchunqiu from '../assets/images/xianshangyouchunqiu.jpeg'
 import xiruisi from '../assets/images/xiruisi.png'
 import Banner from '../components/Banner'
-import Error from '../components/Error'
+import Empty from '../components/Empty'
 import VideoCard from '../components/VideoCard'
 import useGetPlayListRequest from '../hooks/useGetPlayListRequest'
 import { IVod } from '../utils/interfaces'
@@ -56,7 +56,7 @@ const ChannelPage: FC = () => {
 	const pageSize = useState(12)[0]
 	const [currTabIndex, setCurrTabIndex] = useState(0)
 	const scrollableTabs = useMediaQuery(useTheme().breakpoints.down('sm'))
-	const { data, hasError, hasMore } = useGetPlayListRequest(categories[currTabIndex], pageNo, pageSize)
+	const { data, isLoading, hasError, hasMore } = useGetPlayListRequest(categories[currTabIndex], pageNo, pageSize)
 
 	useEffect(() => {
 		data.videoList && setVideos(data.videoList.video)
@@ -70,34 +70,33 @@ const ChannelPage: FC = () => {
 	const TabPanel = ({ children, value, index }: ITabPanel) => (
 		<div role="tabpanel" hidden={value !== index} style={{ backgroundColor: 'whitesmoke', padding: '1vw 5vw' }}>
 			{hasError ? (
-				<Error />
+				<Empty error />
 			) : (
 				<>
-					{value === index && (
+					{!isLoading && (
 						<>
-							{children}
-							<section className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-								{videos.map((video) => (
-									<VideoCard key={video.videoId} video={video} />
-								))}
-							</section>
-							{!hasMore && (
-								<Empty
-									className="fs-3 mt-3"
-									image={emptyImages[currTabIndex]}
-									imageStyle={{ height: '20rem' }}
-									description="没有更多视频啦"
-								/>
+							{value === index && (
+								<>
+									{children}
+									<section className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+										{videos.map((video) => (
+											<VideoCard key={video.videoId} video={video} />
+										))}
+									</section>
+									{!hasMore && <Empty image={emptyImages[currTabIndex]} />}
+									<Pagination
+										className="text-center mt-3 mb-3 mb-lg-0"
+										total={data.total || 0}
+										current={pageNo}
+										defaultPageSize={pageSize}
+										showQuickJumper={(data.total || 0) > pageSize}
+										showSizeChanger={false}
+										hideOnSinglePage
+										responsive
+										onChange={(pageNo) => setPageNo(pageNo)}
+									/>
+								</>
 							)}
-							<Pagination
-								className="text-center mt-4"
-								total={data.total || 0}
-								current={pageNo}
-								defaultPageSize={pageSize}
-								showQuickJumper={(data.total || 0) > pageSize}
-								showSizeChanger={false}
-								onChange={(pageNo) => setPageNo(pageNo)}
-							/>
 						</>
 					)}
 				</>
@@ -157,7 +156,7 @@ const ChannelPage: FC = () => {
 				</Row>
 				<Row>
 					{/* 主题曲置顶 */}
-					<Col sm={24} md={16} lg={12} xl={8}>
+					<Col xs={24} sm={24} md={16} lg={12} xl={8}>
 						<Carousel autoplay>
 							<Link to={`/watch/${process.env.REACT_APP_VOD_VIDEO_ID_TONGHUAZHEN}`} target="_blank">
 								<img className="w-100" src={tonghuazhen} alt="童话镇" />
@@ -173,7 +172,7 @@ const ChannelPage: FC = () => {
 							</Link>
 						</Carousel>
 					</Col>
-					<Col sm={0} md={8}>
+					<Col xs={0} sm={0} md={8}>
 						<FaFaAndRose src={fafa_rose} alt="发发与玫瑰" />
 					</Col>
 				</Row>

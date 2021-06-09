@@ -1,11 +1,12 @@
 import { makeStyles } from '@material-ui/core/styles'
-import { Col, Empty, Row } from 'antd'
+import { Col, Row } from 'antd'
 import moment from 'moment'
 import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
 import beautiful_fafa from '../assets/images/beautiful_fafa.png'
 import goodnight67373 from '../assets/images/goodnight67373.jpg'
+import Empty from '../components/Empty'
 import VideoPlayer from '../components/VideoPlayer'
 import { getLiveTime, getLiveURL } from '../utils/api'
 
@@ -129,11 +130,7 @@ const LivePage: FC = () => {
 						</>
 					) : (
 						<Row justify="center">
-							<Empty
-								image={goodnight67373}
-								imageStyle={{ height: '15rem' }}
-								description={<span style={{ fontSize: 'xx-large' }}>See you next time~</span>}
-							/>
+							<Empty image={goodnight67373} description="See you next time~" />
 						</Row>
 					)}
 				</>

@@ -1,7 +1,8 @@
-import { Avatar, BackTop, Spin } from 'antd'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import { Avatar, BackTop } from 'antd'
 import React, { FC, ReactNode, useCallback, useEffect, useRef } from 'react'
 import cat from '../assets/images/cat.jpeg'
-import Error from './Error'
+import Empty from './Empty'
 
 interface IInfiniteScroll {
 	children?: ReactNode
@@ -35,13 +36,13 @@ const InfiniteScroll: FC<IInfiniteScroll> = ({
 	return (
 		<>
 			{hasError ? (
-				<Error />
+				<Empty error />
 			) : (
 				<>
 					{children}
 					{hasMore ? (
 						<div className="text-center p-5" ref={observerRef}>
-							<Spin size="large" />
+							<CircularProgress />
 						</div>
 					) : (
 						<>{emptyComponent}</>

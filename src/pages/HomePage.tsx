@@ -1,7 +1,7 @@
-import { Empty } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import love_you from '../assets/images/love_you.png'
+import Empty from '../components/Empty'
 import InfiniteScroll from '../components/InfiniteScroll'
 import VideoCard from '../components/VideoCard'
 import useGetPlayListRequest from '../hooks/useGetPlayListRequest'
@@ -35,14 +35,7 @@ const HomePage: FC = () => {
 				hasError={hasError}
 				isLoading={isLoading}
 				loadMore={handleLoadMore}
-				emptyComponent={
-					<Empty
-						className="fs-3"
-						image={love_you}
-						imageStyle={{ height: '20rem' }}
-						description="没有更多视频啦"
-					/>
-				}
+				emptyComponent={<Empty image={love_you} />}
 			>
 				<section className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
 					{videos.map((video) => (
