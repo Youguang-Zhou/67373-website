@@ -1,5 +1,5 @@
 import { DownloadOutlined } from '@ant-design/icons'
-import IconButton from '@material-ui/core/IconButton'
+import { IconButton, Slider } from '@material-ui/core'
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline'
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline'
 import RepeatOneRoundedIcon from '@material-ui/icons/RepeatOneRounded'
@@ -7,13 +7,13 @@ import RepeatRoundedIcon from '@material-ui/icons/RepeatRounded'
 import ShuffleRoundedIcon from '@material-ui/icons/ShuffleRounded'
 import SkipNextIcon from '@material-ui/icons/SkipNext'
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious'
-import { Col, Row, Slider } from 'antd'
+import { Col, Row } from 'antd'
 import React, { FC, useContext, useState } from 'react'
 import styled from 'styled-components'
-import cat from '../../assets/images/cat.jpeg'
-import { MusicContext } from '../../contexts/MusicContext'
-import { PlayOrder } from '../../utils/enums'
-import { formatDuration } from '../../utils/functions'
+import cat from '../assets/images/cat.jpeg'
+import { MusicContext } from '../contexts/MusicContext'
+import { PlayOrder } from '../utils/enums'
+import { formatDuration } from '../utils/functions'
 import Cover from './Cover'
 
 const Box = styled(Row)`
@@ -62,10 +62,10 @@ const MiniPlayer: FC = () => {
 	const displaySliderValue = () => (draggingValue !== 0 ? draggingValue : Math.min(currTime, duration))
 
 	// 拖拽进度条时的调用
-	const handleSliderValueChanged = (value: number) => setDraggingValue(value)
+	const handleSliderValueChanged = (_: unknown, value: number | number[]) => setDraggingValue(value as number)
 
 	// 拖拽进度条后松开鼠标的调用
-	const handleSliderValueAfterChanged = (value: number) => {
+	const handleSliderValueChangeCommitted = (_: unknown, value: number | number[]) => {
 		syncPlayTime(value)
 		setDraggingValue(0)
 	}
@@ -129,10 +129,9 @@ const MiniPlayer: FC = () => {
 					<Col span={16}>
 						<Slider
 							max={duration}
-							tooltipVisible={false}
 							value={displaySliderValue()}
 							onChange={handleSliderValueChanged}
-							onAfterChange={handleSliderValueAfterChanged}
+							onChangeCommitted={handleSliderValueChangeCommitted}
 						/>
 					</Col>
 					<Col span={4}>{formatDuration(duration)}</Col>
