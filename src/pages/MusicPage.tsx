@@ -1,56 +1,31 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 import music_banner from '../assets/images/music_banner.jpeg'
+import AudioList from '../components/AudioList'
 import Banner from '../components/Banner'
-import AudioList from '../components/MusicPage/AudioList'
-import MiniPlayer from '../components/MusicPage/MiniPlayer'
+import MiniPlayer from '../components/MiniPlayer'
 import { MusicProvider } from '../contexts/MusicContext'
-
-const Container = styled.div`
-	user-select: none;
-`
-
-const Header = styled.header`
-	position: relative;
-`
 
 const Main = styled.main`
 	background: linear-gradient(to bottom, #602560, black);
 	padding: 3vw;
 `
 
-const TitleBox = styled.div`
-	bottom: 1vw;
-	color: white;
-	left: 3vw;
-	position: absolute;
-`
-
-const BigTitle = styled.div`
-	font-size: 5vw;
-`
-
-const SmallTitle = styled.div`
-	font-size: 1vw;
-	font-style: italic;
-	margin-left: 3px;
-`
-
 const MusicPage: FC = () => (
 	<MusicProvider>
-		<Container>
-			<Header>
+		<div className="text-light user-select-none">
+			<header className="position-relative">
+				<div className="position-absolute bottom-0 d-none d-md-block m-md-3 ms-lg-5">
+					<div style={{ fontSize: '5vw' }}>陈一发儿</div>
+					<div className="fs-5 fst-italic">Spotify: @陈一发儿</div>
+				</div>
 				<Banner src={music_banner} alt="music_banner" />
-				<TitleBox>
-					<BigTitle>陈一发儿</BigTitle>
-					<SmallTitle>Spotify: @陈一发儿</SmallTitle>
-				</TitleBox>
-			</Header>
+			</header>
 			<Main>
 				<AudioList />
 			</Main>
 			<MiniPlayer />
-		</Container>
+		</div>
 	</MusicProvider>
 )
 

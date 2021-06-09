@@ -1,10 +1,10 @@
 import { Col, Row } from 'antd'
 import React, { FC, useContext, useEffect } from 'react'
 import styled from 'styled-components'
-import { MusicContext } from '../../contexts/MusicContext'
-import useGetPlayListRequest from '../../hooks/useGetPlayListRequest'
-import { formatDuration } from '../../utils/functions'
-import { IVod } from '../../utils/interfaces'
+import { MusicContext } from '../contexts/MusicContext'
+import useGetPlayListRequest from '../hooks/useGetPlayListRequest'
+import { formatDuration } from '../utils/functions'
+import { IVod } from '../utils/interfaces'
 import Cover from './Cover'
 
 const { REACT_APP_VOD_CATE_ID_AUDIO } = process.env

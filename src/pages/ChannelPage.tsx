@@ -1,6 +1,5 @@
-import { Tab, Tabs, Typography } from '@material-ui/core'
+import { Tab, Tabs, Typography, useMediaQuery } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import LibraryMusicIcon from '@material-ui/icons/LibraryMusic'
 import MusicNoteIcon from '@material-ui/icons/MusicNote'
