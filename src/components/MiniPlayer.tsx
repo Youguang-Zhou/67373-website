@@ -35,7 +35,12 @@ const Box = styled(Row)`
 	}
 `
 
-const MiniPlayer: FC = () => {
+interface IMiniPlayer {
+	highlightLyricBtn: boolean
+	onToggleLyricBtn: () => void
+}
+
+const MiniPlayer: FC<IMiniPlayer> = ({ highlightLyricBtn, onToggleLyricBtn }: IMiniPlayer) => {
 	const {
 		isPlaying,
 		currTime,
@@ -147,7 +152,12 @@ const MiniPlayer: FC = () => {
 			<Col xs={0} sm={0} md={6} lg={6} xl={6}>
 				<Row align="middle" justify="center">
 					<Col span={4}>
-						<Button color="secondary" variant="outlined" style={{ minWidth: 'auto' }}>
+						<Button
+							color={highlightLyricBtn ? 'primary' : 'secondary'}
+							variant="outlined"
+							style={{ minWidth: 'auto' }}
+							onClick={() => onToggleLyricBtn()}
+						>
 							词
 						</Button>
 					</Col>
