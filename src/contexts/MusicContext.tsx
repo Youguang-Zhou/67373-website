@@ -45,7 +45,12 @@ const MusicProvider: FC = ({ children }) => {
 
 	// 通过改变isPlaying的值来播放或暂停
 	useLayoutEffect(() => {
-		isPlaying ? audioRef.current?.play() : audioRef.current?.pause()
+		if (isPlaying) {
+			audioRef.current?.play()
+			document.title = `${getCurrSongInfo().title}_67373UPUP (=^ェ^=)`
+		} else {
+			audioRef.current?.pause()
+		}
 	}, [isPlaying])
 
 	// useState仅与页面渲染有关（且是异步的），所以要用useRef
