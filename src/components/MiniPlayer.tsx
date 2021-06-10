@@ -11,9 +11,10 @@ import { Col, Row } from 'antd'
 import React, { FC, useContext, useState } from 'react'
 import styled from 'styled-components'
 import cat from '../assets/images/cat.jpeg'
+import { LyricContext } from '../contexts/LyricContext'
 import { MusicContext } from '../contexts/MusicContext'
 import { PlayOrder } from '../utils/enums'
-import { formatDuration } from '../utils/functions'
+import { durationToSeconds, formatDuration } from '../utils/functions'
 import Cover from './Cover'
 
 const Box = styled(Row)`
@@ -35,12 +36,7 @@ const Box = styled(Row)`
 	}
 `
 
-interface IMiniPlayer {
-	highlightLyricBtn: boolean
-	onToggleLyricBtn: () => void
-}
-
-const MiniPlayer: FC<IMiniPlayer> = ({ highlightLyricBtn, onToggleLyricBtn }: IMiniPlayer) => {
+const MiniPlayer: FC = () => {
 	const {
 		isPlaying,
 		currTime,
@@ -52,6 +48,7 @@ const MiniPlayer: FC<IMiniPlayer> = ({ highlightLyricBtn, onToggleLyricBtn }: IM
 		syncPlayTime,
 		switchSong,
 	} = useContext(MusicContext)
+	const { lyrics, shouldShowLyricView, setCurrLine, setShouldShowLyricView } = useContext(LyricContext)
 	const { coverURL, duration, title } = getCurrSongInfo()
 	const [draggingValue, setDraggingValue] = useState(0)
 
@@ -68,6 +65,17 @@ const MiniPlayer: FC<IMiniPlayer> = ({ highlightLyricBtn, onToggleLyricBtn }: IM
 	const handleSliderValueChangeCommitted = (_: unknown, value: number | number[]) => {
 		syncPlayTime(value)
 		setDraggingValue(0)
+		// handle lyric
+		let max = 0
+		let maxIndex = 0
+		lyrics.map((lyric: string, index: number) => {
+			const seconds = durationToSeconds(`00:${lyric.slice(1, 6)}`)
+			if (seconds >= max && seconds <= value) {
+				max = seconds
+				maxIndex = index
+			}
+		})
+		setCurrLine(Math.max(0, maxIndex))
 	}
 
 	// 最右侧播放类型的按钮
@@ -153,10 +161,10 @@ const MiniPlayer: FC<IMiniPlayer> = ({ highlightLyricBtn, onToggleLyricBtn }: IM
 				<Row align="middle" justify="center">
 					<Col span={4}>
 						<Button
-							color={highlightLyricBtn ? 'primary' : 'secondary'}
+							color={shouldShowLyricView ? 'primary' : 'secondary'}
 							variant="outlined"
 							style={{ minWidth: 'auto' }}
-							onClick={() => onToggleLyricBtn()}
+							onClick={() => setShouldShowLyricView(!shouldShowLyricView)}
 						>
 							词
 						</Button>
