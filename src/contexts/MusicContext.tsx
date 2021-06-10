@@ -1,6 +1,6 @@
 import React, { createContext, FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { usePrevious } from 'react-use'
-import { getPlayInfo } from '../utils/api'
+import { API } from '../utils/api'
 import { PlayOrder } from '../utils/enums'
 import { IVod } from '../utils/interfaces'
 
@@ -28,8 +28,8 @@ const MusicProvider: FC = ({ children }) => {
 		syncPlayTime(0)
 		setIsPlaying(false)
 		if (playlist[currIndex]) {
-			getPlayInfo(playlist[currIndex].videoId).then(({ playInfoList }) => {
-				const { playURL } = playInfoList.playInfo[0]
+			API.get(`vod/${playlist[currIndex].videoId}`).then(({ data }) => {
+				const { playURL } = data.playInfoList.playInfo[0]
 				setCurrPlayURL(playURL)
 				audioRef.current = new Audio(playURL)
 				audioRef.current.addEventListener('timeupdate', handleTimeupdate)
