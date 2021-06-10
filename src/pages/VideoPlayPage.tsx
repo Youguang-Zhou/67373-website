@@ -3,30 +3,34 @@ import React, { FC, useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { VideoJsPlayerOptions } from 'video.js'
 import VideoPlayer from '../components/VideoPlayer'
-import { getPlayInfo } from '../utils/api'
+import useGetPlayInfoRequest from '../hooks/useGetPlayInfoRequest'
 
 const VideoPlayPage: FC = () => {
 	const [title, setTitle] = useState('')
 	const [playOptions, setPlayOptions] = useState<VideoJsPlayerOptions>()
 	const { id } = useParams<{ id: string }>()
 	const history = useHistory()
+	const { response, hasError } = useGetPlayInfoRequest(id)
 
 	useEffect(() => {
-		getPlayInfo(id)
-			.then(({ videoBase, playInfoList: { playInfo } }) => {
-				document.title = `${videoBase.title}_67373UPUP (=^ェ^=)`
-				setTitle(videoBase.title)
-				setPlayOptions({
-					sources: [
-						{
-							src: playInfo[0].playURL,
-							type: 'video/mp4',
-						},
-					],
-				})
+		const { videoBase, playInfoList } = response
+		if (videoBase && playInfoList) {
+			document.title = `${videoBase.title}_67373UPUP (=^ェ^=)`
+			setTitle(videoBase.title)
+			setPlayOptions({
+				sources: [
+					{
+						src: playInfoList.playInfo[0].playURL,
+						type: 'video/mp4',
+					},
+				],
 			})
-			.catch(() => history.push('/'))
-	}, [id])
+		}
+	}, [response])
+
+	useEffect(() => {
+		hasError && history.push('/')
+	}, [hasError])
 
 	return (
 		<main style={{ margin: '0vw 2vw' }}>

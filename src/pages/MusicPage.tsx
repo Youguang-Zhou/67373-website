@@ -20,11 +20,11 @@ const Box = styled.div`
 const MusicPage: FC = () => {
 	const [isShowLyric, setIsShowLyric] = useState(false)
 	const { setPlaylist } = useContext(MusicContext)
-	const { data } = useGetPlayListRequest(REACT_APP_VOD_CATE_ID_AUDIO, 1, 100)
+	const { response } = useGetPlayListRequest(REACT_APP_VOD_CATE_ID_AUDIO, 1, 100)
 
 	useEffect(() => {
-		if (data.videoList) {
-			const audios = data.videoList.video
+		if (response.videoList) {
+			const audios = response.videoList.video
 			const originals = audios.filter(
 				(audio) => audio.title === '童话镇' || audio.title === '阿婆说' || audio.title === '弦上有春秋'
 			)
@@ -33,7 +33,7 @@ const MusicPage: FC = () => {
 			)
 			setPlaylist([...originals, ...covers])
 		}
-	}, [data])
+	}, [response])
 
 	return (
 		<Box>

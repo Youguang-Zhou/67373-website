@@ -18,11 +18,15 @@ const HomePage: FC = () => {
 	const [videos, setVideos] = useState<IVod[]>([])
 	const [pageNo, setPageNo] = useState(1)
 	const pageSize = useState(12)[0]
-	const { data, isLoading, hasError, hasMore } = useGetPlayListRequest(REACT_APP_VOD_CATE_ID_VIDEO, pageNo, pageSize)
+	const { response, isLoading, hasError, hasMore } = useGetPlayListRequest(
+		REACT_APP_VOD_CATE_ID_VIDEO,
+		pageNo,
+		pageSize
+	)
 
 	useEffect(() => {
-		data.videoList && setVideos(videos.concat(data.videoList.video))
-	}, [data])
+		response.videoList && setVideos(videos.concat(response.videoList.video))
+	}, [response])
 
 	const handleLoadMore = () => setPageNo((prevPageNo) => prevPageNo + 1)
 

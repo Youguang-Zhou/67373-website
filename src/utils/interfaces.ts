@@ -13,6 +13,7 @@ export interface IPlayList {
 }
 
 export interface IPlayInfo {
-	playInfoList: { playInfo: Array<{ playURL: string }> }
-	videoBase: IVod
+	requestId: string | null
+	videoBase: IVod | null
+	playInfoList: { playInfo: Array<{ playURL: string }> } | null
 }

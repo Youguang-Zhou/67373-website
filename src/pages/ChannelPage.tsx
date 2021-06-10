@@ -55,11 +55,11 @@ const ChannelPage: FC = () => {
 	const pageSize = useState(12)[0]
 	const [currTabIndex, setCurrTabIndex] = useState(0)
 	const scrollableTabs = useMediaQuery(useTheme().breakpoints.down('sm'))
-	const { data, isLoading, hasError, hasMore } = useGetPlayListRequest(categories[currTabIndex], pageNo, pageSize)
+	const { response, isLoading, hasError, hasMore } = useGetPlayListRequest(categories[currTabIndex], pageNo, pageSize)
 
 	useEffect(() => {
-		data.videoList && setVideos(data.videoList.video)
-	}, [data])
+		response.videoList && setVideos(response.videoList.video)
+	}, [response])
 
 	const handleChange = (event: ChangeEvent<Record<string, never>>, value: number) => {
 		setCurrTabIndex(value)
@@ -85,10 +85,10 @@ const ChannelPage: FC = () => {
 									{!hasMore && <Empty image={emptyImages[currTabIndex]} />}
 									<Pagination
 										className="text-center mt-3 mb-3 mb-lg-0"
-										total={data.total || 0}
+										total={response.total || 0}
 										current={pageNo}
 										defaultPageSize={pageSize}
-										showQuickJumper={(data.total || 0) > pageSize}
+										showQuickJumper={(response.total || 0) > pageSize}
 										showSizeChanger={false}
 										hideOnSinglePage
 										responsive
