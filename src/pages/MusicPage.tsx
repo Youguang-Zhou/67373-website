@@ -8,12 +8,14 @@ import { MusicProvider } from '../contexts/MusicContext'
 
 const Main = styled.main`
 	background-color: #121212;
-	padding: 3vw;
+	color: #f8f9fa;
+	padding-bottom: 6rem;
+	user-select: none;
 `
 
 const MusicPage: FC = () => (
 	<MusicProvider>
-		<div className="text-light user-select-none">
+		<Main>
 			<header className="position-relative">
 				<div className="position-absolute bottom-0 d-none d-md-block m-md-3 ms-lg-5">
 					<div style={{ fontSize: '5vw' }}>陈一发儿</div>
@@ -21,11 +23,11 @@ const MusicPage: FC = () => (
 				</div>
 				<Banner src={music_banner} alt="music_banner" />
 			</header>
-			<Main>
+			<section className="p-5">
 				<AudioList />
-			</Main>
+			</section>
 			<MiniPlayer />
-		</div>
+		</Main>
 	</MusicProvider>
 )
 

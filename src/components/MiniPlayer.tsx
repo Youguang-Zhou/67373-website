@@ -1,5 +1,5 @@
-import { DownloadOutlined } from '@ant-design/icons'
-import { IconButton, Slider } from '@material-ui/core'
+import { Button, IconButton, Slider } from '@material-ui/core'
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline'
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline'
 import RepeatOneRoundedIcon from '@material-ui/icons/RepeatOneRounded'
@@ -17,26 +17,21 @@ import { formatDuration } from '../utils/functions'
 import Cover from './Cover'
 
 const Box = styled(Row)`
-	background-color: #121212;
+	backdrop-filter: blur(5px);
+	background-color: #121212cc;
+	border: 1px solid rgb(255 255 255 / 30%);
+	border-radius: 2rem;
 	color: #fafafafa;
+	margin: 0rem 1rem;
+	padding: 1rem;
 	text-align: center;
-`
 
-const Button = styled(IconButton)`
-	opacity: 0.85;
+	button {
+		opacity: 0.85;
 
-	&:hover {
-		opacity: 1;
-	}
-`
-
-const DownloadLink = styled.a`
-	color: #fafafafa;
-	opacity: 0.85;
-
-	&:hover {
-		color: #fafafafa;
-		opacity: 1;
+		&:hover {
+			opacity: 1;
+		}
 	}
 `
 
@@ -74,11 +69,11 @@ const MiniPlayer: FC = () => {
 	const renderPlayOrderBtn = () => {
 		switch (currOrder) {
 			case PlayOrder.Repeat:
-				return <RepeatRoundedIcon color="secondary" fontSize="large" />
+				return <RepeatRoundedIcon fontSize="large" />
 			case PlayOrder.RepeatOne:
-				return <RepeatOneRoundedIcon color="secondary" fontSize="large" />
+				return <RepeatOneRoundedIcon fontSize="large" />
 			case PlayOrder.Shuffle:
-				return <ShuffleRoundedIcon color="secondary" fontSize="large" />
+				return <ShuffleRoundedIcon fontSize="large" />
 			default:
 				break
 		}
@@ -102,26 +97,38 @@ const MiniPlayer: FC = () => {
 	}
 
 	return (
-		<Box align="middle" justify="center">
-			<Col xs={0} sm={0} md={4} lg={4} xl={4}>
-				<Cover src={coverURL || cat} alt={title} size="calc(3vw + 3rem)" />
+		<Box className="fixed-bottom" align="middle" justify="center">
+			<Col xs={0} sm={0} md={6} lg={6} xl={6}>
+				<Row align="middle" justify="center" gutter={32}>
+					<Col>
+						<Cover src={coverURL || cat} alt={title} size="calc(3vw + 3rem)" />
+					</Col>
+					<Col>
+						<Row className="fs-3">{title}</Row>
+						<Row>陈一发儿</Row>
+					</Col>
+				</Row>
 			</Col>
-			<Col xs={22} sm={22} md={16} lg={16} xl={16}>
+			<Col xs={22} sm={22} md={12} lg={12} xl={12}>
 				<Row justify="center">
 					<Col>
-						<Button onClick={() => switchSong(-1)}>
-							<SkipPreviousIcon color="secondary" fontSize="large" />
-						</Button>
-						<Button style={{ fontSize: '60px' }} onClick={handlePlayOrPauseBtnClicked}>
+						<IconButton color="secondary" onClick={() => switchSong(-1)}>
+							<SkipPreviousIcon fontSize="large" />
+						</IconButton>
+						<IconButton
+							color="secondary"
+							style={{ fontSize: '60px' }}
+							onClick={handlePlayOrPauseBtnClicked}
+						>
 							{isPlaying ? (
-								<PauseCircleOutlineIcon color="secondary" fontSize="inherit" />
+								<PauseCircleOutlineIcon fontSize="inherit" />
 							) : (
-								<PlayCircleOutlineIcon color="secondary" fontSize="inherit" />
+								<PlayCircleOutlineIcon fontSize="inherit" />
 							)}
-						</Button>
-						<Button onClick={() => switchSong(1)}>
-							<SkipNextIcon color="secondary" fontSize="large" />
-						</Button>
+						</IconButton>
+						<IconButton color="secondary" onClick={() => switchSong(1)}>
+							<SkipNextIcon fontSize="large" />
+						</IconButton>
 					</Col>
 				</Row>
 				<Row>
@@ -137,11 +144,31 @@ const MiniPlayer: FC = () => {
 					<Col span={4}>{formatDuration(duration)}</Col>
 				</Row>
 			</Col>
-			<Col xs={0} sm={0} md={4} lg={4} xl={4}>
-				<Button onClick={handlePlayOrderBtnClicked}>{renderPlayOrderBtn()}</Button>
-				<DownloadLink href={currPlayURL} target="_blank">
-					<DownloadOutlined style={{ fontSize: '2.1875rem' }} />
-				</DownloadLink>
+			<Col xs={0} sm={0} md={6} lg={6} xl={6}>
+				<Row align="middle" justify="center">
+					<Col span={4}>
+						<Button color="secondary" variant="outlined" style={{ minWidth: 'auto' }}>
+							词
+						</Button>
+					</Col>
+					<Col span={4}>
+						<IconButton color="secondary" onClick={handlePlayOrderBtnClicked}>
+							{renderPlayOrderBtn()}
+						</IconButton>
+					</Col>
+					<Col span={4}>
+						<IconButton color="secondary">
+							<a
+								href={currPlayURL}
+								target="_blank"
+								rel="noopener noreferrer"
+								style={{ color: 'inherit' }}
+							>
+								<CloudDownloadIcon fontSize="large" />
+							</a>
+						</IconButton>
+					</Col>
+				</Row>
 			</Col>
 		</Box>
 	)
