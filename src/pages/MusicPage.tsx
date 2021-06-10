@@ -1,10 +1,11 @@
-import React, { FC, useContext, useEffect, useState } from 'react'
+import React, { FC, useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import music_banner from '../assets/images/music_banner.jpeg'
 import AudioList from '../components/AudioList'
 import Banner from '../components/Banner'
 import LyricView from '../components/LyricView'
 import MiniPlayer from '../components/MiniPlayer'
+import { LyricContext } from '../contexts/LyricContext'
 import { MusicContext } from '../contexts/MusicContext'
 import useGetPlayListRequest from '../hooks/useGetPlayListRequest'
 
@@ -18,8 +19,8 @@ const Box = styled.div`
 `
 
 const MusicPage: FC = () => {
-	const [isShowLyric, setIsShowLyric] = useState(false)
 	const { setPlaylist } = useContext(MusicContext)
+	const { shouldShowLyricView } = useContext(LyricContext)
 	const { response } = useGetPlayListRequest(REACT_APP_VOD_CATE_ID_AUDIO, 1, 100)
 
 	useEffect(() => {
@@ -44,8 +45,8 @@ const MusicPage: FC = () => {
 				</div>
 				<Banner src={music_banner} alt="music_banner" />
 			</header>
-			<main className="p-5">{isShowLyric ? <LyricView /> : <AudioList />}</main>
-			<MiniPlayer highlightLyricBtn={isShowLyric} onToggleLyricBtn={() => setIsShowLyric(!isShowLyric)} />
+			<main className="p-5">{shouldShowLyricView ? <LyricView /> : <AudioList />}</main>
+			<MiniPlayer />
 		</Box>
 	)
 }
