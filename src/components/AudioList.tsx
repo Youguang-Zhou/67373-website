@@ -13,7 +13,16 @@ const AudioList: FC = () => {
 	const handleDoubleClick = (index: number) => () => setCurrIndex(index)
 
 	useEffect(() => {
-		data.videoList && setPlaylist(data.videoList.video)
+		if (data.videoList) {
+			const audios = data.videoList.video
+			const originals = audios.filter(
+				(audio) => audio.title === '童话镇' || audio.title === '阿婆说' || audio.title === '弦上有春秋'
+			)
+			const covers = audios.filter(
+				(audio) => audio.title !== '童话镇' && audio.title !== '阿婆说' && audio.title !== '弦上有春秋'
+			)
+			setPlaylist([...originals, ...covers])
+		}
 	}, [data])
 
 	return (
