@@ -23,7 +23,7 @@ import xiruisi from '../assets/images/xiruisi.png'
 import Banner from '../components/Banner'
 import Empty from '../components/Empty'
 import VideoCard from '../components/VideoCard'
-import useGetPlayListRequest from '../hooks/useGetPlayListRequest'
+import useGetPlaylistRequest from '../hooks/useGetPlaylistRequest'
 import { IVod } from '../utils/interfaces'
 
 const categories = [
@@ -55,7 +55,7 @@ const ChannelPage: FC = () => {
 	const pageSize = useState(12)[0]
 	const [currTabIndex, setCurrTabIndex] = useState(0)
 	const scrollableTabs = useMediaQuery(useTheme().breakpoints.down('sm'))
-	const { response, isLoading, hasError, hasMore } = useGetPlayListRequest(categories[currTabIndex], pageNo, pageSize)
+	const { response, isLoading, hasError, hasMore } = useGetPlaylistRequest(categories[currTabIndex], pageNo, pageSize)
 
 	useEffect(() => {
 		response.videoList && setVideos(response.videoList.video)

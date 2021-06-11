@@ -8,7 +8,7 @@ import MiniPlayer from '../components/MiniPlayer'
 import { LyricContext } from '../contexts/LyricContext'
 import { MusicContext } from '../contexts/MusicContext'
 import useGetLyricsRequest from '../hooks/useGetLyricsRequest'
-import useGetPlayListRequest from '../hooks/useGetPlayListRequest'
+import useGetPlaylistRequest from '../hooks/useGetPlaylistRequest'
 
 const { REACT_APP_VOD_CATE_ID_AUDIO } = process.env
 
@@ -22,7 +22,7 @@ const Box = styled.div`
 const MusicPage: FC = () => {
 	const { setPlaylist, getCurrSongInfo } = useContext(MusicContext)
 	const { setLyrics, shouldShowLyricView } = useContext(LyricContext)
-	const { response: playlistRes } = useGetPlayListRequest(REACT_APP_VOD_CATE_ID_AUDIO, 1, 100)
+	const { response: playlistRes } = useGetPlaylistRequest(REACT_APP_VOD_CATE_ID_AUDIO, 1, 100)
 	const { response: lyricsRes, isLoading, hasError } = useGetLyricsRequest(getCurrSongInfo().videoId)
 
 	useEffect(() => {
