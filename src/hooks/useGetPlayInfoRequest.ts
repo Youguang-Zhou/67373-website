@@ -1,27 +1,36 @@
 import { useEffect, useState } from 'react'
 import { API } from '../utils/api'
-import { IPlayInfo } from '../utils/interfaces'
+import { IVod } from '../utils/interfaces'
+
+const emptyData = { requestId: null, videoBase: null, playInfoList: null }
 
 interface IGetPlayInfoResponse {
-	response: IPlayInfo
+	response: {
+		requestId: string | null
+		videoBase: IVod | null
+		playInfoList: { playInfo: Array<{ playURL: string }> } | null
+	}
 	isLoading: boolean
 	hasError: boolean
 }
 
 const useGetPlayInfoRequest = (id: string): IGetPlayInfoResponse => {
-	const [response, setResponse] = useState({ requestId: null, videoBase: null, playInfoList: null })
-	const [isLoading, setIsLoading] = useState(true)
+	const [response, setResponse] = useState(emptyData)
+	const [isLoading, setIsLoading] = useState(false)
 	const [hasError, setHasError] = useState(false)
 
 	useEffect(() => {
-		setHasError(false)
 		setIsLoading(true)
+		setHasError(false)
 		API.get(`vod/${id}`)
 			.then(({ data }) => {
 				data.requestId ? setResponse(data) : setHasError(true)
-				setIsLoading(false)
 			})
-			.catch(() => setHasError(true))
+			.catch(() => {
+				setResponse(emptyData)
+				setHasError(true)
+			})
+			.finally(() => setIsLoading(false))
 	}, [id])
 
 	return { response, isLoading, hasError }

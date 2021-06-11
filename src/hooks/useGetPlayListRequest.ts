@@ -1,33 +1,49 @@
 import { useEffect, useState } from 'react'
 import { API } from '../utils/api'
-import { IPlayList } from '../utils/interfaces'
+import { IVod } from '../utils/interfaces'
 
-interface IGetPlayListResponse {
-	response: IPlayList
+const emptyData = { requestId: null, total: null, videoList: null }
+
+interface IGetPlaylistResponse {
+	response: {
+		requestId: string | null
+		total: number | null
+		videoList: { video: IVod[] } | null
+	}
 	isLoading: boolean
 	hasError: boolean
 	hasMore: boolean
 }
 
-const useGetPlayListRequest = (cateId: string | undefined, pageNo: number, pageSize: number): IGetPlayListResponse => {
-	const [response, setResponse] = useState({ requestId: null, total: null, videoList: null })
-	const [isLoading, setIsLoading] = useState(true)
+const useGetPlaylistRequest = (cateId: string | undefined, pageNo: number, pageSize: number): IGetPlaylistResponse => {
+	const [response, setResponse] = useState(emptyData)
+	const [isLoading, setIsLoading] = useState(false)
 	const [hasError, setHasError] = useState(false)
 	const [hasMore, setHasMore] = useState(true)
 
 	useEffect(() => {
-		setHasError(false)
-		setIsLoading(true)
-		API.get('vod', { params: { cateId: cateId, pageNo: pageNo, pageSize: pageSize } })
-			.then(({ data }) => {
-				data.requestId ? setResponse(data) : setHasError(true)
-				setIsLoading(false)
-				setHasMore((pageNo - 1) * pageSize + data.videoList.video.length !== data.total)
-			})
-			.catch(() => setHasError(true))
+		if (cateId) {
+			setIsLoading(true)
+			setHasError(false)
+			API.get('vod', { params: { cateId: cateId, pageNo: pageNo, pageSize: pageSize } })
+				.then(({ data }) => {
+					data.requestId ? setResponse(data) : setHasError(true)
+					setHasMore((pageNo - 1) * pageSize + data.videoList.video.length !== data.total)
+				})
+				.catch(() => {
+					setResponse(emptyData)
+					setHasError(true)
+					setHasMore(false)
+				})
+				.finally(() => setIsLoading(false))
+		} else {
+			setResponse(emptyData)
+			setHasError(true)
+			setHasMore(false)
+		}
 	}, [cateId, pageNo])
 
 	return { response, isLoading, hasError, hasMore }
 }
 
-export default useGetPlayListRequest
+export default useGetPlaylistRequest
