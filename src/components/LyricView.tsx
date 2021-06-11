@@ -5,9 +5,16 @@ import styled from 'styled-components'
 import { LyricContext } from '../contexts/LyricContext'
 import { MusicContext } from '../contexts/MusicContext'
 
+const Box = styled(Row)`
+	margin-bottom: 8rem;
+	padding: 2vw 0px;
+	text-align: center;
+`
+
 const LyricList = styled.div`
-	height: 600px;
+	height: 550px;
 	overflow: scroll;
+	pointer-events: none;
 
 	&::-webkit-scrollbar {
 		display: none; /* Chrome, Safari and Opera */
@@ -47,12 +54,12 @@ const LyricView: FC<ILyricView> = ({ isLoading, hasError }: ILyricView) => {
 	}, [currLine])
 
 	return (
-		<Row className="px-5" align="middle" justify="center">
-			<Col span={12} className="text-center">
-				<img className="rounded-circle w-50" src={coverURL} alt={title} />
+		<Box align="middle" justify="center">
+			<Col xs={12} md={12} lg={8}>
+				<img className="rounded-circle w-75 mb-3" src={coverURL} alt={title} />
 			</Col>
-			<Col span={12}>
-				<h1 className="text-light mb-5">{title}</h1>
+			<Col xs={24} md={12} lg={12}>
+				<h1 className="text-light mb-4">{title}</h1>
 				<LyricList ref={scrollRef}>
 					{!isLoading && (
 						<>
@@ -71,7 +78,7 @@ const LyricView: FC<ILyricView> = ({ isLoading, hasError }: ILyricView) => {
 					)}
 				</LyricList>
 			</Col>
-		</Row>
+		</Box>
 	)
 }
 

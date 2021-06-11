@@ -15,7 +15,6 @@ import { LyricContext } from '../contexts/LyricContext'
 import { MusicContext } from '../contexts/MusicContext'
 import { PlayOrder } from '../utils/enums'
 import { durationToSeconds, formatDuration } from '../utils/functions'
-import Cover from './Cover'
 
 const Box = styled(Row)`
 	backdrop-filter: blur(5px);
@@ -36,7 +35,11 @@ const Box = styled(Row)`
 	}
 `
 
-const MiniPlayer: FC = () => {
+interface IMiniPlayer {
+	onCoverClicked: () => void
+}
+
+const MiniPlayer: FC<IMiniPlayer> = ({ onCoverClicked }: IMiniPlayer) => {
 	const {
 		isPlaying,
 		currTime,
@@ -78,20 +81,6 @@ const MiniPlayer: FC = () => {
 		setCurrLine(Math.max(0, maxIndex))
 	}
 
-	// 最右侧播放类型的按钮
-	const renderPlayOrderBtn = () => {
-		switch (currOrder) {
-			case PlayOrder.Repeat:
-				return <RepeatRoundedIcon fontSize="large" />
-			case PlayOrder.RepeatOne:
-				return <RepeatOneRoundedIcon fontSize="large" />
-			case PlayOrder.Shuffle:
-				return <ShuffleRoundedIcon fontSize="large" />
-			default:
-				break
-		}
-	}
-
 	// 切换播放类型
 	const handlePlayOrderBtnClicked = () => {
 		switch (currOrder) {
@@ -109,25 +98,51 @@ const MiniPlayer: FC = () => {
 		}
 	}
 
+	// 歌词按钮
+	const LyricBtn = (
+		<Button
+			color={shouldShowLyricView ? 'primary' : 'secondary'}
+			variant="outlined"
+			style={{ minWidth: 'auto' }}
+			onClick={() => setShouldShowLyricView(!shouldShowLyricView)}
+		>
+			词
+		</Button>
+	)
+
+	// 播放顺序按钮
+	const PlayOrderBtn = (
+		<IconButton color="secondary" onClick={handlePlayOrderBtnClicked}>
+			{currOrder === PlayOrder.Repeat && <RepeatRoundedIcon fontSize="large" />}
+			{currOrder === PlayOrder.RepeatOne && <RepeatOneRoundedIcon fontSize="large" />}
+			{currOrder === PlayOrder.Shuffle && <ShuffleRoundedIcon fontSize="large" />}
+		</IconButton>
+	)
+
 	return (
 		<Box className="fixed-bottom" align="middle" justify="center">
-			<Col xs={0} sm={0} md={6} lg={6} xl={6}>
-				<Row align="middle" justify="center" gutter={32}>
-					<Col>
-						<Cover src={coverURL || cat} alt={title} size="calc(3vw + 3rem)" />
+			<Col xs={0} md={6} role="button" onClick={() => onCoverClicked()}>
+				<Row align="middle" justify="center">
+					<Col xs={0} md={16} lg={8}>
+						<img className="h-75 w-75 rounded" src={coverURL || cat} alt={title} />
 					</Col>
-					<Col>
+					<Col xs={0} md={24} lg={16}>
 						<Row className="fs-3">{title}</Row>
 						<Row>陈一发儿</Row>
 					</Col>
 				</Row>
 			</Col>
-			<Col xs={22} sm={22} md={12} lg={12} xl={12}>
-				<Row justify="center">
-					<Col>
+			<Col xs={22} md={12}>
+				<Row align="middle" justify="center">
+					<Col xs={5} md={0}>
+						{LyricBtn}
+					</Col>
+					<Col xs={4} md={6} lg={3}>
 						<IconButton color="secondary" onClick={() => switchSong(-1)}>
 							<SkipPreviousIcon fontSize="large" />
 						</IconButton>
+					</Col>
+					<Col xs={6} md={6} lg={3}>
 						<IconButton
 							color="secondary"
 							style={{ fontSize: '60px' }}
@@ -139,9 +154,14 @@ const MiniPlayer: FC = () => {
 								<PlayCircleOutlineIcon fontSize="inherit" />
 							)}
 						</IconButton>
+					</Col>
+					<Col xs={4} md={6} lg={3}>
 						<IconButton color="secondary" onClick={() => switchSong(1)}>
 							<SkipNextIcon fontSize="large" />
 						</IconButton>
+					</Col>
+					<Col xs={5} md={0}>
+						{PlayOrderBtn}
 					</Col>
 				</Row>
 				<Row>
@@ -157,24 +177,15 @@ const MiniPlayer: FC = () => {
 					<Col span={4}>{formatDuration(duration)}</Col>
 				</Row>
 			</Col>
-			<Col xs={0} sm={0} md={6} lg={6} xl={6}>
+			<Col xs={0} md={6}>
 				<Row align="middle" justify="center">
-					<Col span={4}>
-						<Button
-							color={shouldShowLyricView ? 'primary' : 'secondary'}
-							variant="outlined"
-							style={{ minWidth: 'auto' }}
-							onClick={() => setShouldShowLyricView(!shouldShowLyricView)}
-						>
-							词
-						</Button>
+					<Col xs={0} md={6} lg={4}>
+						{LyricBtn}
 					</Col>
-					<Col span={4}>
-						<IconButton color="secondary" onClick={handlePlayOrderBtnClicked}>
-							{renderPlayOrderBtn()}
-						</IconButton>
+					<Col xs={0} md={6} lg={4}>
+						{PlayOrderBtn}
 					</Col>
-					<Col span={4}>
+					<Col xs={0} md={6} lg={4}>
 						<IconButton color="secondary">
 							<a
 								href={currPlayURL}
