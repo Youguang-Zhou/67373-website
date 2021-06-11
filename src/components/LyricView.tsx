@@ -23,7 +23,12 @@ const Lyric = styled.div<{ highlight: boolean }>`
 	padding: 10px 0px;
 `
 
-const LyricView: FC = () => {
+interface ILyricView {
+	isLoading: boolean
+	hasError: boolean
+}
+
+const LyricView: FC<ILyricView> = ({ isLoading, hasError }: ILyricView) => {
 	const scrollRef = useRef<HTMLDivElement>(null)
 	const { getCurrSongInfo } = useContext(MusicContext)
 	const { lyrics, currLine, shouldShowLyricView } = useContext(LyricContext)
@@ -49,11 +54,21 @@ const LyricView: FC = () => {
 			<Col span={12}>
 				<h1 className="text-light mb-5">{title}</h1>
 				<LyricList ref={scrollRef}>
-					{lyrics.map((lyric: string, index: number) => (
-						<Lyric key={index} highlight={index === currLine - 1}>
-							{lyric.slice(11)}
-						</Lyric>
-					))}
+					{!isLoading && (
+						<>
+							{hasError ? (
+								<span>暂无歌词X...X</span>
+							) : (
+								<>
+									{lyrics.map((lyric: string, index: number) => (
+										<Lyric key={index} highlight={index === currLine - 1}>
+											{lyric.slice(11)}
+										</Lyric>
+									))}
+								</>
+							)}
+						</>
+					)}
 				</LyricList>
 			</Col>
 		</Row>

@@ -7,6 +7,7 @@ import LyricView from '../components/LyricView'
 import MiniPlayer from '../components/MiniPlayer'
 import { LyricContext } from '../contexts/LyricContext'
 import { MusicContext } from '../contexts/MusicContext'
+import useGetLyricsRequest from '../hooks/useGetLyricsRequest'
 import useGetPlayListRequest from '../hooks/useGetPlayListRequest'
 
 const { REACT_APP_VOD_CATE_ID_AUDIO } = process.env
@@ -19,13 +20,14 @@ const Box = styled.div`
 `
 
 const MusicPage: FC = () => {
-	const { setPlaylist } = useContext(MusicContext)
-	const { shouldShowLyricView } = useContext(LyricContext)
-	const { response } = useGetPlayListRequest(REACT_APP_VOD_CATE_ID_AUDIO, 1, 100)
+	const { setPlaylist, getCurrSongInfo } = useContext(MusicContext)
+	const { setLyrics, shouldShowLyricView } = useContext(LyricContext)
+	const { response: playlistRes } = useGetPlayListRequest(REACT_APP_VOD_CATE_ID_AUDIO, 1, 100)
+	const { response: lyricsRes, isLoading, hasError } = useGetLyricsRequest(getCurrSongInfo().videoId)
 
 	useEffect(() => {
-		if (response.videoList) {
-			const audios = response.videoList.video
+		if (playlistRes.videoList) {
+			const audios = playlistRes.videoList.video
 			const originals = audios.filter(
 				(audio) => audio.title === '童话镇' || audio.title === '阿婆说' || audio.title === '弦上有春秋'
 			)
@@ -34,7 +36,11 @@ const MusicPage: FC = () => {
 			)
 			setPlaylist([...originals, ...covers])
 		}
-	}, [response])
+	}, [playlistRes])
+
+	useEffect(() => {
+		setLyrics(lyricsRes.split('\n'))
+	}, [lyricsRes])
 
 	return (
 		<Box>
@@ -45,7 +51,9 @@ const MusicPage: FC = () => {
 				</div>
 				<Banner src={music_banner} alt="music_banner" />
 			</header>
-			<main className="p-5">{shouldShowLyricView ? <LyricView /> : <AudioList />}</main>
+			<main className="p-5">
+				{shouldShowLyricView ? <LyricView isLoading={isLoading} hasError={hasError} /> : <AudioList />}
+			</main>
 			<MiniPlayer />
 		</Box>
 	)
