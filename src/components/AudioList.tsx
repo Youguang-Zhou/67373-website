@@ -14,7 +14,7 @@ const AudioList: FC = () => {
 	}
 
 	return (
-		<section className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-5">
+		<section className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-5">
 			{playlist.map((audio: IVod, index: number) => (
 				<AudioCard
 					key={audio.videoId}
