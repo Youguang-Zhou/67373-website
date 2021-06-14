@@ -61,7 +61,10 @@ const Header: FC = () => {
 								>
 									频道
 								</a>
-								<a className={`nav-link ${currNav === '/music' && 'active'} px-4 py-1`} href="/music">
+								<a
+									className={`nav-link ${currNav.startsWith('/music') && 'active'} px-4 py-1`}
+									href="/music"
+								>
 									音乐
 								</a>
 								<a className={`nav-link ${currNav === '/67373' && 'active'} px-4 py-1`} href="/67373">

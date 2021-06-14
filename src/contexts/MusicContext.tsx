@@ -1,125 +1,149 @@
-import React, { createContext, FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { usePrevious } from 'react-use'
+import React, { createContext, FC, useEffect, useRef, useState } from 'react'
+import useGetPlaylistRequest from '../hooks/useGetPlaylistRequest'
 import { API } from '../utils/api'
 import { PlayOrder } from '../utils/enums'
 import { IVod } from '../utils/interfaces'
+
+const { REACT_APP_VOD_CATE_ID_AUDIO } = process.env
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const MusicContext = createContext<any>(undefined)
 const { Provider } = MusicContext
 
-const emptyData = { coverURL: '', creationTime: '', duration: 0, title: '', videoId: '' }
-
 // eslint-disable-next-line react/prop-types
 const MusicProvider: FC = ({ children }) => {
-	const audioRef = useRef<HTMLAudioElement>()
-	const orderRef = useRef(PlayOrder.Repeat)
-	const [playlist, setPlaylist] = useState<IVod[]>([])
-	const [isPlaying, setIsPlaying] = useState(false)
-	const [currTime, setCurrTime] = useState(0)
-	const [currIndex, setCurrIndex] = useState(0)
-	const [currOrder, setCurrOrder] = useState(PlayOrder.Repeat)
-	const [currPlayURL, setCurrPlayURL] = useState('')
-	const prevSong = usePrevious(playlist[currIndex])
+	const audioRef = useRef<HTMLAudioElement>(new Audio())
+	const [currIndex, setCurrIndex] = useState<number | undefined>(undefined)
+	const [currSong, setCurrSong] = useState<IVod | undefined>(undefined)
+	const [currTime, setCurrTime] = useState<number>(0)
+	const [currOrder, setCurrOrder] = useState<PlayOrder>(PlayOrder.Repeat)
+	const [playlist, setPlaylist] = useState<IVod[] | undefined>(undefined)
+	const { response: playlistRes } = useGetPlaylistRequest(REACT_APP_VOD_CATE_ID_AUDIO, 1, 100)
 
-	// 通过改变currSongId的值来切歌
-	// 使用useLayoutEffect目的是解决Safari自动播放问题（Safari只能通过onClick事件播放音频）
-	useLayoutEffect(() => {
-		syncPlayTime(0)
-		setIsPlaying(false)
-		if (playlist[currIndex]) {
-			API.get(`vod/${playlist[currIndex].videoId}`).then(({ data }) => {
-				const { playURL } = data.playInfoList.playInfo[0]
-				setCurrPlayURL(playURL)
-				audioRef.current = new Audio(playURL)
-				audioRef.current.addEventListener('timeupdate', handleTimeupdate)
-				audioRef.current.addEventListener('ended', handleEnded)
-				prevSong && setIsPlaying(true)
-			})
-		}
-		return () => {
-			audioRef.current?.removeEventListener('timeupdate', handleTimeupdate)
-			audioRef.current?.removeEventListener('ended', handleEnded)
-		}
-	}, [playlist[currIndex]])
-
-	// 通过改变isPlaying的值来播放或暂停
-	useLayoutEffect(() => {
-		if (isPlaying) {
-			audioRef.current?.play()
-			document.title = `${getCurrSongInfo().title}_67373UPUP (=^ェ^=)`
-		} else {
-			audioRef.current?.pause()
-		}
-	}, [isPlaying])
-
-	// useState仅与页面渲染有关（且是异步的），所以要用useRef
+	// 初始化
 	useEffect(() => {
-		orderRef.current = currOrder
-	}, [currOrder])
+		// 更新当前歌曲的当前时间
+		const handleTimeupdate = () => setCurrTime(audioRef.current.currentTime)
+		// 当前歌曲播放结束的调用
+		const handleEnded = () => switchSong(1, false)
+		audioRef.current.addEventListener('timeupdate', handleTimeupdate)
+		audioRef.current.addEventListener('ended', handleEnded)
+		return () => {
+			audioRef.current.removeEventListener('timeupdate', handleTimeupdate)
+			audioRef.current.removeEventListener('ended', handleEnded)
+		}
+	}, [currSong])
 
-	// 更新当前歌曲的当前时间
-	const handleTimeupdate = () => setCurrTime(audioRef.current?.currentTime || 0)
+	// 通过改变currIndex的值来切歌（currIndex !== undefined是因为currIndex为0的时候也会被当成false）
+	useEffect(() => {
+		playlist && currIndex !== undefined && setCurrSong(playlist[currIndex])
+	}, [currIndex])
 
-	// 当前歌曲播放结束的调用
-	const handleEnded = () => switchSong(1)
+	// 获取歌曲列表，并排序
+	useEffect(() => {
+		if (playlistRes.videoList) {
+			const audios = playlistRes.videoList.video
+			const originals = audios.filter(
+				(audio) => audio.title === '童话镇' || audio.title === '阿婆说' || audio.title === '弦上有春秋'
+			)
+			const covers = audios.filter(
+				(audio) => audio.title !== '童话镇' && audio.title !== '阿婆说' && audio.title !== '弦上有春秋'
+			)
+			setPlaylist([...originals, ...covers])
+		}
+	}, [playlistRes])
 
-	// 获取当前歌曲的详细信息
-	const getCurrSongInfo = () => playlist[currIndex] || emptyData
+	// 获取当前播放状态
+	const getIsPlaying = () => !audioRef.current.paused
 
-	// 同步当前时间
-	const syncPlayTime = (time: number) => {
-		if (audioRef.current) {
-			audioRef.current.currentTime = time
-			setCurrTime(time)
+	// 获取当前播放源
+	const getCurrSource = () => audioRef.current.src
+
+	// 跳转
+	const seek = (value: number) => (audioRef.current.currentTime = value)
+
+	// 开始播放，因为浏览器自动播放政策的原因，这里用不了useGetPlayInfoRequest（因为hook是异步的）
+	const playAudioById = (id: string) =>
+		API.get(`vod/${id}`).then(({ data }) => {
+			audioRef.current.src = data.playInfoList.playInfo[0].playURL
+			audioRef.current.play()
+			setCurrIndexById(id)
+		})
+
+	const playAudio = () => audioRef.current.play()
+
+	// 暂停播放
+	const pauseAudio = () => audioRef.current.pause()
+
+	// 通过当前歌曲id设置当前歌曲index
+	const setCurrIndexById = (id: string): boolean => {
+		if (playlist) {
+			const arr = playlist.filter((audio: IVod) => audio.videoId === id)
+			if (arr.length !== 0 && arr[0].cateName === '音乐') {
+				setCurrIndex(playlist.indexOf(arr[0]))
+				return true
+			} else {
+				return false
+			}
+		} else {
+			return false
 		}
 	}
 
 	// 切歌（+1表示切到下一首，-1表示切到上一首）
-	const switchSong = (offset: number) => {
-		if (orderRef.current === PlayOrder.Repeat) {
-			const newIndex = currIndex + offset
-			if (newIndex < 0) {
-				// 到第一首歌了，切到最后一首歌
-				setCurrIndex(playlist.length - 1)
-			} else if (newIndex > playlist.length - 1) {
-				// 到最后一首歌了，切到第一首歌
-				setCurrIndex(0)
-			} else {
-				setCurrIndex(newIndex)
+	const switchSong = (offset: number, triggerByUser: boolean) => {
+		setCurrTime(0)
+		audioRef.current.currentTime = 0
+		if (currSong && playlist && currIndex !== undefined) {
+			let songIdToPlay = undefined
+			// ===循环播放 或者 单曲循环但是由用户点击按钮触发===
+			if (currOrder === PlayOrder.Repeat || (currOrder === PlayOrder.RepeatOne && triggerByUser)) {
+				const newIndex = currIndex + offset
+				if (newIndex < 0) {
+					// 到第一首歌了，切到最后一首歌
+					songIdToPlay = playlist[playlist.length - 1].videoId
+				} else if (newIndex > playlist.length - 1) {
+					// 到最后一首歌了，切到第一首歌
+					songIdToPlay = playlist[0].videoId
+				} else {
+					songIdToPlay = playlist[newIndex].videoId
+				}
 			}
-		} else if (orderRef.current === PlayOrder.RepeatOne) {
-			// 单曲循环
-			if (audioRef.current) {
-				audioRef.current.currentTime = 0
+			// ===单曲循环下自动重新播放===
+			else if (currOrder === PlayOrder.RepeatOne && !triggerByUser) {
 				audioRef.current.play()
 			}
-		} else {
-			// 除了currIndex以外的index数组
-			const indicesArr = Array.from(Array(playlist.length).keys()).filter((index) => index !== currIndex)
-			// 其中随机选一个index
-			const randomIndex = indicesArr[Math.floor(Math.random() * indicesArr.length)]
-			setCurrIndex(randomIndex)
+			// ===随机播放===
+			else if (currOrder === PlayOrder.Shuffle) {
+				// 除了当前歌曲的剩下的歌曲
+				const arr = playlist.filter((audio) => audio.videoId !== currSong.videoId)
+				// 其中随机选一首
+				songIdToPlay = arr[Math.floor(Math.random() * arr.length)].videoId
+			}
+			songIdToPlay && playAudioById(songIdToPlay)
 		}
 	}
 
 	return (
 		<Provider
 			value={{
-				playlist,
-				isPlaying,
-				currTime,
 				currIndex,
+				currSong,
+				currTime,
 				currOrder,
-				currPlayURL,
-				setPlaylist,
-				setIsPlaying,
-				setCurrTime,
+				playlist,
 				setCurrIndex,
+				setCurrSong,
+				setCurrTime,
 				setCurrOrder,
-				setCurrPlayURL,
-				getCurrSongInfo,
-				syncPlayTime,
+				setPlaylist,
+				getIsPlaying,
+				getCurrSource,
+				seek,
+				playAudioById,
+				playAudio,
+				pauseAudio,
+				setCurrIndexById,
 				switchSong,
 			}}
 		>

@@ -14,23 +14,26 @@ interface IGetPlayInfoResponse {
 	hasError: boolean
 }
 
-const useGetPlayInfoRequest = (id: string): IGetPlayInfoResponse => {
+const useGetPlayInfoRequest = (id: string | undefined): IGetPlayInfoResponse => {
 	const [response, setResponse] = useState(emptyData)
 	const [isLoading, setIsLoading] = useState(false)
 	const [hasError, setHasError] = useState(false)
 
 	useEffect(() => {
-		setIsLoading(true)
-		setHasError(false)
-		API.get(`vod/${id}`)
-			.then(({ data }) => {
-				data.requestId ? setResponse(data) : setHasError(true)
-			})
-			.catch(() => {
-				setResponse(emptyData)
-				setHasError(true)
-			})
-			.finally(() => setIsLoading(false))
+		if (id) {
+			setIsLoading(true)
+			setHasError(false)
+			API.get(`vod/${id}`)
+				.then(({ data }) => (data.requestId ? setResponse(data) : setHasError(true)))
+				.catch(() => {
+					setResponse(emptyData)
+					setHasError(true)
+				})
+				.finally(() => setIsLoading(false))
+		} else {
+			setResponse(emptyData)
+			setHasError(true)
+		}
 	}, [id])
 
 	return { response, isLoading, hasError }

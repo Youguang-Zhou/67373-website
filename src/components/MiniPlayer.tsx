@@ -41,32 +41,41 @@ interface IMiniPlayer {
 
 const MiniPlayer: FC<IMiniPlayer> = ({ onCoverClicked }: IMiniPlayer) => {
 	const {
-		isPlaying,
+		currSong,
 		currTime,
 		currOrder,
-		currPlayURL,
-		setIsPlaying,
+		setCurrTime,
 		setCurrOrder,
-		getCurrSongInfo,
-		syncPlayTime,
+		getIsPlaying,
+		getCurrSource,
+		seek,
+		playAudioById,
+		playAudio,
+		pauseAudio,
 		switchSong,
 	} = useContext(MusicContext)
 	const { lyrics, shouldShowLyricView, setCurrLine, setShouldShowLyricView } = useContext(LyricContext)
-	const { coverURL, duration, title } = getCurrSongInfo()
 	const [draggingValue, setDraggingValue] = useState(0)
 
 	// 播放或暂停
-	const handlePlayOrPauseBtnClicked = () => setIsPlaying(!isPlaying)
+	const handlePlayOrPauseBtnClicked = () => {
+		if (getIsPlaying()) {
+			pauseAudio()
+		} else {
+			getCurrSource() ? playAudio() : playAudioById(currSong.videoId)
+		}
+	}
 
 	// 进度条左侧显示的时间，如果用户在拖拽进度条则显示拖拽进度，否则显示当前歌曲进度
-	const displaySliderValue = () => (draggingValue !== 0 ? draggingValue : Math.min(currTime, duration))
+	const displaySliderValue = () => (draggingValue !== 0 ? draggingValue : Math.min(currTime, currSong.duration))
 
 	// 拖拽进度条时的调用
 	const handleSliderValueChanged = (_: unknown, value: number | number[]) => setDraggingValue(value as number)
 
 	// 拖拽进度条后松开鼠标的调用
 	const handleSliderValueChangeCommitted = (_: unknown, value: number | number[]) => {
-		syncPlayTime(value)
+		seek(value)
+		setCurrTime(value)
 		setDraggingValue(0)
 		// handle lyric
 		let max = 0
@@ -120,86 +129,94 @@ const MiniPlayer: FC<IMiniPlayer> = ({ onCoverClicked }: IMiniPlayer) => {
 	)
 
 	return (
-		<Box className="fixed-bottom" align="middle" justify="center">
-			<Col xs={0} md={6} role="button" onClick={() => onCoverClicked()}>
-				<Row align="middle" justify="center">
-					<Col xs={0} md={16} lg={8}>
-						<img className="h-75 w-75 rounded" src={coverURL || cat} alt={title} />
+		<>
+			{currSong && (
+				<Box className="fixed-bottom" align="middle" justify="center">
+					<Col xs={0} md={6} role="button" onClick={() => onCoverClicked()}>
+						<Row align="middle" justify="center">
+							<Col xs={0} md={16} lg={8}>
+								<img
+									className="h-75 w-75 rounded"
+									src={currSong.coverURL || cat}
+									alt={currSong.title || ''}
+								/>
+							</Col>
+							<Col xs={0} md={24} lg={16}>
+								<Row className="fs-3">{currSong.title || '未在播放'}</Row>
+								<Row>陈一发儿</Row>
+							</Col>
+						</Row>
 					</Col>
-					<Col xs={0} md={24} lg={16}>
-						<Row className="fs-3">{title}</Row>
-						<Row>陈一发儿</Row>
+					<Col xs={22} md={12}>
+						<Row align="middle" justify="center">
+							<Col xs={5} md={0}>
+								{LyricBtn}
+							</Col>
+							<Col xs={4} md={6} lg={3}>
+								<IconButton color="secondary" onClick={() => switchSong(-1, true)}>
+									<SkipPreviousIcon fontSize="large" />
+								</IconButton>
+							</Col>
+							<Col xs={6} md={6} lg={3}>
+								<IconButton
+									color="secondary"
+									style={{ fontSize: '60px' }}
+									onClick={handlePlayOrPauseBtnClicked}
+								>
+									{getIsPlaying() ? (
+										<PauseCircleOutlineIcon fontSize="inherit" />
+									) : (
+										<PlayCircleOutlineIcon fontSize="inherit" />
+									)}
+								</IconButton>
+							</Col>
+							<Col xs={4} md={6} lg={3}>
+								<IconButton color="secondary" onClick={() => switchSong(1, true)}>
+									<SkipNextIcon fontSize="large" />
+								</IconButton>
+							</Col>
+							<Col xs={5} md={0}>
+								{PlayOrderBtn}
+							</Col>
+						</Row>
+						<Row>
+							<Col span={4}>{formatDuration(displaySliderValue())}</Col>
+							<Col span={16}>
+								<Slider
+									max={currSong.duration}
+									value={displaySliderValue()}
+									onChange={handleSliderValueChanged}
+									onChangeCommitted={handleSliderValueChangeCommitted}
+								/>
+							</Col>
+							<Col span={4}>{formatDuration(currSong.duration)}</Col>
+						</Row>
 					</Col>
-				</Row>
-			</Col>
-			<Col xs={22} md={12}>
-				<Row align="middle" justify="center">
-					<Col xs={5} md={0}>
-						{LyricBtn}
+					<Col xs={0} md={6}>
+						<Row align="middle" justify="center">
+							<Col xs={0} md={6} lg={4}>
+								{LyricBtn}
+							</Col>
+							<Col xs={0} md={6} lg={4}>
+								{PlayOrderBtn}
+							</Col>
+							<Col xs={0} md={6} lg={4}>
+								<IconButton color="secondary">
+									<a
+										href={getCurrSource()}
+										target="_blank"
+										rel="noopener noreferrer"
+										style={{ color: 'inherit' }}
+									>
+										<CloudDownloadIcon fontSize="large" />
+									</a>
+								</IconButton>
+							</Col>
+						</Row>
 					</Col>
-					<Col xs={4} md={6} lg={3}>
-						<IconButton color="secondary" onClick={() => switchSong(-1)}>
-							<SkipPreviousIcon fontSize="large" />
-						</IconButton>
-					</Col>
-					<Col xs={6} md={6} lg={3}>
-						<IconButton
-							color="secondary"
-							style={{ fontSize: '60px' }}
-							onClick={handlePlayOrPauseBtnClicked}
-						>
-							{isPlaying ? (
-								<PauseCircleOutlineIcon fontSize="inherit" />
-							) : (
-								<PlayCircleOutlineIcon fontSize="inherit" />
-							)}
-						</IconButton>
-					</Col>
-					<Col xs={4} md={6} lg={3}>
-						<IconButton color="secondary" onClick={() => switchSong(1)}>
-							<SkipNextIcon fontSize="large" />
-						</IconButton>
-					</Col>
-					<Col xs={5} md={0}>
-						{PlayOrderBtn}
-					</Col>
-				</Row>
-				<Row>
-					<Col span={4}>{formatDuration(displaySliderValue())}</Col>
-					<Col span={16}>
-						<Slider
-							max={duration}
-							value={displaySliderValue()}
-							onChange={handleSliderValueChanged}
-							onChangeCommitted={handleSliderValueChangeCommitted}
-						/>
-					</Col>
-					<Col span={4}>{formatDuration(duration)}</Col>
-				</Row>
-			</Col>
-			<Col xs={0} md={6}>
-				<Row align="middle" justify="center">
-					<Col xs={0} md={6} lg={4}>
-						{LyricBtn}
-					</Col>
-					<Col xs={0} md={6} lg={4}>
-						{PlayOrderBtn}
-					</Col>
-					<Col xs={0} md={6} lg={4}>
-						<IconButton color="secondary">
-							<a
-								href={currPlayURL}
-								target="_blank"
-								rel="noopener noreferrer"
-								style={{ color: 'inherit' }}
-							>
-								<CloudDownloadIcon fontSize="large" />
-							</a>
-						</IconButton>
-					</Col>
-				</Row>
-			</Col>
-		</Box>
+				</Box>
+			)}
+		</>
 	)
 }
 

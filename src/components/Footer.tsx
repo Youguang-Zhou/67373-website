@@ -9,8 +9,8 @@ const Footer: FC = () => {
 		<footer
 			className="text-center py-3"
 			style={{
-				backgroundColor: pathname === '/music' ? '#121212' : 'white',
-				color: pathname === '/music' ? '#fafafafa' : '#00000080',
+				backgroundColor: pathname.startsWith('/music') ? '#121212' : 'white',
+				color: pathname.startsWith('/music') ? '#fafafafa' : '#00000080',
 			}}
 		>
 			<span className="px-3">{`© 2020-${new Date().getFullYear()} 67373upup.com`}</span>
