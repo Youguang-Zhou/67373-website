@@ -35,11 +35,7 @@ const Box = styled(Row)`
 	}
 `
 
-interface IMiniPlayer {
-	onCoverClicked: () => void
-}
-
-const MiniPlayer: FC<IMiniPlayer> = ({ onCoverClicked }: IMiniPlayer) => {
+const MiniPlayer: FC = () => {
 	const {
 		currSong,
 		currTime,
@@ -132,9 +128,9 @@ const MiniPlayer: FC<IMiniPlayer> = ({ onCoverClicked }: IMiniPlayer) => {
 		<>
 			{currSong && (
 				<Box className="fixed-bottom" align="middle" justify="center">
-					<Col xs={0} md={6} role="button" onClick={() => onCoverClicked()}>
+					<Col xs={0} md={6} role="button" onClick={() => setShouldShowLyricView(true)}>
 						<Row align="middle" justify="center">
-							<Col xs={0} md={16} lg={8}>
+							<Col xs={0} md={16} lg={8} className="px-3">
 								<img
 									className="h-75 w-75 rounded"
 									src={currSong.coverURL || cat}
