@@ -1,10 +1,12 @@
 import React, { FC, useContext } from 'react'
+import { LyricContext } from '../contexts/LyricContext'
 import { MusicContext } from '../contexts/MusicContext'
 import { IVod } from '../utils/interfaces'
 import AudioCard from './AudioCard'
 
 const AudioList: FC = () => {
 	const { currSong, playlist, getCurrSource, playAudioById } = useContext(MusicContext)
+	const { setShouldShowLyricView } = useContext(LyricContext)
 
 	const isClickCurrSong = (audio: IVod) => currSong && currSong.videoId === audio.videoId
 
@@ -12,6 +14,7 @@ const AudioList: FC = () => {
 		if (!isClickCurrSong(audio) || !getCurrSource()) {
 			playAudioById(audio.videoId)
 		}
+		setShouldShowLyricView(true)
 	}
 
 	return (
