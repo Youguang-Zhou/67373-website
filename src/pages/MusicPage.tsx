@@ -40,7 +40,10 @@ const MusicPage: FC = () => {
 
 	// 切歌时，url跳转到对应id
 	useEffect(() => {
-		currSong && history.push(`/music/${currSong.videoId}`)
+		if (currSong) {
+			history.push(`/music/${currSong.videoId}`)
+			document.title = `${currSong.title}_67373UPUP (=^ェ^=)`
+		}
 	}, [currSong])
 
 	// 当显示歌词时，滚动到歌词页面
