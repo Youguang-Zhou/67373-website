@@ -6,7 +6,9 @@ import styled from 'styled-components'
 import { formatDuration } from '../utils/functions'
 import { IVod } from '../utils/interfaces'
 
-const { Title } = Typography
+const Title = styled(Typography.Title)`
+	font-size: calc(0.5vw + 0.8rem) !important;
+`
 
 const Card = styled.div`
 	transition: box-shadow 0.3s;
@@ -31,7 +33,7 @@ const VideoCard: FC<IVideoCard> = ({ video: { videoId, creationTime, title, dura
 					</span>
 				</div>
 				<div className="card-body p-2 p-lg-3 pb-0">
-					<Title className="fs-5 fw-normal mb-0 mb-lg-2" level={5} ellipsis={{ rows: 2, tooltip: true }}>
+					<Title className="fw-normal mb-0 mb-lg-2" level={5} ellipsis={{ rows: 2, tooltip: true }}>
 						{title}
 					</Title>
 				</div>

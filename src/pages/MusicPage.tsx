@@ -64,7 +64,7 @@ const MusicPage: FC = () => {
 				</div>
 				<Banner src={music_banner} alt="music_banner" />
 			</header>
-			<main className="p-5">
+			<main style={{ padding: '1vw 5vw' }}>
 				{currSong && (
 					<div ref={observerRef}>
 						<LyricView />
