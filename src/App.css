@@ -13,3 +13,8 @@
 :root {
 	scroll-behavior: auto;
 }
+
+::selection {
+	color: #fafafafa;
+	background: orange;
+}
