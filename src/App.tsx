@@ -1,7 +1,7 @@
 import { orange } from '@material-ui/core/colors'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import { ConfigProvider } from 'antd'
-import 'antd/dist/antd.css'
+import 'antd/dist/antd.less'
 import zhCN from 'antd/lib/locale/zh_CN'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
