@@ -1,10 +1,11 @@
-import { BellOutlined } from '@ant-design/icons'
+import NotificationsNoneRoundedIcon from '@material-ui/icons/NotificationsNoneRounded'
 import { Row } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import logo from '../assets/images/logo_v2.jpg'
 import { getLiveTime } from '../utils/api'
+import SearchBar from './SearchBar'
 
 const Logo = styled.img`
 	height: 56.5px;
@@ -51,7 +52,7 @@ const Header: FC = () => {
 							<span className="navbar-toggler-icon"></span>
 						</button>
 						<div className="collapse navbar-collapse" id="BootstrapNavbar">
-							<div className="navbar-nav me-auto text-center fs-4">
+							<div className="navbar-nav text-center fs-4" style={{ flexGrow: 1 }}>
 								<a className={`nav-link ${currNav === '/' && 'active'} px-4 py-1`} href="/">
 									首页
 								</a>
@@ -70,10 +71,12 @@ const Header: FC = () => {
 								<a className={`nav-link ${currNav === '/67373' && 'active'} px-4 py-1`} href="/67373">
 									<Row align="middle" justify="center">
 										<span>67373</span>
-										{hasLive && <BellOutlined style={{ color: '#164080c1' }} />}
+										{hasLive && <NotificationsNoneRoundedIcon style={{ color: '#164080c1' }} />}
 									</Row>
 								</a>
 							</div>
+							<SearchBar style={{ flexGrow: 3 }} />
+							<div style={{ flexGrow: 5 }}></div>
 						</div>
 					</div>
 				</nav>
