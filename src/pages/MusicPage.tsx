@@ -3,12 +3,14 @@ import { useHistory, useParams } from 'react-router-dom'
 import { useMeasure } from 'react-use'
 import styled from 'styled-components'
 import music_banner from '../assets/images/music_banner.jpeg'
+import AudioCard from '../components/AudioCard'
 import AudioList from '../components/AudioList'
 import Banner from '../components/Banner'
 import LyricView from '../components/LyricView'
 import MiniPlayer from '../components/MiniPlayer'
 import { LyricContext } from '../contexts/LyricContext'
 import { MusicContext } from '../contexts/MusicContext'
+import { IVod } from '../utils/interfaces'
 
 const Box = styled.div`
 	background-color: #121212;
@@ -22,13 +24,19 @@ const MusicPage: FC = () => {
 	const history = useHistory()
 	const { id } = useParams<{ id: string }>()
 	const [ref, { height }] = useMeasure<HTMLElement>()
-	const { currIndex, currSong, playlist, setCurrIndexById } = useContext(MusicContext)
+	const { currIndex, currSong, playlist, getCurrSource, playAudioById, setCurrIndexById, cleanUp } =
+		useContext(MusicContext)
 	const { shouldShowLyricView, setShouldShowLyricView } = useContext(LyricContext)
 	const observerRef = useRef<HTMLDivElement>(null)
 	const showLyricView = useCallback(
 		(entries) => shouldShowLyricView && setShouldShowLyricView(entries[0].isIntersecting),
 		[shouldShowLyricView]
 	)
+
+	// 切换页面时清理当前播放器
+	useEffect(() => {
+		return () => cleanUp()
+	}, [])
 
 	// 如果url里有id，就设置为当前歌曲，否则跳转到/music
 	useEffect(() => {
@@ -58,6 +66,17 @@ const MusicPage: FC = () => {
 		return () => observer.disconnect()
 	}, [currSong, observerRef, showLyricView])
 
+	// 是否是当前歌曲
+	const isCurrSong = (audio: IVod) => currSong?.videoId === audio.videoId
+
+	// 双击时调用
+	const handleDoubleClick = (audio: IVod) => {
+		if (!isCurrSong(audio) || !getCurrSource()) {
+			playAudioById(audio.videoId)
+		}
+		setShouldShowLyricView(true)
+	}
+
 	return (
 		<Box>
 			<header ref={ref} className="position-relative">
@@ -73,7 +92,18 @@ const MusicPage: FC = () => {
 						<LyricView />
 					</div>
 				)}
-				<AudioList />
+				<h1 className="text-light p-1 mb-3">热门单曲</h1>
+				<AudioList>
+					{playlist &&
+						playlist.map((audio: IVod) => (
+							<AudioCard
+								key={audio.videoId}
+								audio={audio}
+								highlight={isCurrSong(audio)}
+								onDoubleClick={() => handleDoubleClick(audio)}
+							/>
+						))}
+				</AudioList>
 			</main>
 			<MiniPlayer />
 		</Box>

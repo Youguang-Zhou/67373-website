@@ -11,14 +11,7 @@ interface ISearch {
 		total: number | null
 		mediaList: Array<{
 			mediaType: string
-			audio: {
-				audioId: string
-				cateName: string
-				coverURL: string
-				creationTime: string
-				duration: number
-				title: string
-			}
+			audio: IVod
 			video: IVod
 		}> | null
 	}
@@ -37,10 +30,23 @@ const useSearch = (query: string | undefined): ISearch => {
 			setIsLoading(true)
 			setHasError(false)
 			API.get('search', {
-				params: { query: query },
+				params: { query: encodeURIComponent(query) },
 				cancelToken: source.token,
 			})
-				.then(({ data }) => (data ? setResponse(data) : setHasError(true)))
+				.then(({ data }) => {
+					if (data) {
+						// 这个接口会返回audioId，为了与IVod同步，把audioId改回videoId
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
+						data.mediaList.map((media: any) => {
+							if (media.mediaType === 'audio') {
+								media.audio.videoId = media.audio.audioId
+							}
+						})
+						setResponse(data)
+					} else {
+						setHasError(true)
+					}
+				})
 				.catch((e) => {
 					if (axios.isCancel(e)) return
 					setResponse(emptyData)

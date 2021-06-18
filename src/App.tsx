@@ -19,6 +19,7 @@ import ChannelPage from './pages/ChannelPage'
 import HomePage from './pages/HomePage'
 import LivePage from './pages/LivePage'
 import MusicPage from './pages/MusicPage'
+import SearchResultsPage from './pages/SearchResultsPage'
 import VideoPlayPage from './pages/VideoPlayPage'
 
 moment.locale('zh-cn')
@@ -39,11 +40,12 @@ const App: FC = () => (
 					<BrowserRouter>
 						<Header />
 						<Switch>
-							<Route exact path="/watch/:id" component={VideoPlayPage} />
 							<Route exact path="/channel" component={ChannelPage} />
 							<Route exact path="/music" component={MusicPage} />
 							<Route exact path="/music/:id" component={MusicPage} />
 							<Route exact path="/67373" component={LivePage} />
+							<Route exact path="/watch/:id" component={VideoPlayPage} />
+							<Route exact path="/search" component={SearchResultsPage} />
 							<Route exact path="/" component={HomePage} />
 							<Redirect to="/" />
 						</Switch>

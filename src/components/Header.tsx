@@ -52,7 +52,7 @@ const Header: FC = () => {
 							<span className="navbar-toggler-icon"></span>
 						</button>
 						<div className="collapse navbar-collapse" id="BootstrapNavbar">
-							<div className="navbar-nav text-center fs-4" style={{ flexGrow: 1 }}>
+							<div className="navbar-nav text-center fs-4 me-auto">
 								<a className={`nav-link ${currNav === '/' && 'active'} px-4 py-1`} href="/">
 									首页
 								</a>
@@ -75,8 +75,8 @@ const Header: FC = () => {
 									</Row>
 								</a>
 							</div>
-							<SearchBar style={{ flexGrow: 3 }} />
-							<div style={{ flexGrow: 5 }}></div>
+							<SearchBar />
+							<div className="me-auto"></div>
 						</div>
 					</div>
 				</nav>
