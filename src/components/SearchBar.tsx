@@ -1,14 +1,17 @@
-import { AutoComplete, AutoCompleteProps, Button } from 'antd'
-import React, { FC, useEffect, useState } from 'react'
+import { AutoComplete, Button } from 'antd'
+import React, { FC, useEffect, useRef, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import useSearch from '../hooks/useSearch'
 import { LongestCommonSubsequence } from '../utils/functions'
 
 const { Option } = AutoComplete
 
-const SearchBar: FC<AutoCompleteProps> = ({ style }: AutoCompleteProps) => {
+const SearchBar: FC = () => {
 	const [query, setQuery] = useState('')
 	const { response } = useSearch(query)
 	const [searchResults, setSearchResults] = useState<string[]>([])
+	const history = useHistory()
+	const queryRef = useRef('')
 
 	useEffect(() => {
 		setSearchResults(
@@ -18,20 +21,28 @@ const SearchBar: FC<AutoCompleteProps> = ({ style }: AutoCompleteProps) => {
 		)
 	}, [response])
 
-	const handleInputValueChange = (inputValue: string) => setQuery(inputValue)
-
-	const handleAutoCompleteSearch = (value: string) => console.log('onSearch', value)
-
-	const handleAutoCompleteSelect = (value: string) => console.log('onSelect', value)
+	const ToSearchResultsPage = (value: string) =>
+		history.push({
+			pathname: '/search',
+			search: `?query=${encodeURIComponent(value)}`,
+		})
 
 	return (
-		<>
+		<div className="d-flex align-items-center justify-content-center me-auto">
 			<AutoComplete
+				value={query}
+				style={{ width: 'calc(12vw + 6rem)' }}
+				onChange={(inputValue) => {
+					setQuery(inputValue)
+					queryRef.current = inputValue
+				}}
+				onSelect={(selectedValue) => {
+					setQuery(selectedValue)
+					queryRef.current = selectedValue
+					ToSearchResultsPage(selectedValue)
+				}}
+				onKeyDown={({ key }) => key === 'Enter' && ToSearchResultsPage(queryRef.current)}
 				backfill
-				style={style}
-				onChange={handleInputValueChange}
-				onSearch={handleAutoCompleteSearch}
-				onSelect={handleAutoCompleteSelect}
 			>
 				{searchResults.map((title, index) => {
 					const indexes = LongestCommonSubsequence(query, title)
@@ -53,8 +64,10 @@ const SearchBar: FC<AutoCompleteProps> = ({ style }: AutoCompleteProps) => {
 					)
 				})}
 			</AutoComplete>
-			<Button type="primary">搜索</Button>
-		</>
+			<Button type="primary" onClick={() => ToSearchResultsPage(query)}>
+				搜索
+			</Button>
+		</div>
 	)
 }
 

@@ -124,6 +124,13 @@ const MusicProvider: FC = ({ children }) => {
 		}
 	}
 
+	// 清理audioRef
+	const cleanUp = () => {
+		audioRef.current.pause()
+		audioRef.current.src = ''
+		audioRef.current.remove()
+	}
+
 	return (
 		<Provider
 			value={{
@@ -145,6 +152,7 @@ const MusicProvider: FC = ({ children }) => {
 				pauseAudio,
 				setCurrIndexById,
 				switchSong,
+				cleanUp,
 			}}
 		>
 			{children}
