@@ -6,11 +6,11 @@ import AudioList from '../components/AudioList'
 import Empty from '../components/Empty'
 import VideoCard from '../components/VideoCard'
 import useSearch from '../hooks/useSearch'
-import { IVod } from '../utils/interfaces'
+import { VodProps } from '../utils/interfaces'
 
 const SearchResultsPage: FC = () => {
-	const [audios, setAudios] = useState<IVod[] | undefined>(undefined)
-	const [videos, setVideos] = useState<IVod[] | undefined>(undefined)
+	const [audios, setAudios] = useState<VodProps[] | undefined>(undefined)
+	const [videos, setVideos] = useState<VodProps[] | undefined>(undefined)
 	const [query, setQuery] = useState<string | undefined>(undefined)
 	const { response, isLoading, hasError } = useSearch(query)
 	const { search } = useLocation()
@@ -46,7 +46,7 @@ const SearchResultsPage: FC = () => {
 							<h1>音乐单曲</h1>
 							<AudioList>
 								{audios &&
-									audios.map((audio: IVod) => (
+									audios.map((audio: VodProps) => (
 										<AudioCard
 											key={audio.videoId}
 											audio={audio}

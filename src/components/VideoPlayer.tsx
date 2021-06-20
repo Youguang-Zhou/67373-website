@@ -19,7 +19,7 @@ const Notice = styled.div`
 	transition: all 0.3s ease-in-out;
 `
 
-interface IVideoPlayer {
+interface VideoPlayerProps {
 	options: VideoJsPlayerOptions
 	onLoad?: (player: VideoJsPlayer) => void
 }
@@ -40,7 +40,7 @@ const initialOptions: VideoJsPlayerOptions = {
 	},
 }
 
-const VideoPlayer: FC<IVideoPlayer> = ({ options, onLoad }: IVideoPlayer) => {
+const VideoPlayer: FC<VideoPlayerProps> = ({ options, onLoad }: VideoPlayerProps) => {
 	const playerRef = useRef<VideoJsPlayer>()
 	const noticeRef = useRef<HTMLDivElement>(null)
 

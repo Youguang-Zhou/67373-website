@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components'
 import { formatDuration } from '../utils/functions'
-import { IVod } from '../utils/interfaces'
+import { VodProps } from '../utils/interfaces'
 
 const Card = styled.div<{ variant?: string }>`
 	background-color: ${({ variant }) => (variant === 'light' ? 'transparent' : '#181818')};
@@ -14,15 +14,15 @@ const Card = styled.div<{ variant?: string }>`
 	}
 `
 
-interface IAudioCard {
-	audio: IVod
+interface AudioCardProps {
+	audio: VodProps
 	variant?: 'light' | 'dark'
 	highlight?: boolean
 	onClick?: () => void
 	onDoubleClick?: () => void
 }
 
-const AudioCard: FC<IAudioCard> = ({ audio, variant, highlight, onClick, onDoubleClick }: IAudioCard) => {
+const AudioCard: FC<AudioCardProps> = ({ audio, variant, highlight, onClick, onDoubleClick }: AudioCardProps) => {
 	const textColor = variant === 'light' ? '#212529' : '#fafafa'
 	const highlightColor = 'orange'
 

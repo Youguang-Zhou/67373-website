@@ -10,7 +10,7 @@ import LyricView from '../components/LyricView'
 import MiniPlayer from '../components/MiniPlayer'
 import { LyricContext } from '../contexts/LyricContext'
 import { MusicContext } from '../contexts/MusicContext'
-import { IVod } from '../utils/interfaces'
+import { VodProps } from '../utils/interfaces'
 
 const Box = styled.div`
 	background-color: #121212;
@@ -67,10 +67,10 @@ const MusicPage: FC = () => {
 	}, [currSong, observerRef, showLyricView])
 
 	// 是否是当前歌曲
-	const isCurrSong = (audio: IVod) => currSong?.videoId === audio.videoId
+	const isCurrSong = (audio: VodProps) => currSong?.videoId === audio.videoId
 
 	// 双击时调用
-	const handleDoubleClick = (audio: IVod) => {
+	const handleDoubleClick = (audio: VodProps) => {
 		if (!isCurrSong(audio) || !getCurrSource()) {
 			playAudioById(audio.videoId)
 		}
@@ -95,7 +95,7 @@ const MusicPage: FC = () => {
 				<h1 className="text-light p-1 mb-3">热门单曲</h1>
 				<AudioList>
 					{playlist &&
-						playlist.map((audio: IVod) => (
+						playlist.map((audio: VodProps) => (
 							<AudioCard
 								key={audio.videoId}
 								audio={audio}

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { API } from '../utils/api'
 
-interface IGetLyricsResponse {
+interface GetLyricsResponseProps {
 	response: string
 	isLoading: boolean
 	hasError: boolean
 }
 
-const useGetLyricsRequest = (id: string | undefined): IGetLyricsResponse => {
+const useGetLyricsRequest = (id: string | undefined): GetLyricsResponseProps => {
 	const [response, setResponse] = useState('')
 	const [isLoading, setIsLoading] = useState(false)
 	const [hasError, setHasError] = useState(false)

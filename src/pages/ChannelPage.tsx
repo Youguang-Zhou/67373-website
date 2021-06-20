@@ -24,7 +24,7 @@ import Banner from '../components/Banner'
 import Empty from '../components/Empty'
 import VideoCard from '../components/VideoCard'
 import useGetPlaylistRequest from '../hooks/useGetPlaylistRequest'
-import { IVod } from '../utils/interfaces'
+import { VodProps } from '../utils/interfaces'
 
 const categories = [
 	process.env.REACT_APP_VOD_CATE_ID_CHANGGE,
@@ -43,14 +43,14 @@ const FaFaAndRose = styled.img`
 	bottom: 0;
 `
 
-interface ITabPanel {
+interface TabPanelProps {
 	children?: ReactNode
 	value: number
 	index: number
 }
 
 const ChannelPage: FC = () => {
-	const [videos, setVideos] = useState<IVod[]>([])
+	const [videos, setVideos] = useState<VodProps[]>([])
 	const [pageNo, setPageNo] = useState(1)
 	const pageSize = useState(12)[0]
 	const [currTabIndex, setCurrTabIndex] = useState(0)
@@ -66,7 +66,7 @@ const ChannelPage: FC = () => {
 		setPageNo(1)
 	}
 
-	const TabPanel = ({ children, value, index }: ITabPanel) => (
+	const TabPanel = ({ children, value, index }: TabPanelProps) => (
 		<div role="tabpanel" hidden={value !== index} style={{ backgroundColor: 'whitesmoke', padding: '1vw 5vw' }}>
 			{hasError ? (
 				<Empty error />

@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { formatDuration } from '../utils/functions'
-import { IVod } from '../utils/interfaces'
+import { VodProps } from '../utils/interfaces'
 
 const Title = styled(Typography.Title)`
 	font-size: calc(0.5vw + 0.8rem) !important;
@@ -18,11 +18,13 @@ const Card = styled.div`
 	}
 `
 
-interface IVideoCard {
-	video: IVod
+interface VideoCardProps {
+	video: VodProps
 }
 
-const VideoCard: FC<IVideoCard> = ({ video: { videoId, creationTime, title, duration, coverURL } }: IVideoCard) => (
+const VideoCard: FC<VideoCardProps> = ({
+	video: { videoId, creationTime, title, duration, coverURL },
+}: VideoCardProps) => (
 	<div className="col">
 		<Link className="text-decoration-none" to={`/watch/${videoId}`} target="_blank">
 			<Card className="card h-100">

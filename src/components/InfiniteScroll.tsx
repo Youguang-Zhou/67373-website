@@ -4,7 +4,7 @@ import React, { FC, ReactNode, useCallback, useEffect, useRef } from 'react'
 import cat from '../assets/images/cat.jpeg'
 import Empty from './Empty'
 
-interface IInfiniteScroll {
+interface InfiniteScrollProps {
 	children?: ReactNode
 	isLoading: boolean
 	hasMore: boolean
@@ -13,14 +13,14 @@ interface IInfiniteScroll {
 	loadMore: () => void
 }
 
-const InfiniteScroll: FC<IInfiniteScroll> = ({
+const InfiniteScroll: FC<InfiniteScrollProps> = ({
 	children,
 	isLoading,
 	hasMore,
 	hasError,
 	emptyComponent,
 	loadMore,
-}: IInfiniteScroll) => {
+}: InfiniteScrollProps) => {
 	const observerRef = useRef<HTMLDivElement>(null)
 	const scroll = useCallback(
 		(entries) => entries[0].isIntersecting && hasMore && !isLoading && loadMore(),
