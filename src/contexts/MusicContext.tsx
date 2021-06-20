@@ -2,7 +2,7 @@ import React, { createContext, FC, useEffect, useRef, useState } from 'react'
 import useGetPlaylistRequest from '../hooks/useGetPlaylistRequest'
 import { API } from '../utils/api'
 import { PlayOrder } from '../utils/enums'
-import { IVod } from '../utils/interfaces'
+import { VodProps } from '../utils/interfaces'
 
 const { REACT_APP_VOD_CATE_ID_AUDIO } = process.env
 
@@ -14,10 +14,10 @@ const { Provider } = MusicContext
 const MusicProvider: FC = ({ children }) => {
 	const audioRef = useRef<HTMLAudioElement>(new Audio())
 	const [currIndex, setCurrIndex] = useState<number | undefined>(undefined)
-	const [currSong, setCurrSong] = useState<IVod | undefined>(undefined)
+	const [currSong, setCurrSong] = useState<VodProps | undefined>(undefined)
 	const [currTime, setCurrTime] = useState<number>(0)
 	const [currOrder, setCurrOrder] = useState<PlayOrder>(PlayOrder.Repeat)
-	const [playlist, setPlaylist] = useState<IVod[] | undefined>(undefined)
+	const [playlist, setPlaylist] = useState<VodProps[] | undefined>(undefined)
 	const { response: playlistRes } = useGetPlaylistRequest(REACT_APP_VOD_CATE_ID_AUDIO, 1, 100)
 
 	// 初始化
@@ -78,7 +78,7 @@ const MusicProvider: FC = ({ children }) => {
 	// 通过当前歌曲id设置当前歌曲index
 	const setCurrIndexById = (id: string): boolean => {
 		if (playlist) {
-			const arr = playlist.filter((audio: IVod) => audio.videoId === id)
+			const arr = playlist.filter((audio: VodProps) => audio.videoId === id)
 			if (arr.length !== 0 && arr[0].cateName === '音乐') {
 				setCurrIndex(playlist.indexOf(arr[0]))
 				return true

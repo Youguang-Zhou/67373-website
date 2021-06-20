@@ -1,25 +1,25 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { API } from '../utils/api'
-import { IVod } from '../utils/interfaces'
+import { VodProps } from '../utils/interfaces'
 
 const emptyData = { requestId: null, total: null, mediaList: null }
 
-interface ISearch {
+interface SearchResponseProps {
 	response: {
 		requestId: string | null
 		total: number | null
 		mediaList: Array<{
 			mediaType: string
-			audio: IVod
-			video: IVod
+			audio: VodProps
+			video: VodProps
 		}> | null
 	}
 	isLoading: boolean
 	hasError: boolean
 }
 
-const useSearch = (query: string | undefined): ISearch => {
+const useSearch = (query: string | undefined): SearchResponseProps => {
 	const [response, setResponse] = useState(emptyData)
 	const [isLoading, setIsLoading] = useState(false)
 	const [hasError, setHasError] = useState(false)
@@ -35,7 +35,7 @@ const useSearch = (query: string | undefined): ISearch => {
 			})
 				.then(({ data }) => {
 					if (data) {
-						// 这个接口会返回audioId，为了与IVod同步，把audioId改回videoId
+						// 这个接口会返回audioId，为了与VodProps同步，把audioId改回videoId
 						// eslint-disable-next-line @typescript-eslint/no-explicit-any
 						data.mediaList.map((media: any) => {
 							if (media.mediaType === 'audio') {

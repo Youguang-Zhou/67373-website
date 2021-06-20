@@ -1,11 +1,11 @@
 import { useMediaQuery } from '@material-ui/core'
 import React, { FC, ReactNode } from 'react'
 
-interface IAudioList {
+interface AudioListProps {
 	children?: ReactNode
 }
 
-const AudioList: FC<IAudioList> = ({ children }: IAudioList) => {
+const AudioList: FC<AudioListProps> = ({ children }: AudioListProps) => {
 	const large = useMediaQuery('(min-width: 576px)')
 
 	return (

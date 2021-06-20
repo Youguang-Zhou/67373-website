@@ -1,8 +1,8 @@
-export interface IVod {
+export interface VodProps {
+	videoId: string
+	title: string
+	duration: number
 	cateName: string
 	coverURL: string
 	creationTime: string
-	duration: number
-	title: string
-	videoId: string
 }

@@ -1,13 +1,13 @@
 import React, { FC } from 'react'
 import fafa_robot from '../assets/images/fafa_robot.png'
 
-interface IEmpty {
+interface EmptyProps {
 	image?: string
 	description?: string
 	error?: boolean
 }
 
-const Empty: FC<IEmpty> = ({ image, description, error }: IEmpty) => {
+const Empty: FC<EmptyProps> = ({ image, description, error }: EmptyProps) => {
 	return (
 		<figure className="text-center fs-3 mt-3">
 			<img src={image || fafa_robot} alt="empty" style={{ height: 'calc(8vw + 8rem)' }} />

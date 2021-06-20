@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react'
 import { API } from '../utils/api'
-import { IVod } from '../utils/interfaces'
+import { VodProps } from '../utils/interfaces'
 
 const emptyData = { requestId: null, videoBase: null, playInfoList: null }
 
-interface IGetPlayInfoResponse {
+interface GetPlayInfoResponseProps {
 	response: {
 		requestId: string | null
-		videoBase: IVod | null
+		videoBase: VodProps | null
 		playInfoList: { playInfo: Array<{ playURL: string }> } | null
 	}
 	isLoading: boolean
 	hasError: boolean
 }
 
-const useGetPlayInfoRequest = (id: string | undefined): IGetPlayInfoResponse => {
+const useGetPlayInfoRequest = (id: string | undefined): GetPlayInfoResponseProps => {
 	const [response, setResponse] = useState(emptyData)
 	const [isLoading, setIsLoading] = useState(false)
 	const [hasError, setHasError] = useState(false)
