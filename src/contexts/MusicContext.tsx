@@ -1,10 +1,7 @@
 import React, { createContext, FC, useEffect, useRef, useState } from 'react'
-import useGetPlaylistRequest from '../hooks/useGetPlaylistRequest'
 import { API } from '../utils/api'
 import { PlayOrder } from '../utils/enums'
 import { VodProps } from '../utils/interfaces'
-
-const { REACT_APP_VOD_CATE_ID_AUDIO } = process.env
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const MusicContext = createContext<any>(undefined)
@@ -18,7 +15,6 @@ const MusicProvider: FC = ({ children }) => {
 	const [currTime, setCurrTime] = useState<number>(0)
 	const [currOrder, setCurrOrder] = useState<PlayOrder>(PlayOrder.Repeat)
 	const [playlist, setPlaylist] = useState<VodProps[] | undefined>(undefined)
-	const { response: playlistRes } = useGetPlaylistRequest(REACT_APP_VOD_CATE_ID_AUDIO, 1, 100)
 
 	// 初始化
 	useEffect(() => {
@@ -38,20 +34,6 @@ const MusicProvider: FC = ({ children }) => {
 	useEffect(() => {
 		playlist && currIndex !== undefined && setCurrSong(playlist[currIndex])
 	}, [currIndex])
-
-	// 获取歌曲列表，并排序
-	useEffect(() => {
-		if (playlistRes.videoList) {
-			const audios = playlistRes.videoList.video
-			const originals = audios.filter(
-				(audio) => audio.title === '童话镇' || audio.title === '阿婆说' || audio.title === '弦上有春秋'
-			)
-			const covers = audios.filter(
-				(audio) => audio.title !== '童话镇' && audio.title !== '阿婆说' && audio.title !== '弦上有春秋'
-			)
-			setPlaylist([...originals, ...covers])
-		}
-	}, [playlistRes])
 
 	// 获取当前播放状态
 	const getIsPlaying = () => !audioRef.current.paused

@@ -10,7 +10,10 @@ import LyricView from '../components/LyricView'
 import MiniPlayer from '../components/MiniPlayer'
 import { LyricContext } from '../contexts/LyricContext'
 import { MusicContext } from '../contexts/MusicContext'
+import useGetPlaylistRequest from '../hooks/useGetPlaylistRequest'
 import { VodProps } from '../utils/interfaces'
+
+const { REACT_APP_VOD_CATE_ID_AUDIO } = process.env
 
 const Box = styled.div`
 	background-color: #121212;
@@ -24,9 +27,10 @@ const MusicPage: FC = () => {
 	const history = useHistory()
 	const { id } = useParams<{ id: string }>()
 	const [ref, { height }] = useMeasure<HTMLElement>()
-	const { currIndex, currSong, playlist, getCurrSource, playAudioById, setCurrIndexById, cleanUp } =
+	const { currIndex, currSong, playlist, setPlaylist, getCurrSource, playAudioById, setCurrIndexById, cleanUp } =
 		useContext(MusicContext)
 	const { shouldShowLyricView, setShouldShowLyricView } = useContext(LyricContext)
+	const { response: playlistRes } = useGetPlaylistRequest(REACT_APP_VOD_CATE_ID_AUDIO, 1, 100)
 	const observerRef = useRef<HTMLDivElement>(null)
 	const showLyricView = useCallback(
 		(entries) => shouldShowLyricView && setShouldShowLyricView(entries[0].isIntersecting),
@@ -37,6 +41,20 @@ const MusicPage: FC = () => {
 	useEffect(() => {
 		return () => cleanUp()
 	}, [])
+
+	// 获取歌曲列表，并排序
+	useEffect(() => {
+		if (playlistRes.videoList) {
+			const audios = playlistRes.videoList.video
+			const originals = audios.filter(
+				(audio) => audio.title === '童话镇' || audio.title === '阿婆说' || audio.title === '弦上有春秋'
+			)
+			const covers = audios.filter(
+				(audio) => audio.title !== '童话镇' && audio.title !== '阿婆说' && audio.title !== '弦上有春秋'
+			)
+			setPlaylist([...originals, ...covers])
+		}
+	}, [playlistRes])
 
 	// 如果url里有id，就设置为当前歌曲，否则跳转到/music
 	useEffect(() => {
