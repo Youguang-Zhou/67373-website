@@ -1,141 +1,103 @@
-import { makeStyles } from '@material-ui/core/styles'
 import { Col, Row } from 'antd'
 import moment from 'moment'
 import React, { FC, useEffect, useState } from 'react'
+import { useMeasure } from 'react-use'
 import styled from 'styled-components'
-import { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
 import beautiful_fafa from '../assets/images/beautiful_fafa.png'
 import goodnight67373 from '../assets/images/goodnight67373.jpg'
 import Empty from '../components/Empty'
-import VideoPlayer from '../components/VideoPlayer'
-import { getLiveTime, getLiveURL } from '../utils/api'
+import useGetLiveInfoRequest from '../hooks/useGetLiveInfoRequest'
+import { LiveStatus } from '../utils/enums'
 
-const BackGround = styled.img`
-	filter: blur(10px);
+const BackGround = styled.img<{ height: number }>`
+	filter: blur(5px);
+	height: ${({ height }) => height}px;
 	object-fit: cover;
 	position: absolute;
 	width: 100%;
 	z-index: -1;
 `
 
-const CounterBox = styled.div`
-	padding-top: 3vw;
-	text-align: center;
+const Text = styled.div<{ fontSize?: string }>`
+	color: #fafafafa;
+	font-family: MFYueYuan;
+	font-size: ${({ fontSize }) => fontSize || '1.5rem'};
+	margin: 1rem 1vw;
+	text-shadow: black 0.1em 0.1em 0.2em;
 `
 
-const useStyles = makeStyles({
-	text: {
-		color: '#fafafafa',
-		fontFamily: 'MFYueYuan',
-		margin: '1rem 1vw',
-		textShadow: 'black 0.1em 0.1em 0.2em',
-	},
-	image: { height: '740px' },
-})
-
 const LivePage: FC = () => {
-	const classes = useStyles()
-	const [isLive, setIsLive] = useState(false)
-	const [liveTime, setLiveTime] = useState('')
-	const [youtubeURL, setYoutubeURL] = useState('')
-	const [liveCover, setLiveCover] = useState('')
 	const [counter, setCounter] = useState<string[]>([])
-	const [playOptions, setPlayOptions] = useState<VideoJsPlayerOptions>()
+	const [ref, { height }] = useMeasure<HTMLDivElement>()
+	const {
+		response: { status, duration, time, url, cover },
+	} = useGetLiveInfoRequest()
 
 	useEffect(() => {
-		// 获取转播地址
-		getLiveURL().then(({ liveURL }) =>
-			setPlayOptions({
-				sources: [
-					{
-						src: liveURL,
-						type: 'application/x-mpegURL',
-					},
-				],
-			})
-		)
-		// 获取直播时间，封面和地址
-		let timer = 0
-		getLiveTime()
-			.then(({ time, url, cover }) => {
-				setLiveTime(time)
-				setYoutubeURL(url.slice(12))
-				setLiveCover(cover)
-				timer = window.setInterval(() => {
-					const currTime = moment(new Date())
-					const liveTime = moment(new Date(time))
-					// 检查是否开始直播
-					currTime.isBefore(liveTime) ? setIsLive(false) : setIsLive(true)
-					// 计算倒计时
-					const diff = liveTime.diff(currTime)
-					const duration = moment.duration(diff).format('d:hh:mm:ss', { trim: false }).split(':')
-					setCounter([
-						`${duration[0]}`,
-						'天',
-						`${duration[1]}`,
-						'时',
-						`${duration[2]}`,
-						'分',
-						`${duration[3]}`,
-						'秒',
-					])
-				}, 1000)
-			})
-			.catch(() => setIsLive(false))
-		return () => clearInterval(timer)
-	}, [])
-
-	const handlePlayerLoad = (player: VideoJsPlayer) => player.on('error', () => setIsLive(false))
+		if (status === LiveStatus.WillStart) {
+			// 计算倒计时
+			const formatDuation = moment.duration(duration).format('d:hh:mm:ss', { trim: false }).split(':')
+			setCounter([
+				`${formatDuation[0]}`,
+				'天',
+				`${formatDuation[1]}`,
+				'时',
+				`${formatDuation[2]}`,
+				'分',
+				`${formatDuation[3]}`,
+				'秒',
+			])
+		}
+	}, [status, duration])
 
 	return (
-		<main className="mt-3">
-			{isLive && playOptions ? (
-				<Row justify="center">
-					<Col xs={24} sm={24} md={24} lg={16} xl={16}>
-						<VideoPlayer options={playOptions} onLoad={handlePlayerLoad} />
-						<div>转播功能内测中，如有卡顿或掉线，微博联系@青山多妩媚67373</div>
-						<div>{`直播原地址: ${youtubeURL}`}</div>
-					</Col>
-				</Row>
+		<>
+			{status === LiveStatus.IsEnded ? (
+				<Empty image={goodnight67373} description="See you next time~" />
 			) : (
 				<>
-					{youtubeURL && liveCover ? (
+					{url && cover && (
 						<>
-							<BackGround className={classes.image} src={liveCover} alt="background" />
-							<CounterBox className={classes.image}>
-								<h2 className={classes.text} style={{ fontSize: 'calc(3vw + 2rem)' }}>
-									好久不见
-								</h2>
-								<Row align="middle" justify="center">
-									{counter.map((value, index) => (
-										<h1
-											key={index}
-											className={classes.text}
-											style={{ fontSize: index % 2 == 0 ? 'calc(5vw + 2rem)' : '3vw' }}
-										>
-											{value}
-										</h1>
-									))}
-								</Row>
-								<Row align="middle" justify="center">
-									<Col xs={24} sm={24} md={24} lg={3} xl={3}>
-										<img src={beautiful_fafa} alt="beautiful_fafa" style={{ height: '10rem' }} />
+							<BackGround src={cover} alt="background" height={height} />
+							<main ref={ref} className="text-center">
+								<Row className="py-5" align="middle" justify="center">
+									<Col span={24}>
+										<Text fontSize="calc(3vw + 2rem)">
+											{status === LiveStatus.WillStart ? '如 期 而 至' : '⬇️ 直 播 中 ⬇️'}
+										</Text>
 									</Col>
-									<Col xs={24} sm={24} md={24} lg={6} xl={6}>
-										<h4 className={classes.text}>{liveTime}</h4>
-										<h4 className={classes.text}>{youtubeURL}</h4>
+									{status === LiveStatus.WillStart && (
+										<Col span={24}>
+											<Row align="middle" justify="center">
+												{counter.map((value, index) => (
+													<Text
+														key={index}
+														fontSize={index % 2 == 0 ? 'calc(5vw + 2rem)' : '3vw'}
+													>
+														{value}
+													</Text>
+												))}
+											</Row>
+										</Col>
+									)}
+									<Col xs={24} lg={4}>
+										<img
+											src={beautiful_fafa}
+											alt="beautiful_fafa"
+											style={{ height: 'calc(5vw + 15rem)' }}
+										/>
+									</Col>
+									<Col xs={24} lg={6}>
+										<Text>{`${time} （北京时间）`}</Text>
+										<Text>{url.slice(12)}</Text>
 									</Col>
 								</Row>
-							</CounterBox>
+							</main>
 						</>
-					) : (
-						<Row justify="center">
-							<Empty image={goodnight67373} description="See you next time~" />
-						</Row>
 					)}
 				</>
 			)}
-		</main>
+		</>
 	)
 }
 

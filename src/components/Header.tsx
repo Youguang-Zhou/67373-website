@@ -1,10 +1,12 @@
 import NotificationsNoneRoundedIcon from '@material-ui/icons/NotificationsNoneRounded'
+import YouTubeIcon from '@material-ui/icons/YouTube'
 import { Row } from 'antd'
 import React, { FC, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import logo from '../assets/images/logo_v2.jpg'
-import { getLiveTime } from '../utils/api'
+import useGetLiveInfoRequest from '../hooks/useGetLiveInfoRequest'
+import { LiveStatus } from '../utils/enums'
 import SearchBar from './SearchBar'
 
 const Logo = styled.img`
@@ -19,14 +21,10 @@ const Logo = styled.img`
 
 const Header: FC = () => {
 	const { pathname } = useLocation()
-	const [hasLive, setHasLive] = useState(false)
 	const [currNav, setCurrNav] = useState('')
-
-	useEffect(() => {
-		getLiveTime()
-			.then((data) => data && setHasLive(true))
-			.catch(() => setHasLive(false))
-	}, [])
+	const {
+		response: { status },
+	} = useGetLiveInfoRequest()
 
 	useEffect(() => {
 		setCurrNav(pathname)
@@ -71,7 +69,12 @@ const Header: FC = () => {
 								<a className={`nav-link ${currNav === '/67373' && 'active'} px-4 py-1`} href="/67373">
 									<Row align="middle" justify="center">
 										<span>67373</span>
-										{hasLive && <NotificationsNoneRoundedIcon style={{ color: '#164080c1' }} />}
+										{status === LiveStatus.WillStart && (
+											<NotificationsNoneRoundedIcon style={{ color: '#164080c1' }} />
+										)}
+										{status === LiveStatus.IsLive && (
+											<YouTubeIcon style={{ color: '#164080c1' }} fontSize="large" />
+										)}
 									</Row>
 								</a>
 							</div>
