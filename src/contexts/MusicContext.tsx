@@ -47,7 +47,7 @@ const MusicProvider: FC = ({ children }) => {
 	// 开始播放，因为浏览器自动播放政策的原因，这里用不了useGetPlayInfoRequest（因为hook是异步的）
 	const playAudioById = (id: string) =>
 		API.get(`vod/${id}`).then(({ data }) => {
-			audioRef.current.src = data.playInfoList.playInfo[0].playURL
+			audioRef.current.src = data.playInfo[0].playURL
 			audioRef.current.play()
 			setCurrIndexById(id)
 		})
