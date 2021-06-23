@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import { API } from '../utils/api'
 import { VodProps } from '../utils/interfaces'
 
-const emptyData = { requestId: null, videoBase: null, playInfoList: null }
+const emptyData = { requestId: null, videoInfo: null, playInfo: null }
 
 interface GetPlayInfoResponseProps {
 	response: {
 		requestId: string | null
-		videoBase: VodProps | null
-		playInfoList: { playInfo: Array<{ playURL: string }> } | null
+		videoInfo: VodProps | null
+		playInfo: Array<{ playURL: string }> | null
 	}
 	isLoading: boolean
 	hasError: boolean
