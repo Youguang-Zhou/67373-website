@@ -22,12 +22,13 @@ const Box = styled(Row)`
 	border: 1px solid rgb(255 255 255 / 30%);
 	border-radius: 2rem;
 	color: #fafafafa;
-	margin: 0rem 1rem;
-	padding: 1rem;
+	margin: 0rem 0.5rem;
+	padding: 0.5rem 1rem;
 	text-align: center;
 
 	button {
 		opacity: 0.85;
+		padding: 0px;
 
 		&:hover {
 			opacity: 1;
@@ -108,7 +109,7 @@ const MiniPlayer: FC = () => {
 		<Button
 			color={shouldShowLyricView ? 'primary' : 'secondary'}
 			variant="outlined"
-			style={{ minWidth: 'auto' }}
+			style={{ minWidth: 'auto', padding: '5px 15px' }}
 			onClick={() => setShouldShowLyricView(!shouldShowLyricView)}
 		>
 			词

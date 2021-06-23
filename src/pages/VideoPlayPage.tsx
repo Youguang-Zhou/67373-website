@@ -1,5 +1,5 @@
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined'
-import { Button, Col, Row } from 'antd'
+import { Button, Col, Grid, Row } from 'antd'
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useMeasure } from 'react-use'
@@ -8,10 +8,13 @@ import VideoPlayer from '../components/VideoPlayer'
 import useGetPlayInfoRequest from '../hooks/useGetPlayInfoRequest'
 import { durationToSeconds } from '../utils/functions'
 
+const { useBreakpoint } = Grid
+
 const VideoPlayPage: FC = () => {
 	const { id } = useParams<{ id: string }>()
 	const history = useHistory()
 	const [title, setTitle] = useState('')
+	const { lg } = useBreakpoint()
 	const [playOptions, setPlayOptions] = useState<VideoJsPlayerOptions>()
 	const playerRef = useRef<VideoJsPlayer>()
 	const [ref, { width }] = useMeasure<HTMLDivElement>()
@@ -67,7 +70,7 @@ const VideoPlayPage: FC = () => {
 					{title}
 				</h1>
 			</div>
-			<Row>
+			<Row gutter={32}>
 				<Col xs={24} sm={24} md={24} lg={16} xl={16}>
 					{playOptions && (
 						<div ref={ref}>
@@ -77,7 +80,7 @@ const VideoPlayPage: FC = () => {
 				</Col>
 				<Col xs={24} sm={24} md={24} lg={8} xl={8}>
 					{videoInfo?.description && (
-						<div className="border rounded shadow p-3 mx-5">
+						<div className={`border rounded shadow p-3 ${lg || 'my-3'}`}>
 							<Row align="middle">
 								<DescriptionOutlinedIcon fontSize="large" />
 								<h3 className="m-0" style={{ fontFamily: 'MFYueYuan' }}>
