@@ -1,6 +1,12 @@
-@font-face {
-	font-family: MFYueYuan;
-	src: url(./assets/fonts/MFYueYuan.ttf);
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	@font-face {
+		font-family: MFYueYuan;
+		src: url(./assets/fonts/MFYueYuan.ttf);
+	}
 }
 
 /* Ant Design分页样式bug */
