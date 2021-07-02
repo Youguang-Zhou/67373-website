@@ -4,12 +4,13 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: {
-				primary: '#174080',
+				primary: '#174080', // 2代logo蓝色
+				whitesmoke: 'whitesmoke',
 			},
 		},
 	},
 	variants: {
 		extend: {},
 	},
-	plugins: [],
+	plugins: [require('@tailwindcss/line-clamp'), require('@tailwindcss/aspect-ratio')],
 }

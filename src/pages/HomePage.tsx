@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from 'react'
-import styled from 'styled-components'
 import love_you from '../assets/images/love_you.png'
 import Empty from '../components/Empty'
 import InfiniteScroll from '../components/InfiniteScroll'
@@ -9,31 +8,27 @@ import { VodProps } from '../utils/interfaces'
 
 const { REACT_APP_VOD_CATE_ID_VIDEO } = process.env
 
-const Main = styled.main`
-	background: whitesmoke;
-	padding: 30px 5%;
-`
-
 const HomePage: FC = () => {
 	const [videos, setVideos] = useState<VodProps[]>([])
 	const [pageNo, setPageNo] = useState(1)
 	const pageSize = useState(12)[0]
-	const { response, isLoading, hasError, hasMore } = useGetPlaylistRequest(
-		REACT_APP_VOD_CATE_ID_VIDEO,
-		pageNo,
-		pageSize
-	)
+	const {
+		response: { requestId, videoList },
+		isLoading,
+		hasError,
+		hasMore,
+	} = useGetPlaylistRequest(REACT_APP_VOD_CATE_ID_VIDEO, pageNo, pageSize)
 
 	useEffect(() => {
-		response.videoList && setVideos(videos.concat(response.videoList.video))
-	}, [response])
+		videoList && setVideos(videos.concat(videoList.video))
+	}, [requestId])
 
 	const handleLoadMore = () => setPageNo((prevPageNo) => prevPageNo + 1)
 
 	return (
-		<Main>
-			<h1 className="fw-normal">今日推荐</h1>
-			<hr />
+		<main className="px-4 py-4 md:px-12 lg:px-20 md:py-8 bg-whitesmoke">
+			<h1 className="text-2xl md:text-4xl">今日推荐</h1>
+			<hr className="my-2 md:my-4" />
 			<InfiniteScroll
 				hasMore={hasMore}
 				hasError={hasError}
@@ -41,13 +36,13 @@ const HomePage: FC = () => {
 				loadMore={handleLoadMore}
 				emptyComponent={<Empty image={love_you} />}
 			>
-				<section className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+				<section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8">
 					{videos.map((video) => (
 						<VideoCard key={video.videoId} video={video} />
 					))}
 				</section>
 			</InfiniteScroll>
-		</Main>
+		</main>
 	)
 }
 
