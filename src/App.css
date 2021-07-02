@@ -8,19 +8,3 @@
 		src: url(./assets/fonts/MFYueYuan.ttf);
 	}
 }
-
-/* Ant Design分页样式bug */
-.ant-pagination-item-link {
-	display: flex !important;
-	align-items: center;
-	justify-content: center;
-}
-
-:root {
-	scroll-behavior: auto;
-}
-
-::selection {
-	color: #fafafafa;
-	background: orange;
-}
