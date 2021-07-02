@@ -26,7 +26,7 @@ const HomePage: FC = () => {
 	const handleLoadMore = () => setPageNo((prevPageNo) => prevPageNo + 1)
 
 	return (
-		<main className="px-4 py-4 md:px-12 lg:px-20 md:py-8 bg-whitesmoke">
+		<main className="p-container bg-whitesmoke">
 			<h1 className="text-2xl md:text-4xl">今日推荐</h1>
 			<hr className="my-2 md:my-4" />
 			<InfiniteScroll
