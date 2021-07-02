@@ -7,6 +7,12 @@ module.exports = {
 				primary: '#174080', // 2代logo蓝色
 				whitesmoke: 'whitesmoke',
 			},
+			height: {
+				'vw-15': '15vw',
+			},
+			transitionProperty: {
+				width: 'width',
+			},
 		},
 	},
 	variants: {

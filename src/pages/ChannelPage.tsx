@@ -1,26 +1,17 @@
-import { Tab, Tabs, Typography, useMediaQuery } from '@material-ui/core'
+/* eslint-disable @typescript-eslint/no-var-requires */
+import { Tab, Tabs, useMediaQuery } from '@material-ui/core'
 import { useTheme } from '@material-ui/core/styles'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import LibraryMusicIcon from '@material-ui/icons/LibraryMusic'
 import MusicNoteIcon from '@material-ui/icons/MusicNote'
-import { Avatar, Carousel, Col, Pagination, Row } from 'antd'
+import Pagination from '@material-ui/lab/Pagination'
 import React, { ChangeEvent, FC, ReactNode, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import styled from 'styled-components'
-import aposhuo from '../assets/images/aposhuo.jpeg'
 import cat from '../assets/images/cat.jpeg'
 import channel_banner from '../assets/images/channel_banner.jpeg'
-import fafa_0 from '../assets/images/fafa_0.png'
-import fafa_1 from '../assets/images/fafa_1.png'
-import fafa_2 from '../assets/images/fafa_2.png'
-import fafa_3 from '../assets/images/fafa_3.png'
-import fafa_4 from '../assets/images/fafa_4.png'
-import fafa_5 from '../assets/images/fafa_5.png'
 import fafa_rose from '../assets/images/fafa_rose.png'
-import tonghuazhen from '../assets/images/tonghuazhen.jpeg'
-import xianshangyouchunqiu from '../assets/images/xianshangyouchunqiu.jpeg'
 import xiruisi from '../assets/images/xiruisi.png'
-import Banner from '../components/Banner'
+import Carousel from '../components/Carousel'
 import Empty from '../components/Empty'
 import VideoCard from '../components/VideoCard'
 import useGetPlaylistRequest from '../hooks/useGetPlaylistRequest'
@@ -35,13 +26,23 @@ const categories = [
 	process.env.REACT_APP_VOD_CATE_ID_RICHANG,
 ]
 
-const emptyImages = [fafa_0, fafa_1, fafa_2, fafa_3, fafa_4, fafa_5]
-
-const FaFaAndRose = styled.img`
-	width: 100%;
-	position: absolute;
-	bottom: 0;
-`
+const originals = [
+	{
+		id: process.env.REACT_APP_VOD_VIDEO_ID_TONGHUAZHEN,
+		name_cn: '童话镇',
+		name_en: 'tonghuazhen',
+	},
+	{
+		id: process.env.REACT_APP_VOD_VIDEO_ID_APOSHUO,
+		name_cn: '阿婆说',
+		name_en: 'aposhuo',
+	},
+	{
+		id: process.env.REACT_APP_VOD_VIDEO_ID_XIANSHANGYOUCHUNQIU,
+		name_cn: '弦上有春秋',
+		name_en: 'xianshangyouchunqiu',
+	},
+]
 
 interface TabPanelProps {
 	children?: ReactNode
@@ -51,15 +52,20 @@ interface TabPanelProps {
 
 const ChannelPage: FC = () => {
 	const [videos, setVideos] = useState<VodProps[]>([])
-	const [pageNo, setPageNo] = useState(1)
-	const pageSize = useState(12)[0]
-	const [currTabIndex, setCurrTabIndex] = useState(0)
-	const scrollableTabs = useMediaQuery(useTheme().breakpoints.down('sm'))
-	const { response, isLoading, hasError, hasMore } = useGetPlaylistRequest(categories[currTabIndex], pageNo, pageSize)
+	const [pageNo, setPageNo] = useState<number>(1)
+	const pageSize = useState<number>(12)[0]
+	const [currTabIndex, setCurrTabIndex] = useState<number>(0)
+	const smallScreen = useMediaQuery(useTheme().breakpoints.down('sm'))
+	const {
+		response: { requestId, total, videoList },
+		isLoading,
+		hasError,
+		hasMore,
+	} = useGetPlaylistRequest(categories[currTabIndex], pageNo, pageSize)
 
 	useEffect(() => {
-		response.videoList && setVideos(response.videoList.video)
-	}, [response])
+		videoList && setVideos(videoList.video)
+	}, [requestId])
 
 	const handleChange = (event: ChangeEvent<Record<string, never>>, value: number) => {
 		setCurrTabIndex(value)
@@ -67,7 +73,7 @@ const ChannelPage: FC = () => {
 	}
 
 	const TabPanel = ({ children, value, index }: TabPanelProps) => (
-		<div role="tabpanel" hidden={value !== index} style={{ backgroundColor: 'whitesmoke', padding: '1vw 5vw' }}>
+		<div className="p-container bg-whitesmoke" role="tabpanel" hidden={value !== index}>
 			{hasError ? (
 				<Empty error />
 			) : (
@@ -77,23 +83,26 @@ const ChannelPage: FC = () => {
 							{value === index && (
 								<>
 									{children}
-									<section className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+									<section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8">
 										{videos.map((video) => (
 											<VideoCard key={video.videoId} video={video} />
 										))}
 									</section>
-									{!hasMore && <Empty image={emptyImages[currTabIndex]} />}
-									<Pagination
-										className="text-center mt-3 mb-3 mb-lg-0"
-										total={response.total || 0}
-										current={pageNo}
-										defaultPageSize={pageSize}
-										showQuickJumper={(response.total || 0) > pageSize}
-										showSizeChanger={false}
-										hideOnSinglePage
-										responsive
-										onChange={(pageNo) => setPageNo(pageNo)}
-									/>
+									{!hasMore && (
+										<Empty image={require(`../assets/images/fafa_${currTabIndex}.png`).default} />
+									)}
+									{total && Math.ceil(total / pageSize) !== 1 && (
+										<Pagination
+											className="flex justify-center pt-4 md:pt-8"
+											page={pageNo}
+											siblingCount={smallScreen ? 1 : 2}
+											count={Math.ceil(total / pageSize)}
+											size={smallScreen ? 'small' : 'large'}
+											onChange={(_, pageNo) => setPageNo(pageNo)}
+											showFirstButton={!smallScreen}
+											showLastButton={!smallScreen}
+										/>
+									)}
 								</>
 							)}
 						</>
@@ -104,36 +113,31 @@ const ChannelPage: FC = () => {
 	)
 
 	return (
-		<>
-			<Banner src={channel_banner} alt="channel_banner" />
-			<Row className="my-3" align="middle" justify="center">
-				<Col>
-					<Avatar src={cat} size={80} />
-				</Col>
-				<Col style={{ margin: '0 15vw 0 2vw' }}>
-					<Row align="middle">
-						<Typography variant="h5">陈一发儿</Typography>
-						<MusicNoteIcon color="primary" fontSize="small" />
-					</Row>
-					<Row>
-						<Typography variant="caption">673.73万位订阅者</Typography>
-					</Row>
-				</Col>
-				<Col>
-					<a href="https://chenyifaer.taobao.com/" target="_blank" rel="noopener noreferrer">
-						<img
-							src={xiruisi}
-							alt="喜瑞斯"
-							style={{ border: '1px solid rgb(4,7,110)', borderRadius: '5px' }}
-						/>
-					</a>
-				</Col>
-			</Row>
+		<main>
+			<img className="banner" src={channel_banner} alt="channel_banner" />
+			<div className="flex items-center justify-center my-4">
+				<img className="w-20 h-20 rounded-full" src={cat} alt="ChenYiFaer" />
+				<div className="mx-2 sm:ml-8 md:ml-12 sm:mr-32 md:mr-72">
+					<div className="flex items-center">
+						<h1 className="text-xl md:text-2xl">陈一发儿</h1>
+						<MusicNoteIcon className="text-yellow-500" fontSize="small" />
+					</div>
+					<small className="text-gray-600">673.73万位订阅者</small>
+				</div>
+				<a
+					className="w-20 sm:w-auto"
+					href="https://chenyifaer.taobao.com/"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<img className="border rounded border-primary" src={xiruisi} alt="喜瑞斯" />
+				</a>
+			</div>
 			<Tabs
 				value={currTabIndex}
 				scrollButtons="on"
-				centered={!scrollableTabs}
-				variant={scrollableTabs ? 'scrollable' : 'standard'}
+				centered={!smallScreen}
+				variant={smallScreen ? 'scrollable' : 'standard'}
 				textColor="primary"
 				indicatorColor="primary"
 				onChange={handleChange}
@@ -147,39 +151,31 @@ const ChannelPage: FC = () => {
 			</Tabs>
 			{/* 唱歌视频 */}
 			<TabPanel value={currTabIndex} index={0}>
-				<Row align="middle">
-					<Typography variant="h5" gutterBottom>
-						作品集
-					</Typography>
-					<FavoriteIcon style={{ color: 'crimson', marginBottom: '8px' }} />
-				</Row>
-				<Row>
-					{/* 主题曲置顶 */}
-					<Col xs={24} sm={24} md={16} lg={12} xl={8}>
-						<Carousel autoplay>
-							<Link to={`/watch/${process.env.REACT_APP_VOD_VIDEO_ID_TONGHUAZHEN}`} target="_blank">
-								<img className="w-100" src={tonghuazhen} alt="童话镇" />
-							</Link>
-							<Link to={`/watch/${process.env.REACT_APP_VOD_VIDEO_ID_APOSHUO}`} target="_blank">
-								<img className="w-100" src={aposhuo} alt="阿婆说" />
-							</Link>
-							<Link
-								to={`/watch/${process.env.REACT_APP_VOD_VIDEO_ID_XIANSHANGYOUCHUNQIU}`}
-								target="_blank"
-							>
-								<img className="w-100" src={xianshangyouchunqiu} alt="弦上有春秋" />
-							</Link>
+				<div className="flex items-center mb-2">
+					<h2 className="text-2xl">作品集</h2>
+					<FavoriteIcon className="text-red-600" />
+				</div>
+				<div className="flex items-baseline">
+					<div className="w-full sm:w-1/2 lg:w-1/3">
+						<Carousel>
+							{originals.map((song) => (
+								<Link key={song.id} to={`/watch/${song.id}`} target="_blank">
+									<img
+										className="w-full"
+										src={require(`../assets/images/${song.name_en}.jpeg`).default}
+										alt={song.name_cn}
+									/>
+								</Link>
+							))}
 						</Carousel>
-					</Col>
-					<Col xs={0} sm={0} md={8}>
-						<FaFaAndRose src={fafa_rose} alt="发发与玫瑰" />
-					</Col>
-				</Row>
-				<hr />
-				<Row align="middle">
-					<Typography variant="h5">歌曲集</Typography>
+					</div>
+					<img className="hidden h-auto sm:block sm:w-1/2 lg:w-1/3" src={fafa_rose} alt="发发与玫瑰" />
+				</div>
+				<hr className="my-2 md:my-4" />
+				<div className="flex items-center mb-2">
+					<h2 className="text-2xl">歌曲集</h2>
 					<LibraryMusicIcon />
-				</Row>
+				</div>
 			</TabPanel>
 			{/* 油管回放 */}
 			<TabPanel value={currTabIndex} index={1} />
@@ -191,7 +187,7 @@ const ChannelPage: FC = () => {
 			<TabPanel value={currTabIndex} index={4} />
 			{/* 日常 */}
 			<TabPanel value={currTabIndex} index={5} />
-		</>
+		</main>
 	)
 }
 
