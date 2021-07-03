@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import fafa_nezha from '../assets/images/fafa_nezha.jpeg'
 import AudioCard from '../components/AudioCard'
-import AudioList from '../components/AudioList'
 import Empty from '../components/Empty'
 import VideoCard from '../components/VideoCard'
 import useSearch from '../hooks/useSearch'
@@ -44,17 +43,12 @@ const SearchResultsPage: FC = () => {
 					{audios && audios.length !== 0 && (
 						<div className="mb-5">
 							<h1>音乐单曲</h1>
-							<AudioList>
-								{audios &&
-									audios.map((audio: VodProps) => (
-										<AudioCard
-											key={audio.videoId}
-											audio={audio}
-											variant="light"
-											onClick={() => open(`music/${audio.videoId}`)}
-										/>
-									))}
-							</AudioList>
+							{/* <AudioList> */}
+							{audios &&
+								audios.map((audio: VodProps) => (
+									<AudioCard key={audio.videoId} audio={audio} type="secondary" />
+								))}
+							{/* </AudioList> */}
 						</div>
 					)}
 					{videos && videos.length !== 0 && (
