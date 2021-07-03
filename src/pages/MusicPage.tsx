@@ -1,11 +1,9 @@
+import { useMediaQuery } from '@material-ui/core'
 import React, { FC, useCallback, useContext, useEffect, useRef } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useMeasure } from 'react-use'
-import styled from 'styled-components'
 import music_banner from '../assets/images/music_banner.jpeg'
 import AudioCard from '../components/AudioCard'
-import AudioList from '../components/AudioList'
-import Banner from '../components/Banner'
 import LyricView from '../components/LyricView'
 import MiniPlayer from '../components/MiniPlayer'
 import { LyricContext } from '../contexts/LyricContext'
@@ -15,18 +13,11 @@ import { VodProps } from '../utils/interfaces'
 
 const { REACT_APP_VOD_CATE_ID_AUDIO } = process.env
 
-const Box = styled.div`
-	background-color: #121212;
-	color: #f8f9fa;
-	padding-bottom: 6rem;
-	user-select: none;
-`
-
 const MusicPage: FC = () => {
 	const NAVBAR_HEIGHT = 83
 	const history = useHistory()
 	const { id } = useParams<{ id: string }>()
-	const [ref, { height }] = useMeasure<HTMLElement>()
+	const [heightRef, { height }] = useMeasure<HTMLDivElement>()
 	const { currIndex, currSong, playlist, setPlaylist, getCurrSource, playAudioById, setCurrIndexById, cleanUp } =
 		useContext(MusicContext)
 	const { shouldShowLyricView, setShouldShowLyricView } = useContext(LyricContext)
@@ -36,6 +27,7 @@ const MusicPage: FC = () => {
 		(entries) => shouldShowLyricView && setShouldShowLyricView(entries[0].isIntersecting),
 		[shouldShowLyricView]
 	)
+	const largeScreen = useMediaQuery('(min-width: 640px)')
 
 	// 切换页面时清理当前播放器
 	useEffect(() => {
@@ -96,35 +88,38 @@ const MusicPage: FC = () => {
 	}
 
 	return (
-		<Box>
-			<header ref={ref} className="position-relative">
-				<div className="position-absolute bottom-0 d-none d-md-block m-md-3 ms-lg-5">
-					<div style={{ fontSize: '5vw' }}>陈一发儿</div>
-					<div className="fs-5 fst-italic">Spotify: @陈一发儿</div>
+		<main className="select-none text-light bg-spotify-900">
+			<div className="relative" ref={heightRef}>
+				<div className="absolute bottom-0 hidden mx-12 my-4 md:block">
+					<h1 className="text-vw-5">陈一发儿</h1>
+					<small className="text-xl italic">Spotify: @陈一发儿</small>
 				</div>
-				<Banner src={music_banner} alt="music_banner" />
-			</header>
-			<main style={{ padding: '1vw 5vw' }}>
+				<img className="banner" src={music_banner} alt="music_banner" />
+			</div>
+			<section className="p-container">
 				{currSong && (
 					<div ref={observerRef}>
 						<LyricView />
 					</div>
 				)}
-				<h1 className="text-light p-1 mb-3">热门单曲</h1>
-				<AudioList>
-					{playlist &&
-						playlist.map((audio: VodProps) => (
-							<AudioCard
-								key={audio.videoId}
-								audio={audio}
-								highlight={isCurrSong(audio)}
-								onDoubleClick={() => handleDoubleClick(audio)}
-							/>
-						))}
-				</AudioList>
-			</main>
+				<h1 className="mb-8 text-2xl md:text-4xl">热门单曲</h1>
+				<div
+					className={`${
+						largeScreen ? 'grid grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-x-12 gap-y-8' : 'space-y-4'
+					}`}
+				>
+					{playlist?.map((audio: VodProps) => (
+						<AudioCard
+							key={audio.videoId}
+							audio={audio}
+							highlight={isCurrSong(audio)}
+							onDoubleClick={() => handleDoubleClick(audio)}
+						/>
+					))}
+				</div>
+			</section>
 			<MiniPlayer />
-		</Box>
+		</main>
 	)
 }
 

@@ -6,6 +6,15 @@ module.exports = {
 			colors: {
 				primary: '#174080', // 2代logo蓝色
 				whitesmoke: 'whitesmoke',
+				light: '#fafafafa',
+				spotify: {
+					300: '#242424',
+					600: '#181818',
+					900: '#121212',
+				},
+			},
+			fontSize: {
+				'vw-5': '5vw',
 			},
 			height: {
 				'vw-15': '15vw',
