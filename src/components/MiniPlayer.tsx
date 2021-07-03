@@ -1,4 +1,4 @@
-import { Button, IconButton, Slider } from '@material-ui/core'
+import { Button, IconButton, IconButtonProps, Slider, useMediaQuery } from '@material-ui/core'
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline'
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline'
@@ -7,38 +7,19 @@ import RepeatRoundedIcon from '@material-ui/icons/RepeatRounded'
 import ShuffleRoundedIcon from '@material-ui/icons/ShuffleRounded'
 import SkipNextIcon from '@material-ui/icons/SkipNext'
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious'
-import { Col, Row } from 'antd'
 import React, { FC, useContext, useState } from 'react'
-import styled from 'styled-components'
-import cat from '../assets/images/cat.jpeg'
 import { LyricContext } from '../contexts/LyricContext'
 import { MusicContext } from '../contexts/MusicContext'
 import { PlayOrder } from '../utils/enums'
 import { durationToSeconds, formatDuration } from '../utils/functions'
+import { VodProps } from '../utils/interfaces'
 
-const Box = styled(Row)`
-	backdrop-filter: blur(5px);
-	background-color: #121212cc;
-	border: 1px solid rgb(255 255 255 / 30%);
-	border-radius: 2rem;
-	color: #fafafafa;
-	margin: 0rem 0.5rem;
-	padding: 0.5rem 1rem;
-	text-align: center;
+interface MiniPlayerProps {
+	currSong: VodProps
+}
 
-	button {
-		opacity: 0.85;
-		padding: 0px;
-
-		&:hover {
-			opacity: 1;
-		}
-	}
-`
-
-const MiniPlayer: FC = () => {
+const MiniPlayer: FC<MiniPlayerProps> = ({ currSong: { videoId, title, duration, coverURL } }: MiniPlayerProps) => {
 	const {
-		currSong,
 		currTime,
 		currOrder,
 		setCurrTime,
@@ -52,19 +33,20 @@ const MiniPlayer: FC = () => {
 		switchSong,
 	} = useContext(MusicContext)
 	const { lyrics, shouldShowLyricView, setCurrLine, setShouldShowLyricView } = useContext(LyricContext)
-	const [draggingValue, setDraggingValue] = useState(0)
+	const btnSize = useMediaQuery('(min-width: 640px)') ? 'large' : 'small'
+	const [draggingValue, setDraggingValue] = useState<number>(0)
 
 	// 播放或暂停
 	const handlePlayOrPauseBtnClicked = () => {
 		if (getIsPlaying()) {
 			pauseAudio()
 		} else {
-			getCurrSource() ? playAudio() : playAudioById(currSong.videoId)
+			getCurrSource() ? playAudio() : playAudioById(videoId)
 		}
 	}
 
 	// 进度条左侧显示的时间，如果用户在拖拽进度条则显示拖拽进度，否则显示当前歌曲进度
-	const displaySliderValue = () => (draggingValue !== 0 ? draggingValue : Math.min(currTime, currSong.duration))
+	const displaySliderValue = () => (draggingValue !== 0 ? draggingValue : Math.min(currTime, duration))
 
 	// 拖拽进度条时的调用
 	const handleSliderValueChanged = (_: unknown, value: number | number[]) => setDraggingValue(value as number)
@@ -74,7 +56,7 @@ const MiniPlayer: FC = () => {
 		seek(value)
 		setCurrTime(value)
 		setDraggingValue(0)
-		// handle lyric
+		// 处理歌词
 		let max = 0
 		let maxIndex = 0
 		lyrics.map((lyric: string, index: number) => {
@@ -104,12 +86,25 @@ const MiniPlayer: FC = () => {
 		}
 	}
 
+	// 图标按钮
+	const IconBtn: FC<IconButtonProps> = (props: IconButtonProps) => (
+		<IconButton {...props} className="opacity-80 hover:opacity-100" color="inherit">
+			{props.children}
+		</IconButton>
+	)
+
 	// 歌词按钮
-	const LyricBtn = (
+	const LyricBtn: FC = () => (
 		<Button
-			color={shouldShowLyricView ? 'primary' : 'secondary'}
+			size={btnSize}
 			variant="outlined"
-			style={{ minWidth: 'auto', padding: '5px 15px' }}
+			className="opacity-80 hover:opacity-100"
+			style={{
+				minWidth: 'auto',
+				margin: '0.75rem',
+				padding: btnSize === 'small' ? '0.125rem 0.25rem' : '0.25rem 1rem',
+			}}
+			color={shouldShowLyricView ? 'primary' : 'inherit'}
 			onClick={() => setShouldShowLyricView(!shouldShowLyricView)}
 		>
 			词
@@ -117,103 +112,76 @@ const MiniPlayer: FC = () => {
 	)
 
 	// 播放顺序按钮
-	const PlayOrderBtn = (
-		<IconButton color="secondary" onClick={handlePlayOrderBtnClicked}>
-			{currOrder === PlayOrder.Repeat && <RepeatRoundedIcon fontSize="large" />}
-			{currOrder === PlayOrder.RepeatOne && <RepeatOneRoundedIcon fontSize="large" />}
-			{currOrder === PlayOrder.Shuffle && <ShuffleRoundedIcon fontSize="large" />}
-		</IconButton>
+	const PlayOrderBtn: FC = () => (
+		<IconBtn onClick={handlePlayOrderBtnClicked}>
+			{currOrder === PlayOrder.Repeat && <RepeatRoundedIcon fontSize={btnSize} />}
+			{currOrder === PlayOrder.RepeatOne && <RepeatOneRoundedIcon fontSize={btnSize} />}
+			{currOrder === PlayOrder.Shuffle && <ShuffleRoundedIcon fontSize={btnSize} />}
+		</IconBtn>
 	)
 
 	return (
-		<>
-			{currSong && (
-				<Box className="fixed-bottom" align="middle" justify="center">
-					<Col xs={0} md={6} role="button" onClick={() => setShouldShowLyricView(true)}>
-						<Row align="middle" justify="center">
-							<Col xs={0} md={16} lg={8} className="px-3">
-								<img
-									className="h-75 w-75 rounded"
-									src={currSong.coverURL || cat}
-									alt={currSong.title || ''}
-								/>
-							</Col>
-							<Col xs={0} md={24} lg={16}>
-								<Row className="fs-3">{currSong.title || '未在播放'}</Row>
-								<Row>陈一发儿</Row>
-							</Col>
-						</Row>
-					</Col>
-					<Col xs={22} md={12}>
-						<Row align="middle" justify="center">
-							<Col xs={5} md={0}>
-								{LyricBtn}
-							</Col>
-							<Col xs={4} md={6} lg={3}>
-								<IconButton color="secondary" onClick={() => switchSong(-1, true)}>
-									<SkipPreviousIcon fontSize="large" />
-								</IconButton>
-							</Col>
-							<Col xs={6} md={6} lg={3}>
-								<IconButton
-									color="secondary"
-									style={{ fontSize: '60px' }}
-									onClick={handlePlayOrPauseBtnClicked}
-								>
-									{getIsPlaying() ? (
-										<PauseCircleOutlineIcon fontSize="inherit" />
-									) : (
-										<PlayCircleOutlineIcon fontSize="inherit" />
-									)}
-								</IconButton>
-							</Col>
-							<Col xs={4} md={6} lg={3}>
-								<IconButton color="secondary" onClick={() => switchSong(1, true)}>
-									<SkipNextIcon fontSize="large" />
-								</IconButton>
-							</Col>
-							<Col xs={5} md={0}>
-								{PlayOrderBtn}
-							</Col>
-						</Row>
-						<Row>
-							<Col span={4}>{formatDuration(displaySliderValue())}</Col>
-							<Col span={16}>
-								<Slider
-									max={currSong.duration}
-									value={displaySliderValue()}
-									onChange={handleSliderValueChanged}
-									onChangeCommitted={handleSliderValueChangeCommitted}
-								/>
-							</Col>
-							<Col span={4}>{formatDuration(currSong.duration)}</Col>
-						</Row>
-					</Col>
-					<Col xs={0} md={6}>
-						<Row align="middle" justify="center">
-							<Col xs={0} md={6} lg={4}>
-								{LyricBtn}
-							</Col>
-							<Col xs={0} md={6} lg={4}>
-								{PlayOrderBtn}
-							</Col>
-							<Col xs={0} md={6} lg={4}>
-								<IconButton color="secondary">
-									<a
-										href={getCurrSource()}
-										target="_blank"
-										rel="noopener noreferrer"
-										style={{ color: 'inherit' }}
-									>
-										<CloudDownloadIcon fontSize="large" />
-									</a>
-								</IconButton>
-							</Col>
-						</Row>
-					</Col>
-				</Box>
-			)}
-		</>
+		<section className="fixed inset-x-0 bottom-0 flex px-3 py-1 border-t md:py-2 md:px-6 lg:px-9 border-opacity-30 bg-spotify-900 bg-opacity-80 backdrop-filter backdrop-blur">
+			<div className="items-center hidden w-1/4 space-x-8 xl:w-1/5 2xl:w-1/6 lg:flex">
+				<img
+					className="w-24 h-24 rounded-md cursor-pointer"
+					src={coverURL}
+					alt={title}
+					onClick={() => setShouldShowLyricView(true)}
+				/>
+				<div className="flex-1">
+					<h5 className="text-3xl">{title}</h5>
+					<small className="text-lg">陈一发儿</small>
+				</div>
+			</div>
+			<div className="flex-1">
+				<div className="flex items-center justify-evenly lg:justify-center">
+					<div className="block lg:hidden">
+						<LyricBtn />
+					</div>
+					<IconBtn onClick={() => switchSong(-1, true)}>
+						<SkipPreviousIcon fontSize={btnSize} />
+					</IconBtn>
+					<IconBtn
+						style={{
+							fontSize: btnSize === 'large' ? '4rem' : '3rem',
+							margin: btnSize === 'large' ? '0rem 1rem' : '0rem',
+						}}
+						onClick={handlePlayOrPauseBtnClicked}
+					>
+						{getIsPlaying() ? (
+							<PauseCircleOutlineIcon fontSize="inherit" />
+						) : (
+							<PlayCircleOutlineIcon fontSize="inherit" />
+						)}
+					</IconBtn>
+					<IconBtn onClick={() => switchSong(1, true)}>
+						<SkipNextIcon fontSize={btnSize} />
+					</IconBtn>
+					<div className="block lg:hidden">
+						<PlayOrderBtn />
+					</div>
+				</div>
+				<div className="flex items-center justify-center space-x-4 lg:space-x-8">
+					<span className="opacity-80">{formatDuration(displaySliderValue())}</span>
+					<Slider
+						className="max-w-3xl"
+						max={duration}
+						value={displaySliderValue()}
+						onChange={handleSliderValueChanged}
+						onChangeCommitted={handleSliderValueChangeCommitted}
+					/>
+					<span className="opacity-80">{formatDuration(duration)}</span>
+				</div>
+			</div>
+			<div className="items-center justify-center hidden w-1/4 space-x-4 xl:w-1/5 2xl:w-1/6 lg:flex">
+				<LyricBtn />
+				<PlayOrderBtn />
+				<IconBtn onClick={() => open(getCurrSource())}>
+					<CloudDownloadIcon fontSize={btnSize} />
+				</IconBtn>
+			</div>
+		</section>
 	)
 }
 
