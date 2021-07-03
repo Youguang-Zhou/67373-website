@@ -96,7 +96,7 @@ const MusicPage: FC = () => {
 				</div>
 				<img className="banner" src={music_banner} alt="music_banner" />
 			</div>
-			<section className="p-container">
+			<section className="pb-24 p-container">
 				{currSong && (
 					<div ref={observerRef}>
 						<LyricView />
@@ -118,7 +118,7 @@ const MusicPage: FC = () => {
 					))}
 				</div>
 			</section>
-			<MiniPlayer />
+			{currSong && <MiniPlayer currSong={currSong} />}
 		</main>
 	)
 }

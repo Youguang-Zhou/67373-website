@@ -33,8 +33,10 @@ const Header: FC = () => {
 			<a
 				key={index}
 				className={`${
-					currPath === path ? 'text-gray-900 hover:text-gray-900' : 'hover:text-gray-700'
-				} text-xl md:text-2xl text-gray-500 p-3`}
+					(currPath === path && path === '/') || (currPath.startsWith(path) && path !== '/')
+						? 'text-gray-900 hover:text-gray-900'
+						: 'hover:text-gray-700'
+				} text-xl md:text-2xl text-gray-500 p-1 md:p-3`}
 				href={path}
 			>
 				{/* 如果是67373页面后面会附上直播状态的图标 */}
@@ -51,12 +53,12 @@ const Header: FC = () => {
 		))
 
 	return (
-		<header className="px-1 md:px-4">
+		<header className="px-1 lg:px-4">
 			{/* 桌面端 */}
-			<div className="flex items-center justify-between h-16 md:h-20 md:justify-start">
+			<div className="flex items-center justify-between h-16 lg:h-20 md:justify-start">
 				{/* logo */}
 				<a className="flex-shrink-0" href="/">
-					<img className="h-12 md:h-14" src={logo} alt="ChenYiFaer" />
+					<img className="h-12 lg:h-14" src={logo} alt="ChenYiFaer" />
 				</a>
 				{/* 桌面端的导航栏 */}
 				<nav className="items-center justify-center flex-shrink-0 hidden ml-0 md:flex md:space-x-1 lg:space-x-4 lg:ml-8">
