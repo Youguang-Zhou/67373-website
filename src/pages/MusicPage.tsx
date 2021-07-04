@@ -96,7 +96,7 @@ const MusicPage: FC = () => {
 				</div>
 				<img className="banner" src={music_banner} alt="music_banner" />
 			</div>
-			<section className="pb-24 p-container">
+			<section className="pb-12 sm:pb-24 p-container">
 				{currSong && (
 					<div ref={observerRef}>
 						<LyricView currSong={currSong} />

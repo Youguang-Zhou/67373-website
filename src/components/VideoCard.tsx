@@ -26,21 +26,27 @@ const VideoCard: FC<VideoCardProps> = ({
 					<div className="aspect-w-16 aspect-h-9">
 						<img src={coverURL} alt={title} />
 					</div>
-					<span className="absolute bottom-0 right-0 px-1 m-1 text-white bg-black rounded bg-opacity-80">
+					<span className="absolute bottom-0 right-0 px-1 m-1 text-sm text-white bg-black rounded md:text-base bg-opacity-80">
 						{formatDuration(duration)}
 					</span>
 				</div>
 			</div>
-			<div className={`flex flex-col flex-1 space-y-4 ${type === 'primary' ? 'p-4' : 'p-2'}`}>
+			<div className={`flex flex-col flex-1 space-y-1 md:space-y-8 p-2 ${type === 'primary' ? 'md:p-4' : ''}`}>
 				<div className="flex-1">
 					<h3
-						className={`line-clamp-2 ${type === 'primary' ? 'text-xl' : 'text-lg hover:text-primary'}`}
+						className={`line-clamp-2 text-md ${
+							type === 'primary' ? 'md:text-xl' : 'md:text-lg hover:text-primary'
+						}`}
 						title={title}
 					>
 						{title}
 					</h3>
 				</div>
-				<small className="text-gray-600">{`${cateName.slice(3)} · ${moment().to(creationTime)}`}</small>
+				<div className="flex space-x-1 text-gray-600">
+					<small className="hidden md:inline">{cateName.slice(3)}</small>
+					<small className="hidden md:inline">·</small>
+					<small>{moment().to(creationTime)}</small>
+				</div>
 			</div>
 		</div>
 	</Link>
