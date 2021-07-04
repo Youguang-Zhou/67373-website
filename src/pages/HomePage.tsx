@@ -36,7 +36,7 @@ const HomePage: FC = () => {
 				loadMore={handleLoadMore}
 				emptyComponent={<Empty image={love_you} />}
 			>
-				<section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8">
+				<section className="video-container">
 					{videos.map((video) => (
 						<VideoCard key={video.videoId} video={video} />
 					))}

@@ -8,12 +8,16 @@ import useSearch from '../hooks/useSearch'
 import { VodProps } from '../utils/interfaces'
 
 const SearchResultsPage: FC = () => {
+	const history = useHistory()
+	const { search } = useLocation()
 	const [audios, setAudios] = useState<VodProps[] | undefined>(undefined)
 	const [videos, setVideos] = useState<VodProps[] | undefined>(undefined)
 	const [query, setQuery] = useState<string | undefined>(undefined)
-	const { response, isLoading, hasError } = useSearch(query)
-	const { search } = useLocation()
-	const history = useHistory()
+	const {
+		response: { requestId, mediaList },
+		isLoading,
+		hasError,
+	} = useSearch(query)
 
 	useEffect(() => {
 		if (search.startsWith('?query=')) {
@@ -27,39 +31,37 @@ const SearchResultsPage: FC = () => {
 	}, [search])
 
 	useEffect(() => {
-		const { mediaList } = response
 		if (mediaList) {
 			setAudios(mediaList.filter(({ mediaType }) => mediaType === 'audio').map(({ audio }) => audio))
 			setVideos(mediaList.filter(({ mediaType }) => mediaType === 'video').map(({ video }) => video))
 		}
-	}, [response])
+	}, [requestId])
 
 	return (
-		<main style={{ padding: '1vw 5vw' }}>
+		<main className="p-container">
 			{hasError ? (
 				<Empty error />
 			) : (
 				<>
 					{audios && audios.length !== 0 && (
-						<div className="mb-5">
-							<h1>音乐单曲</h1>
-							{/* <AudioList> */}
-							{audios &&
-								audios.map((audio: VodProps) => (
+						<section className="mb-8">
+							<h1 className="mb-4 text-2xl md:text-4xl">音乐单曲</h1>
+							<div className="audio-container">
+								{audios.map((audio: VodProps) => (
 									<AudioCard key={audio.videoId} audio={audio} type="secondary" />
 								))}
-							{/* </AudioList> */}
-						</div>
+							</div>
+						</section>
 					)}
 					{videos && videos.length !== 0 && (
-						<div className="mb-5">
-							<h1>频道视频</h1>
-							<section className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+						<section className="mb-8">
+							<h1 className="mb-4 text-2xl md:text-4xl">频道视频</h1>
+							<div className="video-container">
 								{videos.map((video) => (
 									<VideoCard key={video.videoId} video={video} />
 								))}
-							</section>
-						</div>
+							</div>
+						</section>
 					)}
 					{videos && videos.length === 0 && audios && audios.length === 0 && !isLoading && (
 						<Empty image={fafa_nezha} description="找不到搜索结果>.<!" />
