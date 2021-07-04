@@ -1,101 +1,94 @@
-import { Col, Row } from 'antd'
 import moment from 'moment'
 import React, { FC, useEffect, useState } from 'react'
 import { useMeasure } from 'react-use'
-import styled from 'styled-components'
 import beautiful_fafa from '../assets/images/beautiful_fafa.png'
 import goodnight67373 from '../assets/images/goodnight67373.jpg'
 import Empty from '../components/Empty'
 import useGetLiveInfoRequest from '../hooks/useGetLiveInfoRequest'
 import { LiveStatus } from '../utils/enums'
 
-const BackGround = styled.img<{ height: number }>`
-	filter: blur(5px);
-	height: ${({ height }) => height}px;
-	object-fit: cover;
-	position: absolute;
-	width: 100%;
-	z-index: -1;
-`
-
-const Text = styled.div<{ fontSize?: string }>`
-	color: #fafafafa;
-	font-family: MFYueYuan;
-	font-size: ${({ fontSize }) => fontSize || '1.5rem'};
-	margin: 1rem 1vw;
-	text-shadow: black 0.1em 0.1em 0.2em;
-`
-
 const LivePage: FC = () => {
 	const [counter, setCounter] = useState<string[]>([])
-	const [ref, { height }] = useMeasure<HTMLDivElement>()
+	const [heightRef, { height }] = useMeasure<HTMLDivElement>()
 	const {
-		response: { status, duration, time, url, cover },
+		response: { status, time, url, cover },
 	} = useGetLiveInfoRequest()
 
 	useEffect(() => {
-		if (status === LiveStatus.WillStart) {
-			// 计算倒计时
-			const formatDuation = moment.duration(duration).format('d:hh:mm:ss', { trim: false }).split(':')
-			setCounter([
-				`${formatDuation[0]}`,
-				'天',
-				`${formatDuation[1]}`,
-				'时',
-				`${formatDuation[2]}`,
-				'分',
-				`${formatDuation[3]}`,
-				'秒',
-			])
+		let timer = 0
+		if (status === LiveStatus.WillStart && time) {
+			timer = window.setInterval(() => {
+				const currTime = moment(new Date())
+				const liveTime = moment(new Date(time))
+				const duration = liveTime.diff(currTime)
+				// 计算倒计时
+				const formatDuation = moment.duration(duration).format('d:hh:mm:ss', { trim: false }).split(':')
+				if (formatDuation[0] === '-0') {
+					location.reload()
+				} else {
+					setCounter([
+						`${formatDuation[0]}`,
+						'天',
+						`${formatDuation[1]}`,
+						'时',
+						`${formatDuation[2]}`,
+						'分',
+						`${formatDuation[3]}`,
+						'秒',
+					])
+				}
+			}, 1000)
 		}
-	}, [status, duration])
+		return () => clearInterval(timer)
+	}, [status, time])
 
-	return (
+	return status === LiveStatus.IsEnded ? (
+		<Empty image={goodnight67373} description="See you next time~" />
+	) : (
 		<>
-			{status === LiveStatus.IsEnded ? (
-				<Empty image={goodnight67373} description="See you next time~" />
-			) : (
-				<>
-					{url && cover && (
-						<>
-							<BackGround src={cover} alt="background" height={height} />
-							<main ref={ref} className="text-center">
-								<Row className="py-5" align="middle" justify="center">
-									<Col span={24}>
-										<Text fontSize="calc(3vw + 2rem)">
-											{status === LiveStatus.WillStart ? '如 期 而 至' : '⬇️ 直 播 中 ⬇️'}
-										</Text>
-									</Col>
-									{status === LiveStatus.WillStart && (
-										<Col span={24}>
-											<Row align="middle" justify="center">
-												{counter.map((value, index) => (
-													<Text
-														key={index}
-														fontSize={index % 2 == 0 ? 'calc(5vw + 2rem)' : '3vw'}
-													>
-														{value}
-													</Text>
-												))}
-											</Row>
-										</Col>
-									)}
-									<Col xs={24} lg={4}>
-										<img
-											src={beautiful_fafa}
-											alt="beautiful_fafa"
-											style={{ height: 'calc(5vw + 15rem)' }}
-										/>
-									</Col>
-									<Col xs={24} lg={6}>
-										<Text>{`${time} （北京时间）`}</Text>
-										<Text>{url.slice(12)}</Text>
-									</Col>
-								</Row>
-							</main>
-						</>
-					)}
-				</>
+			{url && cover && (
+				<div className="relative">
+					<img
+						className="absolute object-cover w-full filter blur"
+						style={{ height: height, zIndex: -1 }}
+						src={cover}
+						alt="background"
+					/>
+					<main className="flex-col text-center text-light font-MFYueYuan" ref={heightRef}>
+						<h1 className="py-4 text-4xl md:py-8 md:text-6xl lg:text-8xl">
+							{status === LiveStatus.WillStart ? '如 期 而 至' : '⬇️ 直 播 中 ⬇️'}
+						</h1>
+						{status === LiveStatus.WillStart && (
+							<div className="py-4 md:py-8">
+								<div className="flex items-center justify-center space-x-2 sm:space-x-4 md:space-x-8">
+									{counter.map((value, index) => (
+										<span
+											key={index}
+											className={
+												index % 2 == 0
+													? 'text-3xl md:text-6xl lg:text-9xl'
+													: 'text-2xl md:text-4xl lg:text-6xl'
+											}
+										>
+											{value}
+										</span>
+									))}
+								</div>
+							</div>
+						)}
+						<div className="flex flex-col items-center justify-center sm:flex-row">
+							<img
+								className="w-1/2 py-4 sm:w-1/4 md:w-1/5 md:py-8"
+								src={beautiful_fafa}
+								alt="beautiful_fafa"
+							/>
+							<div className="py-4 text-lg md:py-8 md:text-2xl lg:text-3xl">
+								<div>{`${time} （北京时间）`}</div>
+								<div>{url.slice(12)}</div>
+							</div>
+						</div>
+					</main>
+				</div>
 			)}
 		</>
 	)
