@@ -27,7 +27,7 @@ const AudioCard: FC<AudioCardProps> = ({
 		} else {
 			// 单击
 			timerRef.current = window.setTimeout(() => {
-				open(`music/${videoId}`)
+				open(`/music/${videoId}`)
 				clearTimeout(timerRef.current)
 				timerRef.current = undefined
 			}, 250)
