@@ -35,10 +35,14 @@ const AudioCard: FC<AudioCardProps> = ({
 	}
 
 	return (
-		<>
+		<div className={`cursor-pointer ${type === 'primary' ? '' : 'hover:shadow'}`}>
 			{/* 桌面端尺寸 */}
 			<div
-				className="flex-col hidden p-4 space-y-4 transition-all border rounded cursor-pointer sm:flex bg-spotify-600 border-spotify-900 hover:bg-spotify-300 hover:border-white hover:border-opacity-10"
+				className={`flex-col hidden p-4 space-y-4 transition-all border rounded sm:flex ${
+					type === 'primary'
+						? 'bg-spotify-600 hover:bg-spotify-300 border-spotify-900 hover:border-white hover:border-opacity-10'
+						: ''
+				}`}
 				onClick={handleClick}
 			>
 				<img className="rounded" src={coverURL} alt={title} />
@@ -50,7 +54,9 @@ const AudioCard: FC<AudioCardProps> = ({
 				<div className="flex-shrink-0 w-1/4 p-1">
 					<img className="rounded" src={coverURL} alt={title} />
 				</div>
-				<div className="flex items-center flex-1 p-1 border-b border-opacity-30">
+				<div
+					className={`flex items-center flex-1 p-1 border-b ${type === 'primary' ? 'border-opacity-30' : ''}`}
+				>
 					<div className="flex-1">
 						<h3 className={`text-2xl ${highlight ? 'text-yellow-500' : ''}`}>{title}</h3>
 						<h5 className="opacity-80">陈一发儿</h5>
@@ -58,7 +64,7 @@ const AudioCard: FC<AudioCardProps> = ({
 					<small className="opacity-80">{formatDuration(duration)}</small>
 				</div>
 			</div>
-		</>
+		</div>
 	)
 }
 

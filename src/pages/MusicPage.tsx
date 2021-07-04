@@ -103,11 +103,7 @@ const MusicPage: FC = () => {
 					</div>
 				)}
 				<h1 className="mb-8 text-2xl md:text-4xl">热门单曲</h1>
-				<div
-					className={`${
-						largeScreen ? 'grid grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-x-12 gap-y-8' : 'space-y-4'
-					}`}
-				>
+				<div className="audio-container">
 					{playlist?.map((audio: VodProps) => (
 						<AudioCard
 							key={audio.videoId}
