@@ -103,9 +103,11 @@ const VideoPlayPage: FC = () => {
 							<VideoPlayer options={playOptions} onLoad={handleVideoPlayerLoaded} />
 						</div>
 						<div className="w-full lg:w-1/3">
-							<div className="p-4 border rounded shadow">
-								{renderVideoDescription(videoInfo.description)}
-							</div>
+							{videoInfo.description && (
+								<div className="p-4 border rounded shadow">
+									{renderVideoDescription(videoInfo.description)}
+								</div>
+							)}
 						</div>
 					</section>
 				</main>
