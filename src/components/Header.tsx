@@ -8,6 +8,7 @@ import logo from '../assets/images/logo_v2.jpg'
 import useGetLiveInfoRequest from '../hooks/useGetLiveInfoRequest'
 import { LiveStatus } from '../utils/enums'
 import SearchBar from './SearchBar'
+// import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 
 const navItems = [
 	{ name: '首页', path: '/' },
@@ -55,17 +56,24 @@ const Header: FC = () => {
 	return (
 		<header className="px-1 lg:px-4">
 			{/* 桌面端 */}
-			<div className="flex items-center justify-between h-16 lg:h-20 md:justify-start">
-				{/* logo */}
-				<a className="flex-shrink-0" href="/">
-					<img className="h-12 lg:h-14" src={logo} alt="ChenYiFaer" />
-				</a>
-				{/* 桌面端的导航栏 */}
-				<nav className="items-center justify-center flex-shrink-0 hidden ml-0 md:flex md:space-x-1 lg:space-x-4 lg:ml-8">
-					{renderNavItems()}
-				</nav>
+			<div className="flex items-center justify-between h-16 lg:h-20">
+				<div className="flex flex-shrink-0 gap-0 lg:gap-8">
+					{/* logo */}
+					<a className="flex items-center" href="/">
+						<img className="h-12 lg:h-14" src={logo} alt="ChenYiFaer" />
+					</a>
+					{/* 桌面端的导航栏 */}
+					<nav className="items-center justify-center hidden md:flex md:space-x-1 lg:space-x-4">
+						{renderNavItems()}
+					</nav>
+				</div>
 				{/* 桌面端的搜索栏 */}
-				<SearchBar className="flex-grow hidden max-w-xs ml-0 md:block lg:ml-32" />
+				<SearchBar className="flex-1 hidden max-w-xs md:block" />
+				{/* 问题反馈按钮 */}
+				<div></div>
+				{/* <button type="button" className="hidden px-2 text-primary text-opacity-80 md:block">
+					{<HelpOutlineIcon />}
+				</button> */}
 				{/* 移动端logo右侧显示导航栏的按钮 */}
 				<button
 					type="button"
