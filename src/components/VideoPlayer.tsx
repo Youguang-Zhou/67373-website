@@ -1,28 +1,8 @@
 import React, { FC, useEffect, useRef } from 'react'
-import styled from 'styled-components'
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
 import zhCN from 'video.js/dist/lang/zh-CN.json'
 import 'video.js/dist/video-js.css'
 import '../utils/video-player.css'
-
-const Notice = styled.div`
-	background: rgba(0, 0, 0, 0.8);
-	border-radius: 5px;
-	bottom: 4.5em;
-	color: white;
-	font-size: 14px;
-	left: 1em;
-	opacity: 0;
-	padding: 6px 16px;
-	pointer-events: none;
-	position: absolute;
-	transition: all 0.3s ease-in-out;
-`
-
-interface VideoPlayerProps {
-	options: VideoJsPlayerOptions
-	onLoad?: (player: VideoJsPlayer) => void
-}
 
 const initialOptions: VideoJsPlayerOptions = {
 	autoplay: true,
@@ -40,6 +20,11 @@ const initialOptions: VideoJsPlayerOptions = {
 	},
 }
 
+interface VideoPlayerProps {
+	options: VideoJsPlayerOptions
+	onLoad?: (player: VideoJsPlayer) => void
+}
+
 const VideoPlayer: FC<VideoPlayerProps> = ({ options, onLoad }: VideoPlayerProps) => {
 	const playerRef = useRef<VideoJsPlayer>()
 	const noticeRef = useRef<HTMLDivElement>(null)
@@ -48,9 +33,7 @@ const VideoPlayer: FC<VideoPlayerProps> = ({ options, onLoad }: VideoPlayerProps
 		playerRef.current = videojs('video-player-67373', {
 			...initialOptions,
 			...options,
-			userActions: {
-				hotkeys: ({ which }) => setupHotkeys(which),
-			},
+			userActions: { hotkeys: setupHotkeys },
 		})
 		playerRef.current.volume(0.7)
 		onLoad && onLoad(playerRef.current)
@@ -74,11 +57,12 @@ const VideoPlayer: FC<VideoPlayerProps> = ({ options, onLoad }: VideoPlayerProps
 		}
 	}
 
-	const setupHotkeys = (keycode: number) => {
+	const setupHotkeys = ({ preventDefault, which }: videojs.KeyboardEvent) => {
+		preventDefault()
 		const { current } = playerRef
 		const second = 5 // 快进或者快退的秒数
 		const volume = 0.1 // 增加或者降低的音量
-		switch (keycode) {
+		switch (which) {
 			// 空格键：暂停或者播放
 			case 32:
 				current?.paused() ? current?.play() : current?.pause()
@@ -113,9 +97,14 @@ const VideoPlayer: FC<VideoPlayerProps> = ({ options, onLoad }: VideoPlayerProps
 	}
 
 	return (
-		<div>
+		<div className="relative">
+			{/* 视频 */}
 			<video id="video-player-67373" className="video-js vjs-16-9 custom-css" />
-			<Notice ref={noticeRef} />
+			{/* 键盘快捷键提示 */}
+			<span
+				className="absolute px-4 py-1 transition-all bg-black rounded opacity-0 text-light bg-opacity-70 bottom-12 left-4"
+				ref={noticeRef}
+			></span>
 		</div>
 	)
 }
