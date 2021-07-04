@@ -52,7 +52,7 @@ const InfiniteScroll: FC<InfiniteScrollProps> = ({
 				className="fixed p-1 bg-white rounded-full shadow bottom-20 right-20"
 				onClick={() => scrollTo({ top: 0, left: 0, behavior: 'smooth' })}
 			>
-				<img className="w-20 h-20" src={xiaode} alt="backToTopBtn" />
+				<img className="w-20 h-20" src={xiaode} alt="backToTop" />
 			</button>
 		</>
 	)
