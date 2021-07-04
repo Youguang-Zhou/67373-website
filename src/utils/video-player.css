@@ -11,6 +11,10 @@
   This designer can be linked to at:
   https://codepen.io/heff/pen/EarCt/left/?editors=010
 */
+video {
+	outline: none;
+}
+
 .video-js {
 	/* The base font size controls the size of everything, not just text.
        All dimensions use em-based sizes so that the scale along with the font size.
