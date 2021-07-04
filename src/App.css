@@ -15,7 +15,7 @@
 	}
 
 	.video-container {
-		@apply grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8;
+		@apply grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-x-6 md:gap-y-8;
 	}
 
 	.audio-container {
@@ -25,16 +25,8 @@
 	.banner {
 		@apply object-cover w-full h-vw-15;
 	}
-}
 
-@layer utilities {
-	.lyric {
-		font-size: 20px;
-		padding: 10px 0px;
-	}
-
-	.lyric-list {
-		height: 550px;
+	.hide-scrollbar {
 		overflow: scroll;
 		pointer-events: none;
 
@@ -42,7 +34,7 @@
 		scrollbar-width: none; /* Firefox */
 	}
 
-	.lyric-list::-webkit-scrollbar {
+	.hide-scrollbar::-webkit-scrollbar {
 		display: none; /* Chrome, Safari and Opera */
 	}
 }

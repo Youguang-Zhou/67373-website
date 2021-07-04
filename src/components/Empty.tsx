@@ -8,7 +8,7 @@ interface EmptyProps {
 }
 
 const Empty: FC<EmptyProps> = ({ image, description, error }: EmptyProps) => (
-	<div className="flex flex-col items-center justify-center my-4 space-y-4">
+	<div className="flex flex-col items-center justify-center my-0 space-y-4 md:my-4">
 		<img className="w-32 md:w-48 lg:w-72" src={image || fafa_robot} alt="empty" />
 		<span className="text-xl text-center md:text-2xl lg:text-3xl">
 			{description || (

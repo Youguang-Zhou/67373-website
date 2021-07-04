@@ -121,7 +121,7 @@ const MiniPlayer: FC<MiniPlayerProps> = ({ currSong: { videoId, title, duration,
 	)
 
 	return (
-		<section className="fixed inset-x-0 bottom-0 flex px-3 py-1 border-t md:py-2 md:px-6 lg:px-9 border-opacity-30 bg-spotify-900 bg-opacity-80 backdrop-filter backdrop-blur">
+		<section className="fixed inset-x-0 bottom-0 flex gap-4 px-4 py-1 border-t md:py-2 md:px-6 lg:px-10 border-opacity-30 bg-spotify-900 bg-opacity-80 backdrop-filter backdrop-blur">
 			<div className="items-center hidden w-1/4 space-x-8 xl:w-1/5 2xl:w-1/6 lg:flex">
 				<img
 					className="w-24 h-24 rounded-md cursor-pointer"
@@ -162,7 +162,7 @@ const MiniPlayer: FC<MiniPlayerProps> = ({ currSong: { videoId, title, duration,
 						<PlayOrderBtn />
 					</div>
 				</div>
-				<div className="flex items-center justify-center space-x-4 lg:space-x-8">
+				<div className="flex items-center justify-center space-x-6 lg:space-x-8">
 					<span className="opacity-80">{formatDuration(displaySliderValue())}</span>
 					<Slider
 						className="max-w-3xl"
