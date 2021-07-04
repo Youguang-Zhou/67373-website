@@ -95,8 +95,9 @@ const SearchBar: FC<HTMLProps<HTMLDivElement>> = ({ className }: HTMLProps<HTMLD
 					🔍
 				</button>
 			</div>
+			{/* 自动补全（在小尺寸屏幕默认隐藏） */}
 			{isFocus && query && searchResults.length !== 0 && (
-				<div className="absolute hidden w-full overflow-hidden bg-white border border-t-0 border-gray-200 shadow md:block rounded-b-2xl">
+				<div className="absolute z-50 hidden w-full overflow-hidden bg-white border border-t-0 border-gray-200 shadow md:block rounded-b-2xl">
 					{searchResults.map((title, index) => {
 						const indexes = LongestCommonSubsequence(query, title)
 						const charArr = title.split('')
