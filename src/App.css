@@ -18,3 +18,23 @@
 		@apply object-cover w-full h-vw-15;
 	}
 }
+
+@layer utilities {
+	.lyric {
+		font-size: 20px;
+		padding: 10px 0px;
+	}
+
+	.lyric-list {
+		height: 550px;
+		overflow: scroll;
+		pointer-events: none;
+
+		-ms-overflow-style: none; /* IE and Edge */
+		scrollbar-width: none; /* Firefox */
+	}
+
+	.lyric-list::-webkit-scrollbar {
+		display: none; /* Chrome, Safari and Opera */
+	}
+}

@@ -14,20 +14,20 @@ import { VodProps } from '../utils/interfaces'
 const { REACT_APP_VOD_CATE_ID_AUDIO } = process.env
 
 const MusicPage: FC = () => {
-	const NAVBAR_HEIGHT = 83
 	const history = useHistory()
 	const { id } = useParams<{ id: string }>()
+	const largeScreen = useMediaQuery('(min-width: 640px)')
+	const observerRef = useRef<HTMLDivElement>(null)
 	const [heightRef, { height }] = useMeasure<HTMLDivElement>()
+	const NAVBAR_HEIGHT = largeScreen ? 83 : 68
 	const { currIndex, currSong, playlist, setPlaylist, getCurrSource, playAudioById, setCurrIndexById, cleanUp } =
 		useContext(MusicContext)
 	const { shouldShowLyricView, setShouldShowLyricView } = useContext(LyricContext)
 	const { response: playlistRes } = useGetPlaylistRequest(REACT_APP_VOD_CATE_ID_AUDIO, 1, 100)
-	const observerRef = useRef<HTMLDivElement>(null)
 	const showLyricView = useCallback(
 		(entries) => shouldShowLyricView && setShouldShowLyricView(entries[0].isIntersecting),
 		[shouldShowLyricView]
 	)
-	const largeScreen = useMediaQuery('(min-width: 640px)')
 
 	// 切换页面时清理当前播放器
 	useEffect(() => {
@@ -99,7 +99,7 @@ const MusicPage: FC = () => {
 			<section className="pb-24 p-container">
 				{currSong && (
 					<div ref={observerRef}>
-						<LyricView />
+						<LyricView currSong={currSong} />
 					</div>
 				)}
 				<h1 className="mb-8 text-2xl md:text-4xl">热门单曲</h1>
