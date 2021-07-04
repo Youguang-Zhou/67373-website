@@ -13,6 +13,7 @@ module.exports = {
 					900: '#121212',
 				},
 			},
+			fontFamily: { MFYueYuan: ['MFYueYuan', 'sans-serif'] },
 			fontSize: {
 				'vw-5': '5vw',
 			},
