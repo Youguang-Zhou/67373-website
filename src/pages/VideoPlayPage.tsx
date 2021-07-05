@@ -7,7 +7,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { useMeasure } from 'react-use'
 import { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
 import VideoPlayer from '../components/VideoPlayer'
-import useGetPlayInfoRequest from '../hooks/useGetPlayInfoRequest'
+import useGetVideoInfoRequest from '../hooks/useGetVideoInfoRequest'
 import { durationToSeconds } from '../utils/functions'
 
 interface SubTitleProps {
@@ -31,7 +31,7 @@ const VideoPlayPage: FC = () => {
 	const {
 		response: { requestId, videoInfo, playInfo },
 		hasError,
-	} = useGetPlayInfoRequest(id)
+	} = useGetVideoInfoRequest(id)
 
 	useEffect(() => {
 		if (videoInfo && playInfo) {
@@ -54,7 +54,7 @@ const VideoPlayPage: FC = () => {
 				// 例如['hh:mm:ss童话镇', ... , 'hh:mm:ss阿婆说']
 				const arr = desc.slice(1, desc.length - 1).split(',')
 				return (
-					<div className="mt-8">
+					<div key={index} className="mt-8">
 						<SubTitle icon={<LabelOutlinedIcon fontSize="large" />} subtitle="时间轴" />
 						<div className="my-2">
 							{arr.map((str, index) => (
@@ -77,12 +77,10 @@ const VideoPlayPage: FC = () => {
 			} else {
 				// 正常的简介
 				return (
-					<>
+					<div key={index}>
 						<SubTitle icon={<DescriptionOutlinedIcon fontSize="large" />} subtitle="简介" />
-						<p key={index} className="my-2">
-							{desc}
-						</p>
-					</>
+						<p className="my-2">{desc}</p>
+					</div>
 				)
 			}
 		})

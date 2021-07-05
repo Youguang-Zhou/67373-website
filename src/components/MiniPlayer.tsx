@@ -18,31 +18,17 @@ interface MiniPlayerProps {
 	currSong: VodProps
 }
 
-const MiniPlayer: FC<MiniPlayerProps> = ({ currSong: { videoId, title, duration, coverURL } }: MiniPlayerProps) => {
-	const {
-		currTime,
-		currOrder,
-		setCurrTime,
-		setCurrOrder,
-		getIsPlaying,
-		getCurrSource,
-		seek,
-		playAudioById,
-		playAudio,
-		pauseAudio,
-		switchSong,
-	} = useContext(MusicContext)
+const MiniPlayer: FC<MiniPlayerProps> = ({ currSong }: MiniPlayerProps) => {
+	const { title, duration, description, coverURL } = currSong
+	const { currTime, currOrder, setCurrTime, setCurrOrder, getIsPlaying, seek, playAudio, pauseAudio, switchSong } =
+		useContext(MusicContext)
 	const { lyrics, shouldShowLyricView, setCurrLine, setShouldShowLyricView } = useContext(LyricContext)
 	const btnSize = useMediaQuery('(min-width: 640px)') ? 'large' : 'small'
 	const [draggingValue, setDraggingValue] = useState<number>(0)
 
 	// 播放或暂停
 	const handlePlayOrPauseBtnClicked = () => {
-		if (getIsPlaying()) {
-			pauseAudio()
-		} else {
-			getCurrSource() ? playAudio() : playAudioById(videoId)
-		}
+		getIsPlaying() ? pauseAudio() : playAudio(currSong)
 	}
 
 	// 进度条左侧显示的时间，如果用户在拖拽进度条则显示拖拽进度，否则显示当前歌曲进度
@@ -59,7 +45,7 @@ const MiniPlayer: FC<MiniPlayerProps> = ({ currSong: { videoId, title, duration,
 		// 处理歌词
 		let max = 0
 		let maxIndex = 0
-		lyrics.map((lyric: string, index: number) => {
+		lyrics?.map((lyric: string, index: number) => {
 			const seconds = durationToSeconds(`00:${lyric.slice(1, 6)}`)
 			if (seconds >= max && seconds <= value) {
 				max = seconds
@@ -177,7 +163,7 @@ const MiniPlayer: FC<MiniPlayerProps> = ({ currSong: { videoId, title, duration,
 			<div className="items-center justify-center hidden w-1/4 space-x-4 xl:w-1/5 2xl:w-1/6 lg:flex">
 				<LyricBtn />
 				<PlayOrderBtn />
-				<IconBtn onClick={() => open(getCurrSource())}>
+				<IconBtn onClick={() => open(description)}>
 					<CloudDownloadIcon fontSize={btnSize} />
 				</IconBtn>
 			</div>

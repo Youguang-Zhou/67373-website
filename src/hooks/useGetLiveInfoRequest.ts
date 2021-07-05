@@ -24,9 +24,9 @@ const useGetLiveInfoRequest = (): GetLyricsResponseProps => {
 	useEffect(() => {
 		setIsLoading(true)
 		setHasError(false)
-		API.get('live')
+		API.get('liveInfo')
 			.then(({ data }) => {
-				if (data) {
+				if (data.time) {
 					const currTime = moment(new Date())
 					const liveTime = moment(new Date(data.time))
 					if (currTime.isBefore(liveTime)) {
