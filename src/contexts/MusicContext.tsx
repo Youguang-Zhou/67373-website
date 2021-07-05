@@ -1,5 +1,4 @@
 import React, { createContext, FC, useEffect, useRef, useState } from 'react'
-import { API } from '../utils/api'
 import { PlayOrder } from '../utils/enums'
 import { VodProps } from '../utils/interfaces'
 
@@ -38,21 +37,14 @@ const MusicProvider: FC = ({ children }) => {
 	// 获取当前播放状态
 	const getIsPlaying = () => !audioRef.current.paused
 
-	// 获取当前播放源
-	const getCurrSource = () => audioRef.current.src
-
 	// 跳转
 	const seek = (value: number) => (audioRef.current.currentTime = value)
 
-	// 开始播放，因为浏览器自动播放政策的原因，这里用不了useGetPlayInfoRequest（因为hook是异步的）
-	const playAudioById = (id: string) =>
-		API.get(`vod/${id}`).then(({ data }) => {
-			audioRef.current.src = data.playInfo[0].playURL
-			audioRef.current.play()
-			setCurrIndexById(id)
-		})
-
-	const playAudio = () => audioRef.current.play()
+	// 开始播放
+	const playAudio = (audio: VodProps) => {
+		audioRef.current.src = audio.description
+		audioRef.current.play().then(() => setCurrIndexById(audio.videoId))
+	}
 
 	// 暂停播放
 	const pauseAudio = () => audioRef.current.pause()
@@ -77,18 +69,18 @@ const MusicProvider: FC = ({ children }) => {
 		setCurrTime(0)
 		audioRef.current.currentTime = 0
 		if (currSong && playlist && currIndex !== undefined) {
-			let songIdToPlay = undefined
+			let songToPlay = undefined
 			// ===循环播放 或者 单曲循环但是由用户点击按钮触发===
 			if (currOrder === PlayOrder.Repeat || (currOrder === PlayOrder.RepeatOne && triggerByUser)) {
 				const newIndex = currIndex + offset
 				if (newIndex < 0) {
 					// 到第一首歌了，切到最后一首歌
-					songIdToPlay = playlist[playlist.length - 1].videoId
+					songToPlay = playlist[playlist.length - 1]
 				} else if (newIndex > playlist.length - 1) {
 					// 到最后一首歌了，切到第一首歌
-					songIdToPlay = playlist[0].videoId
+					songToPlay = playlist[0]
 				} else {
-					songIdToPlay = playlist[newIndex].videoId
+					songToPlay = playlist[newIndex]
 				}
 			}
 			// ===单曲循环下自动重新播放===
@@ -98,11 +90,11 @@ const MusicProvider: FC = ({ children }) => {
 			// ===随机播放===
 			else if (currOrder === PlayOrder.Shuffle) {
 				// 除了当前歌曲的剩下的歌曲
-				const arr = playlist.filter((audio) => audio.videoId !== currSong.videoId)
+				const arr = playlist.filter((audio) => audio !== currSong)
 				// 其中随机选一首
-				songIdToPlay = arr[Math.floor(Math.random() * arr.length)].videoId
+				songToPlay = arr[Math.floor(Math.random() * arr.length)]
 			}
-			songIdToPlay && playAudioById(songIdToPlay)
+			songToPlay && playAudio(songToPlay)
 		}
 	}
 
@@ -127,9 +119,7 @@ const MusicProvider: FC = ({ children }) => {
 				setCurrOrder,
 				setPlaylist,
 				getIsPlaying,
-				getCurrSource,
 				seek,
-				playAudioById,
 				playAudio,
 				pauseAudio,
 				setCurrIndexById,

@@ -3,10 +3,9 @@ import love_you from '../assets/images/love_you.png'
 import Empty from '../components/Empty'
 import InfiniteScroll from '../components/InfiniteScroll'
 import VideoCard from '../components/VideoCard'
-import useGetPlaylistRequest from '../hooks/useGetPlaylistRequest'
+import useGetVodListRequest from '../hooks/useGetVodListRequest'
+import { MediaType } from '../utils/enums'
 import { VodProps } from '../utils/interfaces'
-
-const { REACT_APP_VOD_CATE_ID_VIDEO } = process.env
 
 const HomePage: FC = () => {
 	const [videos, setVideos] = useState<VodProps[]>([])
@@ -17,7 +16,7 @@ const HomePage: FC = () => {
 		isLoading,
 		hasError,
 		hasMore,
-	} = useGetPlaylistRequest(REACT_APP_VOD_CATE_ID_VIDEO, pageNo, pageSize)
+	} = useGetVodListRequest(MediaType.Video, pageNo, pageSize)
 
 	useEffect(() => {
 		videoList && setVideos(videos.concat(videoList.video))

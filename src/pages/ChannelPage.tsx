@@ -14,7 +14,8 @@ import xiruisi from '../assets/images/xiruisi.png'
 import Carousel from '../components/Carousel'
 import Empty from '../components/Empty'
 import VideoCard from '../components/VideoCard'
-import useGetPlaylistRequest from '../hooks/useGetPlaylistRequest'
+import useGetVodListRequest from '../hooks/useGetVodListRequest'
+import { MediaType } from '../utils/enums'
 import { VodProps } from '../utils/interfaces'
 
 const categories = [
@@ -61,7 +62,7 @@ const ChannelPage: FC = () => {
 		isLoading,
 		hasError,
 		hasMore,
-	} = useGetPlaylistRequest(categories[currTabIndex], pageNo, pageSize)
+	} = useGetVodListRequest(MediaType.Video, pageNo, pageSize, categories[currTabIndex])
 
 	useEffect(() => {
 		videoList && setVideos(videoList.video)

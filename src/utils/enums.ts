@@ -9,3 +9,8 @@ export enum LiveStatus {
 	IsLive = 'IsLive', // 正在直播
 	IsEnded = 'IsEnded', // 结束直播
 }
+
+export enum MediaType {
+	Video = 'videos', // 视频的url前缀
+	Audio = 'audios', // 音频的url前缀
+}

@@ -8,10 +8,9 @@ import LyricView from '../components/LyricView'
 import MiniPlayer from '../components/MiniPlayer'
 import { LyricContext } from '../contexts/LyricContext'
 import { MusicContext } from '../contexts/MusicContext'
-import useGetPlaylistRequest from '../hooks/useGetPlaylistRequest'
+import useGetVodListRequest from '../hooks/useGetVodListRequest'
+import { MediaType } from '../utils/enums'
 import { VodProps } from '../utils/interfaces'
-
-const { REACT_APP_VOD_CATE_ID_AUDIO } = process.env
 
 const MusicPage: FC = () => {
 	const history = useHistory()
@@ -20,10 +19,12 @@ const MusicPage: FC = () => {
 	const observerRef = useRef<HTMLDivElement>(null)
 	const [heightRef, { height }] = useMeasure<HTMLDivElement>()
 	const NAVBAR_HEIGHT = largeScreen ? 83 : 68
-	const { currIndex, currSong, playlist, setPlaylist, getCurrSource, playAudioById, setCurrIndexById, cleanUp } =
+	const { currIndex, currSong, playlist, setPlaylist, playAudio, setCurrIndexById, cleanUp } =
 		useContext(MusicContext)
 	const { shouldShowLyricView, setShouldShowLyricView } = useContext(LyricContext)
-	const { response: playlistRes } = useGetPlaylistRequest(REACT_APP_VOD_CATE_ID_AUDIO, 1, 100)
+	const {
+		response: { requestId, videoList },
+	} = useGetVodListRequest(MediaType.Audio, 1, 100)
 	const showLyricView = useCallback(
 		(entries) => shouldShowLyricView && setShouldShowLyricView(entries[0].isIntersecting),
 		[shouldShowLyricView]
@@ -36,8 +37,8 @@ const MusicPage: FC = () => {
 
 	// 获取歌曲列表，并排序
 	useEffect(() => {
-		if (playlistRes.videoList) {
-			const audios = playlistRes.videoList.video
+		if (videoList) {
+			const audios = videoList.video
 			const originals = audios.filter(
 				(audio) => audio.title === '童话镇' || audio.title === '阿婆说' || audio.title === '弦上有春秋'
 			)
@@ -46,7 +47,7 @@ const MusicPage: FC = () => {
 			)
 			setPlaylist([...originals, ...covers])
 		}
-	}, [playlistRes])
+	}, [requestId])
 
 	// 如果url里有id，就设置为当前歌曲，否则跳转到/music
 	useEffect(() => {
@@ -81,9 +82,7 @@ const MusicPage: FC = () => {
 
 	// 双击时调用
 	const handleDoubleClick = (audio: VodProps) => {
-		if (!isCurrSong(audio) || !getCurrSource()) {
-			playAudioById(audio.videoId)
-		}
+		isCurrSong(audio) || playAudio(audio)
 		setShouldShowLyricView(true)
 	}
 

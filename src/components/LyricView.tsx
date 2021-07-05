@@ -1,18 +1,26 @@
 import { useMediaQuery } from '@material-ui/core'
 import React, { FC, useContext, useEffect, useRef } from 'react'
 import { LyricContext } from '../contexts/LyricContext'
+import useGetLyricsRequest from '../hooks/useGetLyricsRequest'
 import { VodProps } from '../utils/interfaces'
 
 interface LyricViewProps {
 	currSong: VodProps
 }
 
-const LyricView: FC<LyricViewProps> = ({ currSong: { title, coverURL } }: LyricViewProps) => {
-	const LYRIC_HEIGHT = useMediaQuery('(min-width: 640px)') ? 44 : 36 // 每行歌词高度
+const LyricView: FC<LyricViewProps> = ({ currSong: { videoId, title, coverURL } }: LyricViewProps) => {
 	const NOT_SCROLL_LINE = 6 // 前几行先不滚动
+	const LYRIC_HEIGHT = useMediaQuery('(min-width: 640px)') ? 44 : 36 // 每行歌词高度
 	const scrollRef = useRef<HTMLDivElement>(null)
-	const { lyrics, currLine, isLoading, hasError } = useContext(LyricContext)
+	const { lyrics, currLine, setLyrics } = useContext(LyricContext)
+	const { response: lyricsRes, isLoading, hasError } = useGetLyricsRequest(videoId)
 
+	// 获取歌词
+	useEffect(() => {
+		setLyrics(lyricsRes.lyrics)
+	}, [lyricsRes])
+
+	// 歌词自动滚动
 	useEffect(() => {
 		if (scrollRef.current) {
 			scrollRef.current.scroll({
@@ -33,7 +41,7 @@ const LyricView: FC<LyricViewProps> = ({ currSong: { title, coverURL } }: LyricV
 				<div className="hide-scrollbar" ref={scrollRef} style={{ height: 550 }}>
 					{!isLoading && (
 						<>
-							{hasError ? (
+							{!lyrics || hasError ? (
 								<span>暂无歌词X...X</span>
 							) : (
 								<>
