@@ -42,8 +42,14 @@ const MusicProvider: FC = ({ children }) => {
 
 	// 开始播放
 	const playAudio = (audio: VodProps) => {
-		audioRef.current.src = audio.description
-		audioRef.current.play().then(() => setCurrIndexById(audio.videoId))
+		if (audio.videoId !== currSong?.videoId || !audioRef.current.src) {
+			// 播放新歌曲
+			audioRef.current.src = audio.description
+			audioRef.current.play().then(() => setCurrIndexById(audio.videoId))
+		} else {
+			// 恢复当前歌曲
+			audioRef.current.play()
+		}
 	}
 
 	// 暂停播放
