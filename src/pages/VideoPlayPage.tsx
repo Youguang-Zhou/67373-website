@@ -96,7 +96,7 @@ const VideoPlayPage: FC = () => {
 							<span>{videoInfo.cateName}</span>
 						</div>
 					</div>
-					<section className="flex flex-col items-stretch justify-center gap-4 xl:gap-8 lg:flex-row">
+					<section className="flex flex-col items-stretch justify-center space-x-4 xl:space-x-8 lg:flex-row">
 						<div className="w-full lg:w-2/3" ref={widthRef}>
 							<VideoPlayer options={playOptions} onLoad={handleVideoPlayerLoaded} />
 						</div>

@@ -18,7 +18,7 @@ const VideoCard: FC<VideoCardProps> = ({
 			className={`flex h-full ${
 				type === 'primary'
 					? 'flex-col overflow-hidden transition-all bg-white border rounded hover:shadow-md'
-					: 'flex-row w-full gap-1'
+					: 'flex-row w-full space-x-1'
 			}`}
 		>
 			<div className={`${type === 'primary' ? '' : 'flex-shrink-0 w-1/2'}`}>
