@@ -57,7 +57,7 @@ const Header: FC = () => {
 		<header className="px-1 lg:px-4">
 			{/* 桌面端 */}
 			<div className="flex items-center justify-between h-16 lg:h-20">
-				<div className="flex flex-shrink-0 gap-0 lg:gap-8">
+				<div className="flex flex-shrink-0 space-x-0 lg:space-x-8">
 					{/* logo */}
 					<a className="flex items-center" href="/">
 						<img className="h-12 lg:h-14" src={logo} alt="ChenYiFaer" />
