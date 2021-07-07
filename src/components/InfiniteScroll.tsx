@@ -1,5 +1,6 @@
 import CircularProgress from '@material-ui/core/CircularProgress'
 import React, { FC, ReactNode, useCallback, useEffect, useRef } from 'react'
+import { useFirstMountState } from 'react-use'
 import xiaode from '../assets/images/xiaode.png'
 import Empty from './Empty'
 
@@ -20,6 +21,7 @@ const InfiniteScroll: FC<InfiniteScrollProps> = ({
 	emptyComponent,
 	loadMore,
 }: InfiniteScrollProps) => {
+	const isFirstMount = useFirstMountState()
 	const observerRef = useRef<HTMLDivElement>(null)
 	const scroll = useCallback(
 		(entries) => entries[0].isIntersecting && hasMore && !isLoading && loadMore(),
@@ -34,26 +36,30 @@ const InfiniteScroll: FC<InfiniteScrollProps> = ({
 
 	return (
 		<>
-			{hasError ? (
-				<Empty error />
-			) : (
+			{!isFirstMount && (
 				<>
-					{children}
-					{hasMore ? (
-						<div className="my-8 text-center text-primary" ref={observerRef}>
-							<CircularProgress color="inherit" />
-						</div>
+					{hasError ? (
+						<Empty error />
 					) : (
-						<>{emptyComponent}</>
+						<>
+							{children}
+							{hasMore ? (
+								<div className="my-8 text-center text-primary" ref={observerRef}>
+									<CircularProgress color="inherit" />
+								</div>
+							) : (
+								<>{emptyComponent}</>
+							)}
+						</>
 					)}
+					<button
+						className="fixed p-1 bg-white rounded-full shadow bottom-10 right-10 md:bottom-20 md:right-20"
+						onClick={() => scrollTo({ top: 0, left: 0, behavior: 'smooth' })}
+					>
+						<img className="w-16 h-16 md:w-20 md:h-20" src={xiaode} alt="backToTop" />
+					</button>
 				</>
 			)}
-			<button
-				className="fixed p-1 bg-white rounded-full shadow bottom-10 right-10 md:bottom-20 md:right-20"
-				onClick={() => scrollTo({ top: 0, left: 0, behavior: 'smooth' })}
-			>
-				<img className="w-16 h-16 md:w-20 md:h-20" src={xiaode} alt="backToTop" />
-			</button>
 		</>
 	)
 }
