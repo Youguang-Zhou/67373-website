@@ -1,4 +1,4 @@
-import { Button, IconButton, IconButtonProps, Slider, useMediaQuery } from '@material-ui/core'
+import { Button, IconButton, Slider, useMediaQuery } from '@material-ui/core'
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline'
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline'
@@ -72,13 +72,6 @@ const MiniPlayer: FC<MiniPlayerProps> = ({ currSong }: MiniPlayerProps) => {
 		}
 	}
 
-	// 图标按钮
-	const IconBtn: FC<IconButtonProps> = (props: IconButtonProps) => (
-		<IconButton {...props} className="opacity-80 hover:opacity-100" color="inherit">
-			{props.children}
-		</IconButton>
-	)
-
 	// 歌词按钮
 	const LyricBtn: FC = () => (
 		<Button
@@ -99,11 +92,11 @@ const MiniPlayer: FC<MiniPlayerProps> = ({ currSong }: MiniPlayerProps) => {
 
 	// 播放顺序按钮
 	const PlayOrderBtn: FC = () => (
-		<IconBtn onClick={handlePlayOrderBtnClicked}>
+		<IconButton color="inherit" onClick={handlePlayOrderBtnClicked}>
 			{currOrder === PlayOrder.Repeat && <RepeatRoundedIcon fontSize={btnSize} />}
 			{currOrder === PlayOrder.RepeatOne && <RepeatOneRoundedIcon fontSize={btnSize} />}
 			{currOrder === PlayOrder.Shuffle && <ShuffleRoundedIcon fontSize={btnSize} />}
-		</IconBtn>
+		</IconButton>
 	)
 
 	return (
@@ -125,25 +118,26 @@ const MiniPlayer: FC<MiniPlayerProps> = ({ currSong }: MiniPlayerProps) => {
 					<div className="block lg:hidden">
 						<LyricBtn />
 					</div>
-					<IconBtn onClick={() => switchSong(-1, true)}>
+					<IconButton color="inherit" onClick={() => switchSong(-1, true)}>
 						<SkipPreviousIcon fontSize={btnSize} />
-					</IconBtn>
-					<IconBtn
+					</IconButton>
+					<IconButton
+						color="inherit"
+						onClick={handlePlayOrPauseBtnClicked}
 						style={{
 							fontSize: btnSize === 'large' ? '4rem' : '3rem',
 							margin: btnSize === 'large' ? '0rem 1rem' : '0rem',
 						}}
-						onClick={handlePlayOrPauseBtnClicked}
 					>
 						{getIsPlaying() ? (
 							<PauseCircleOutlineIcon fontSize="inherit" />
 						) : (
 							<PlayCircleOutlineIcon fontSize="inherit" />
 						)}
-					</IconBtn>
-					<IconBtn onClick={() => switchSong(1, true)}>
+					</IconButton>
+					<IconButton color="inherit" onClick={() => switchSong(1, true)}>
 						<SkipNextIcon fontSize={btnSize} />
-					</IconBtn>
+					</IconButton>
 					<div className="block lg:hidden">
 						<PlayOrderBtn />
 					</div>
@@ -163,9 +157,9 @@ const MiniPlayer: FC<MiniPlayerProps> = ({ currSong }: MiniPlayerProps) => {
 			<div className="items-center justify-center hidden w-1/4 space-x-4 xl:w-1/5 2xl:w-1/6 lg:flex">
 				<LyricBtn />
 				<PlayOrderBtn />
-				<IconBtn onClick={() => open(description)}>
+				<IconButton color="inherit" onClick={() => open(description)}>
 					<CloudDownloadIcon fontSize={btnSize} />
-				</IconBtn>
+				</IconButton>
 			</div>
 		</section>
 	)
