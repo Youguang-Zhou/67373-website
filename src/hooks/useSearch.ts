@@ -53,9 +53,6 @@ const useSearch = (query: string | undefined): SearchResponseProps => {
 					setHasError(true)
 				})
 				.finally(() => setIsLoading(false))
-		} else {
-			setResponse(emptyData)
-			setHasError(true)
 		}
 		return () => source.cancel()
 	}, [query])
