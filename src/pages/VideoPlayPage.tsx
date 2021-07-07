@@ -1,6 +1,7 @@
 import { SvgIconProps } from '@material-ui/core'
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined'
 import LabelOutlinedIcon from '@material-ui/icons/LabelOutlined'
+import MailOutlineIcon from '@material-ui/icons/MailOutline'
 import moment from 'moment'
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
@@ -9,7 +10,6 @@ import { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
 import VideoPlayer from '../components/VideoPlayer'
 import useGetVideoInfoRequest from '../hooks/useGetVideoInfoRequest'
 import { durationToSeconds } from '../utils/functions'
-
 interface SubTitleProps {
 	icon: SvgIconProps
 	subtitle: string
@@ -47,43 +47,53 @@ const VideoPlayPage: FC = () => {
 
 	const handleVideoPlayerLoaded = (player: VideoJsPlayer) => (playerRef.current = player)
 
-	const renderVideoDescription = (description: string) =>
-		description.split('\n').map((desc, index) => {
-			if (desc.startsWith('[')) {
-				// 快速跳跃到固定时间点
-				// 例如['hh:mm:ss童话镇', ... , 'hh:mm:ss阿婆说']
-				const arr = desc.slice(1, desc.length - 1).split(',')
-				return (
-					<div key={index} className="mt-8">
-						<SubTitle icon={<LabelOutlinedIcon fontSize="large" />} subtitle="时间轴" />
-						<div className="my-2">
-							{arr.map((str, index) => (
-								<div key={index}>
-									<button
-										className="p-2 text-primary tabular-nums"
-										onClick={() =>
-											playerRef.current &&
-											playerRef.current.currentTime(durationToSeconds(str.slice(0, 8)))
-										}
-									>
-										{str.slice(0, 8)}
-									</button>
-									<span>{str.slice(8)}</span>
-								</div>
-							))}
+	const renderVideoDescription = (description: string) => (
+		<>
+			<SubTitle icon={<DescriptionOutlinedIcon fontSize="large" />} subtitle="简介" />
+			{description.split('\n').map((desc, index) => {
+				if (desc.startsWith('[')) {
+					// 快速跳跃到固定时间点
+					// 例如['hh:mm:ss童话镇', ... , 'hh:mm:ss阿婆说']
+					const arr = desc.slice(1, desc.length - 1).split(',')
+					return (
+						<div key={index} className="mt-8">
+							<SubTitle icon={<LabelOutlinedIcon fontSize="large" />} subtitle="时间轴" />
+							<div className="my-2">
+								{arr.map((str, index) => (
+									<p key={index}>
+										<button
+											className="p-2 text-primary tabular-nums"
+											onClick={() =>
+												playerRef.current &&
+												playerRef.current.currentTime(durationToSeconds(str.slice(0, 8)))
+											}
+										>
+											{str.slice(0, 8)}
+										</button>
+										{str.slice(8) === '邮件环节' ? (
+											<span className="inline-flex items-center">
+												{str.slice(8)}
+												<MailOutlineIcon />
+											</span>
+										) : (
+											<span>{str.slice(8)}</span>
+										)}
+									</p>
+								))}
+							</div>
 						</div>
-					</div>
-				)
-			} else {
-				// 正常的简介
-				return (
-					<div key={index}>
-						<SubTitle icon={<DescriptionOutlinedIcon fontSize="large" />} subtitle="简介" />
-						<p className="my-2">{desc}</p>
-					</div>
-				)
-			}
-		})
+					)
+				} else {
+					// 正常的简介
+					return (
+						<p key={index} className="my-2">
+							{desc}
+						</p>
+					)
+				}
+			})}
+		</>
+	)
 
 	return (
 		<>
