@@ -7,6 +7,7 @@ const SearchBar: FC<HTMLProps<HTMLDivElement>> = ({ className }: HTMLProps<HTMLD
 	const [query, setQuery] = useState<string>('')
 	const [input, setInput] = useState<string>('')
 	const [isFocus, setIsFocus] = useState<boolean>(false)
+	const [isComposition, setIsComposition] = useState<boolean>(false)
 	const [selectedIndex, setSelectedIndex] = useState<number | undefined>()
 	const [searchResults, setSearchResults] = useState<string[]>([])
 	const { search } = useLocation()
@@ -26,13 +27,16 @@ const SearchBar: FC<HTMLProps<HTMLDivElement>> = ({ className }: HTMLProps<HTMLD
 
 	// 键盘上下键选择搜索结果时，固定光标在字符串末尾
 	useEffect(() => {
-		inputRef.current?.setSelectionRange(input.length, input.length)
+		if (inputRef.current) {
+			inputRef.current.setSelectionRange(inputRef.current?.value.length, input.length)
+			inputRef.current.value = input
+		}
 	}, [input])
 
 	const handleInputValueChanged = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
 		setQuery(value)
-		setInput(value)
 		setSelectedIndex(undefined)
+		!isComposition && setInput(value)
 	}
 
 	const handleKeyboardEvent = ({ key }: KeyboardEvent<HTMLInputElement>) => {
@@ -57,7 +61,7 @@ const SearchBar: FC<HTMLProps<HTMLDivElement>> = ({ className }: HTMLProps<HTMLD
 				setInput(searchResults[index])
 				break
 			case 'Enter':
-				toSearchResultsPage(input)
+				toSearchResultsPage(inputRef.current?.value)
 				inputRef.current?.blur()
 				break
 			default:
@@ -65,12 +69,14 @@ const SearchBar: FC<HTMLProps<HTMLDivElement>> = ({ className }: HTMLProps<HTMLD
 		}
 	}
 
-	const toSearchResultsPage = (value: string) => {
-		setInput(value)
-		history.push({
-			pathname: '/search',
-			search: `?query=${encodeURIComponent(value)}`,
-		})
+	const toSearchResultsPage = (value: string | undefined) => {
+		if (value) {
+			setInput(value)
+			history.push({
+				pathname: '/search',
+				search: `?query=${encodeURIComponent(value)}`,
+			})
+		}
 	}
 
 	return (
@@ -82,7 +88,6 @@ const SearchBar: FC<HTMLProps<HTMLDivElement>> = ({ className }: HTMLProps<HTMLD
 			>
 				<input
 					type="text"
-					value={input}
 					ref={inputRef}
 					maxLength={30}
 					className="flex-1 outline-none"
@@ -90,8 +95,10 @@ const SearchBar: FC<HTMLProps<HTMLDivElement>> = ({ className }: HTMLProps<HTMLD
 					onBlur={() => setIsFocus(false)}
 					onKeyDown={handleKeyboardEvent}
 					onChange={handleInputValueChanged}
+					onCompositionStart={() => setIsComposition(true)}
+					onCompositionEnd={() => setIsComposition(false)}
 				/>
-				<button className="opacity-70" onClick={() => toSearchResultsPage(input)}>
+				<button className="opacity-70" onClick={() => toSearchResultsPage(inputRef.current?.value)}>
 					🔍
 				</button>
 			</div>
