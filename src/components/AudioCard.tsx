@@ -38,7 +38,7 @@ const AudioCard: FC<AudioCardProps> = ({
 		<div className={`cursor-pointer ${type === 'primary' ? '' : 'hover:shadow'}`}>
 			{/* 桌面端尺寸 */}
 			<div
-				className={`flex-col hidden p-4 space-y-4 transition-all border rounded sm:flex ${
+				className={`flex-col h-full hidden p-4 space-y-4 transition-all border rounded sm:flex ${
 					type === 'primary'
 						? 'bg-spotify-600 hover:bg-spotify-300 border-spotify-900 hover:border-white hover:border-opacity-10'
 						: ''
