@@ -28,21 +28,19 @@ const HomePage: FC = () => {
 		<main className="p-container bg-whitesmoke">
 			<h1 className="text-2xl md:text-4xl">今日推荐</h1>
 			<hr className="my-2 md:my-4" />
-			{videos && (
-				<InfiniteScroll
-					hasMore={hasMore}
-					hasError={hasError}
-					isLoading={isLoading}
-					loadMore={handleLoadMore}
-					emptyComponent={<Empty image={love_you} />}
-				>
-					<section className="video-container">
-						{videos.map((video) => (
-							<VideoCard key={video.videoId} video={video} />
-						))}
-					</section>
-				</InfiniteScroll>
-			)}
+			<InfiniteScroll
+				hasMore={hasMore}
+				hasError={hasError}
+				isLoading={isLoading}
+				loadMore={handleLoadMore}
+				emptyComponent={<Empty image={love_you} />}
+			>
+				<section className="video-container">
+					{videos?.map((video) => (
+						<VideoCard key={video.videoId} video={video} />
+					))}
+				</section>
+			</InfiniteScroll>
 		</main>
 	)
 }
