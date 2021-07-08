@@ -21,28 +21,26 @@ const initialOptions: VideoJsPlayerOptions = {
 }
 
 interface VideoPlayerProps {
-	options: VideoJsPlayerOptions
-	onLoad?: (player: VideoJsPlayer) => void
+	onLoad: (player: VideoJsPlayer) => void
 }
 
-const VideoPlayer: FC<VideoPlayerProps> = ({ options, onLoad }: VideoPlayerProps) => {
+const VideoPlayer: FC<VideoPlayerProps> = ({ onLoad }: VideoPlayerProps) => {
 	const playerRef = useRef<VideoJsPlayer>()
 	const noticeRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
 		playerRef.current = videojs('video-player-67373', {
 			...initialOptions,
-			...options,
 			userActions: { hotkeys: setupHotkeys },
 		})
 		playerRef.current.volume(0.7)
-		onLoad && onLoad(playerRef.current)
+		onLoad(playerRef.current)
 		return () => {
 			if (playerRef.current) {
 				playerRef.current.dispose()
 			}
 		}
-	}, [options])
+	}, [])
 
 	const notice = (text: string) => {
 		const { current } = noticeRef
