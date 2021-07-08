@@ -15,10 +15,9 @@ import { VodProps } from '../utils/interfaces'
 const MusicPage: FC = () => {
 	const history = useHistory()
 	const { id } = useParams<{ id: string }>()
-	const largeScreen = useMediaQuery('(min-width: 640px)')
 	const observerRef = useRef<HTMLDivElement>(null)
 	const [heightRef, { height }] = useMeasure<HTMLDivElement>()
-	const NAVBAR_HEIGHT = largeScreen ? 83 : 68
+	const NAVBAR_HEIGHT = useMediaQuery('(min-width: 640px)') ? 83 : 68
 	const { currIndex, currSong, playlist, setPlaylist, playAudio, setCurrIndexById, cleanUp } =
 		useContext(MusicContext)
 	const { shouldShowLyricView, setShouldShowLyricView } = useContext(LyricContext)
