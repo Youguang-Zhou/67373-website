@@ -83,7 +83,7 @@ const VideoPlayPage: FC = () => {
 						<div className="w-full lg:w-1/3">
 							{/* 简介 */}
 							{videoInfo.description && (
-								<div className="p-4 border rounded shadow">
+								<div className="p-4 mb-4 border rounded shadow xl:mb-8">
 									<SubTitle icon={<DescriptionOutlinedIcon fontSize="large" />} subtitle="简介" />
 									{videoInfo.description.split('\n').map((desc, index) => {
 										if (desc.startsWith('[')) {
@@ -150,11 +150,7 @@ const VideoPlayPage: FC = () => {
 									<CircularProgress color="inherit" />
 								</div>
 							) : (
-								<section
-									className={
-										largeScreen ? 'flex flex-col space-y-4 mt-4 xl:mt-8' : 'video-container mt-4'
-									}
-								>
+								<section className={largeScreen ? 'flex flex-col space-y-4' : 'video-container'}>
 									{recommVideos?.map((video) => (
 										<VideoCard
 											key={video.videoId}
