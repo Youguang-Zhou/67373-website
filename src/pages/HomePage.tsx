@@ -37,7 +37,7 @@ const HomePage: FC = () => {
 			>
 				<section className="video-container">
 					{videos?.map((video) => (
-						<VideoCard key={video.videoId} video={video} />
+						<VideoCard key={video.videoId} video={video} openInNewTab />
 					))}
 				</section>
 			</InfiniteScroll>

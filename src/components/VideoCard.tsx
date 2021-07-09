@@ -7,13 +7,15 @@ import { VodProps } from '../utils/interfaces'
 interface VideoCardProps {
 	type?: 'primary' | 'secondary'
 	video: VodProps
+	openInNewTab?: boolean
 }
 
 const VideoCard: FC<VideoCardProps> = ({
 	type = 'primary',
 	video: { videoId, title, duration, cateName, coverURL, creationTime },
+	openInNewTab = false,
 }: VideoCardProps) => (
-	<Link className="select-none" to={`/watch/${videoId}`} target={type === 'primary' ? '_blank' : '_self'}>
+	<Link className="select-none" to={`/watch/${videoId}`} target={openInNewTab ? '_blank' : '_self'}>
 		<div
 			className={`flex ${
 				type === 'primary'

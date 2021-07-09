@@ -58,7 +58,7 @@ const SearchResultsPage: FC = () => {
 							<h1 className="mb-4 text-2xl md:text-4xl">频道视频</h1>
 							<div className="video-container">
 								{videos.map((video) => (
-									<VideoCard key={video.videoId} video={video} />
+									<VideoCard key={video.videoId} video={video} openInNewTab />
 								))}
 							</div>
 						</section>
