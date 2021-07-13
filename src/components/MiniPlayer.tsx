@@ -143,7 +143,7 @@ const MiniPlayer: FC<MiniPlayerProps> = ({ currSong }: MiniPlayerProps) => {
 					</div>
 				</div>
 				<div className="flex items-center justify-center space-x-6 lg:space-x-8">
-					<span className="opacity-80">{formatDuration(displaySliderValue())}</span>
+					<span className="opacity-80 tabular-nums">{formatDuration(displaySliderValue())}</span>
 					<Slider
 						className="max-w-3xl"
 						max={duration}
@@ -151,7 +151,7 @@ const MiniPlayer: FC<MiniPlayerProps> = ({ currSong }: MiniPlayerProps) => {
 						onChange={handleSliderValueChanged}
 						onChangeCommitted={handleSliderValueChangeCommitted}
 					/>
-					<span className="opacity-80">{formatDuration(duration)}</span>
+					<span className="opacity-80 tabular-nums">{formatDuration(duration)}</span>
 				</div>
 			</div>
 			<div className="items-center justify-center hidden w-1/4 space-x-4 xl:w-1/5 2xl:w-1/6 lg:flex">
