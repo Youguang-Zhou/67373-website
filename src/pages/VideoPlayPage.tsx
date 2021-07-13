@@ -70,7 +70,7 @@ const VideoPlayPage: FC = () => {
 					<div style={{ width: width }}>
 						<h1 className="text-2xl md:text-4xl">{videoInfo.title}</h1>
 						<div className="flex my-2 space-x-4 text-gray-500">
-							<span>{moment(videoInfo.creationTime).format('YYYY-MM-DD hh:mm:ss')}</span>
+							<span>{moment(videoInfo.creationTime).format('YYYY-MM-DD HH:mm:ss')}</span>
 							<span>{videoInfo.cateName}</span>
 						</div>
 					</div>
