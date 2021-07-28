@@ -7,6 +7,15 @@
 		font-family: MFYueYuan;
 		src: url(./assets/fonts/MFYueYuan.ttf);
 	}
+
+	body {
+		overflow-y: scroll;
+	}
+
+	::selection {
+		color: #fafafafa;
+		background: orange;
+	}
 }
 
 @layer components {
