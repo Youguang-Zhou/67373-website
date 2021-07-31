@@ -3,7 +3,7 @@
 	"version": "3.1.0",
 	"dependencies": {
 		"@craco/craco": "^6.2.0",
-		"@material-ui/core": "^4.12.2",
+		"@material-ui/core": "^4.12.3",
 		"@material-ui/icons": "^4.11.2",
 		"@material-ui/lab": "^4.0.0-alpha.60",
 		"@tailwindcss/aspect-ratio": "^0.2.1",
@@ -54,7 +54,7 @@
 		"@types/video.js": "^7.3.26",
 		"@typescript-eslint/eslint-plugin": "^4.28.5",
 		"@typescript-eslint/parser": "^4.28.5",
-		"eslint": "^7.31.0",
+		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-prettier": "^3.4.0",
 		"eslint-plugin-react": "^7.24.0",
