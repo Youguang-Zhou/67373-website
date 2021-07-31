@@ -1,4 +1,5 @@
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import MenuRoundedIcon from '@material-ui/icons/MenuRounded'
 import NotificationsNoneRoundedIcon from '@material-ui/icons/NotificationsNoneRounded'
 import YouTubeIcon from '@material-ui/icons/YouTube'
@@ -8,7 +9,6 @@ import logo from '../assets/images/logo_v2.jpg'
 import useGetLiveInfoRequest from '../hooks/useGetLiveInfoRequest'
 import { LiveStatus } from '../utils/enums'
 import SearchBar from './SearchBar'
-// import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 
 const navItems = [
 	{ name: '首页', path: '/' },
@@ -70,10 +70,14 @@ const Header: FC = () => {
 				{/* 桌面端的搜索栏 */}
 				<SearchBar className="flex-1 hidden max-w-xs md:block" />
 				{/* 问题反馈按钮 */}
-				<div></div>
-				{/* <button type="button" className="hidden px-2 text-primary text-opacity-80 md:block">
+				<button
+					type="button"
+					title="使用条款"
+					className="hidden px-2 text-primary text-opacity-70 lg:block"
+					onClick={() => open('/terms')}
+				>
 					{<HelpOutlineIcon />}
-				</button> */}
+				</button>
 				{/* 移动端logo右侧显示导航栏的按钮 */}
 				<button
 					type="button"

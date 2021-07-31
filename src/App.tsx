@@ -15,6 +15,7 @@ import HomePage from './pages/HomePage'
 import LivePage from './pages/LivePage'
 import MusicPage from './pages/MusicPage'
 import SearchResultsPage from './pages/SearchResultsPage'
+import TermsOfUsePage from './pages/TermsOfUsePage'
 import VideoPlayPage from './pages/VideoPlayPage'
 
 moment.locale('zh-cn')
@@ -35,6 +36,7 @@ const App: FC = () => (
 						<Route exact path="/67373" component={LivePage} />
 						<Route exact path="/watch/:id" component={VideoPlayPage} />
 						<Route exact path="/search" component={SearchResultsPage} />
+						<Route exact path="/terms" component={TermsOfUsePage} />
 						<Route exact path="/" component={HomePage} />
 						<Redirect to="/" />
 					</Switch>
