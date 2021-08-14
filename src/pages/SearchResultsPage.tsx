@@ -17,7 +17,7 @@ const SearchResultsPage: FC = () => {
 		response: { requestId, mediaList },
 		isLoading,
 		hasError,
-	} = useSearch(query)
+	} = useSearch(query, 1, 100)
 
 	useEffect(() => {
 		if (search.startsWith('?query=')) {

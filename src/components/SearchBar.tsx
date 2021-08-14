@@ -15,7 +15,7 @@ const SearchBar: FC<HTMLProps<HTMLDivElement>> = ({ className }: HTMLProps<HTMLD
 	const inputRef = useRef<HTMLInputElement>(null)
 	const {
 		response: { mediaList },
-	} = useSearch(query)
+	} = useSearch(query, 1, 100)
 
 	useEffect(() => {
 		setInput(decodeURIComponent(search.slice(7)))

@@ -19,7 +19,7 @@ interface SearchResponseProps {
 	hasError: boolean
 }
 
-const useSearch = (query: string | undefined): SearchResponseProps => {
+const useSearch = (query: string | undefined, pageNo: number, pageSize: number): SearchResponseProps => {
 	const [response, setResponse] = useState(emptyData)
 	const [isLoading, setIsLoading] = useState(false)
 	const [hasError, setHasError] = useState(false)
@@ -30,7 +30,7 @@ const useSearch = (query: string | undefined): SearchResponseProps => {
 			setIsLoading(true)
 			setHasError(false)
 			API.get('search', {
-				params: { query: encodeURIComponent(query) },
+				params: { query: encodeURIComponent(query), pageNo: pageNo, pageSize: pageSize },
 				cancelToken: source.token,
 			})
 				.then(({ data }) => {
