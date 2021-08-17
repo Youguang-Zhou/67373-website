@@ -1,4 +1,5 @@
 import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
+import FiberNewOutlinedIcon from '@material-ui/icons/FiberNewOutlined'
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import MenuRoundedIcon from '@material-ui/icons/MenuRounded'
 import NotificationsNoneRoundedIcon from '@material-ui/icons/NotificationsNoneRounded'
@@ -7,7 +8,9 @@ import React, { FC, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import logo from '../assets/images/logo_v2.jpg'
 import useGetLiveInfoRequest from '../hooks/useGetLiveInfoRequest'
-import { LiveStatus } from '../utils/enums'
+import useGetVodListRequest from '../hooks/useGetVodListRequest'
+import { LiveStatus, MediaType } from '../utils/enums'
+import { daysToToday } from '../utils/functions'
 import SearchBar from './SearchBar'
 
 const navItems = [
@@ -21,13 +24,21 @@ const Header: FC = () => {
 	const [currPath, setCurrPath] = useState<string>('')
 	const [toggle, setToggle] = useState<boolean>(false)
 	const { pathname } = useLocation()
+	const [hasNewSong, setHasNewSong] = useState(false)
 	const {
 		response: { status },
 	} = useGetLiveInfoRequest()
+	const {
+		response: { requestId, videoList },
+	} = useGetVodListRequest(MediaType.Audio, 1, 100)
 
 	useEffect(() => {
 		setCurrPath(pathname)
 	}, [pathname])
+
+	useEffect(() => {
+		videoList?.video.map((audio) => daysToToday(audio.creationTime) <= 7 && setHasNewSong(true))
+	}, [requestId])
 
 	const renderNavItems = () =>
 		navItems.map(({ name, path }, index) => (
@@ -40,16 +51,22 @@ const Header: FC = () => {
 				} text-xl md:text-2xl text-gray-500 p-1 md:p-3`}
 				href={path}
 			>
-				{/* 如果是67373页面后面会附上直播状态的图标 */}
-				{name === '67373' ? (
-					<div className="flex items-center justify-center space-x-0.5">
-						<span>{name}</span>
-						{status === LiveStatus.WillStart && <NotificationsNoneRoundedIcon className="text-primary" />}
-						{status === LiveStatus.IsLive && <YouTubeIcon className="text-primary" />}
-					</div>
-				) : (
+				<div className="flex items-center justify-center space-x-0.5">
 					<span>{name}</span>
-				)}
+					{/* 判断是否有新歌 */}
+					{name === '音乐' && hasNewSong && (
+						<FiberNewOutlinedIcon className="text-primary" fontSize="large" />
+					)}
+					{/* 判断直播状态 */}
+					{name === '67373' && (
+						<>
+							{status === LiveStatus.WillStart && (
+								<NotificationsNoneRoundedIcon className="text-primary" />
+							)}
+							{status === LiveStatus.IsLive && <YouTubeIcon className="text-primary" />}
+						</>
+					)}
+				</div>
 			</a>
 		))
 

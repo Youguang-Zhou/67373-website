@@ -1,5 +1,5 @@
-import React, { FC, useRef } from 'react'
-import { formatDuration } from '../utils/functions'
+import React, { FC, useRef, useState } from 'react'
+import { daysToToday, formatDuration } from '../utils/functions'
 import { VodProps } from '../utils/interfaces'
 
 interface AudioCardProps {
@@ -10,11 +10,14 @@ interface AudioCardProps {
 }
 
 const AudioCard: FC<AudioCardProps> = ({
-	audio: { videoId, title, duration, coverURL },
+	audio: { videoId, title, duration, coverURL, creationTime },
 	type = 'primary',
 	highlight = false,
 	onDoubleClick,
 }: AudioCardProps) => {
+	// 是否为最近7天内新出的歌曲
+	const isNewSong = useState(daysToToday(creationTime) <= 7)[0]
+	// 判断双击还是单击的计时器
 	const timerRef = useRef<number | undefined>(undefined)
 
 	// 单击在当前标签页打开，双击在新标签页打开
@@ -46,7 +49,10 @@ const AudioCard: FC<AudioCardProps> = ({
 				onClick={handleClick}
 			>
 				<img className="rounded" src={coverURL} alt={title} />
-				<h3 className={`flex-1 text-xl ${highlight ? 'text-yellow-500' : ''}`}>{title}</h3>
+				<div className="flex space-x-1">
+					<h3 className={`text-xl ${highlight ? 'text-yellow-500' : ''}`}>{title}</h3>
+					{isNewSong && <span className="new-song-label">New</span>}
+				</div>
 				<small className="text-lg opacity-80">{formatDuration(duration)}</small>
 			</div>
 			{/* 移动端尺寸 */}
@@ -58,7 +64,10 @@ const AudioCard: FC<AudioCardProps> = ({
 					className={`flex items-center flex-1 p-1 border-b ${type === 'primary' ? 'border-opacity-30' : ''}`}
 				>
 					<div className="flex-1">
-						<h3 className={`text-2xl ${highlight ? 'text-yellow-500' : ''}`}>{title}</h3>
+						<div className="flex space-x-1">
+							<h3 className={`text-2xl ${highlight ? 'text-yellow-500' : ''}`}>{title}</h3>
+							{isNewSong && <span className="new-song-label">新</span>}
+						</div>
 						<h5 className="opacity-80">陈一发儿</h5>
 					</div>
 					<small className="opacity-80">{formatDuration(duration)}</small>

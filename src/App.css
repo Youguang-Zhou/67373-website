@@ -35,6 +35,10 @@
 		@apply object-cover w-full h-vw-15;
 	}
 
+	.new-song-label {
+		@apply px-1 my-auto text-sm text-yellow-500 border border-yellow-500 rounded;
+	}
+
 	.hide-scrollbar {
 		overflow: scroll;
 		pointer-events: none;
