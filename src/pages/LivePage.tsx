@@ -2,7 +2,8 @@ import moment from 'moment'
 import React, { FC, useEffect, useState } from 'react'
 import { useMeasure } from 'react-use'
 import beautiful_fafa from '../assets/images/beautiful_fafa.png'
-import goodnight67373 from '../assets/images/goodnight67373.jpg'
+// import goodnight67373 from '../assets/images/goodnight67373.jpg'
+import fafa_robot from '../assets/images/fafa_robot.png'
 import Empty from '../components/Empty'
 import useGetLiveInfoRequest from '../hooks/useGetLiveInfoRequest'
 import { LiveStatus } from '../utils/enums'
@@ -43,7 +44,14 @@ const LivePage: FC = () => {
 	}, [status, time])
 
 	return status === LiveStatus.IsEnded ? (
-		<Empty image={goodnight67373} description="See you next time~" />
+		<>
+			<Empty image={fafa_robot} description="新页面施工中。。。敬请期待！" />
+			<div className="my-4 space-y-4 text-center md:text-2xl">
+				<p>YouTube：周三打游戏、周六唱歌聊天读邮件（北京时间晚上8:30）</p>
+				<p>Twitch：随缘时间看电影</p>
+				<p>具体通知关注微博超话@陈一发儿超话</p>
+			</div>
+		</>
 	) : (
 		<>
 			{url && cover && (
