@@ -18,7 +18,7 @@
 		"react-router-dom": "^5.2.0",
 		"react-scripts": "4.0.3",
 		"react-use": "^17.2.4",
-		"swiper": "^6.8.2",
+		"swiper": "^6.8.4",
 		"tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.7",
 		"video.js": "^7.14.3"
 	},
@@ -48,15 +48,15 @@
 	},
 	"devDependencies": {
 		"@types/moment-duration-format": "^2.2.3",
-		"@types/react": "^17.0.18",
+		"@types/react": "^17.0.19",
 		"@types/react-dom": "^17.0.9",
 		"@types/react-router-dom": "^5.1.8",
 		"@types/video.js": "^7.3.26",
-		"@typescript-eslint/eslint-plugin": "^4.29.2",
-		"@typescript-eslint/parser": "^4.29.2",
+		"@typescript-eslint/eslint-plugin": "^4.29.3",
+		"@typescript-eslint/parser": "^4.29.3",
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
-		"eslint-plugin-prettier": "^3.4.0",
+		"eslint-plugin-prettier": "^3.4.1",
 		"eslint-plugin-react": "^7.24.0",
 		"prettier": "^2.3.2",
 		"typescript": "^4.3.5"
