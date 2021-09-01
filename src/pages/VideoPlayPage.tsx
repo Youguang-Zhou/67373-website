@@ -29,15 +29,17 @@ const SubTitle: FC<SubTitleProps> = ({ icon, subtitle }: SubTitleProps) => (
 
 const VideoPlayPage: FC = () => {
 	const history = useHistory()
-	const { id } = useParams<{ id: string }>()
-	const [isToggleDesc, setIsToggleDesc] = useState<boolean>(false)
 	const playerRef = useRef<VideoJsPlayer>()
-	const [widthRef, { width }] = useMeasure<HTMLDivElement>()
+	const { id } = useParams<{ id: string }>()
 	const largeScreen = useMediaQuery('(min-width: 1024px)')
+	const [widthRef, { width }] = useMeasure<HTMLDivElement>()
+	const [isToggleDesc, setIsToggleDesc] = useState<boolean>(false)
+	// 获取主视频的API
 	const {
 		response: { requestId, videoInfo, playInfo },
 		hasError,
 	} = useGetVideoInfoRequest(id)
+	// 获取推荐视频的API
 	const {
 		response: { videoList: recommVideos },
 		isLoading,
@@ -60,23 +62,39 @@ const VideoPlayPage: FC = () => {
 		hasError && history.push('/')
 	}, [hasError])
 
+	// 标题大小与标题长度相关
+	const handleDisplayTitleSize = (title: string) => {
+		const { length } = title
+		if (length >= 100) {
+			return 'text-base md:text-2xl'
+		} else if (length >= 50 && length < 100) {
+			return 'text-lg md:text-3xl'
+		} else if (length < 50) {
+			return 'text-xl md:text-4xl'
+		} else {
+			return 'text-base'
+		}
+	}
+
+	// 从子组件获取播放器
 	const handleVideoPlayerLoaded = (player: VideoJsPlayer) => (playerRef.current = player)
 
 	return (
 		<>
 			{videoInfo && (
-				<main className="px-4 lg:px-8 2xl:px-16 2xl:py-4">
+				<main className="px-4 lg:px-8 2xl:px-16 2xl:py-2">
 					{/* 标题 */}
 					<div style={{ width: width }}>
-						<h1 className="text-2xl md:text-4xl">{videoInfo.title}</h1>
-						<div className="flex my-2 space-x-4 text-gray-500">
+						<h1 className={handleDisplayTitleSize(videoInfo.title)}>{videoInfo.title}</h1>
+						<div className="flex my-2 space-x-4 text-sm text-gray-500 sm:text-base">
 							<span>{moment(videoInfo.creationTime).format('YYYY-MM-DD HH:mm:ss')}</span>
 							<span>{videoInfo.cateName}</span>
 						</div>
 					</div>
 					<section className="flex flex-col items-stretch justify-center space-x-0 space-y-4 lg:space-x-4 lg:space-y-0 xl:space-x-8 lg:flex-row">
-						{/* 主视频 */}
+						{/* 左边栏 */}
 						<div className="w-full lg:w-2/3" ref={widthRef}>
+							{/* 主视频 */}
 							<VideoPlayer onLoad={handleVideoPlayerLoaded} />
 						</div>
 						{/* 右边栏 */}
