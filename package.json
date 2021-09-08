@@ -8,7 +8,7 @@
 		"@material-ui/lab": "^4.0.0-alpha.60",
 		"@tailwindcss/aspect-ratio": "^0.2.1",
 		"@tailwindcss/line-clamp": "^0.2.1",
-		"@tailwindcss/postcss7-compat": "^2.2.10",
+		"@tailwindcss/postcss7-compat": "^2.2.14",
 		"autoprefixer": "^9.8.6",
 		"axios": "^0.21.4",
 		"moment-duration-format": "^2.3.2",
@@ -19,7 +19,7 @@
 		"react-scripts": "4.0.3",
 		"react-use": "^17.3.1",
 		"swiper": "^6.8.4",
-		"tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.10",
+		"tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.14",
 		"video.js": "^7.14.3"
 	},
 	"scripts": {
