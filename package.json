@@ -2,7 +2,7 @@
 	"name": "67373-website",
 	"version": "3.1.0",
 	"dependencies": {
-		"@craco/craco": "^6.2.0",
+		"@craco/craco": "^6.3.0",
 		"@material-ui/core": "^4.12.3",
 		"@material-ui/icons": "^4.11.2",
 		"@material-ui/lab": "^4.0.0-alpha.60",
@@ -50,15 +50,15 @@
 		"@types/moment-duration-format": "^2.2.3",
 		"@types/react": "^17.0.20",
 		"@types/react-dom": "^17.0.9",
-		"@types/react-router-dom": "^5.1.8",
+		"@types/react-router-dom": "^5.1.9",
 		"@types/video.js": "^7.3.26",
-		"@typescript-eslint/eslint-plugin": "^4.31.0",
-		"@typescript-eslint/parser": "^4.31.0",
+		"@typescript-eslint/eslint-plugin": "^4.31.1",
+		"@typescript-eslint/parser": "^4.31.1",
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-prettier": "^4.0.0",
 		"eslint-plugin-react": "^7.25.1",
-		"prettier": "^2.3.2",
-		"typescript": "^4.4.2"
+		"prettier": "^2.4.0",
+		"typescript": "^4.4.3"
 	}
 }
