@@ -2,14 +2,11 @@ import CloseRoundedIcon from '@material-ui/icons/CloseRounded'
 import FiberNewOutlinedIcon from '@material-ui/icons/FiberNewOutlined'
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import MenuRoundedIcon from '@material-ui/icons/MenuRounded'
-import NotificationsNoneRoundedIcon from '@material-ui/icons/NotificationsNoneRounded'
-import YouTubeIcon from '@material-ui/icons/YouTube'
 import React, { FC, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import logo from '../assets/images/logo_v2.jpg'
-import useGetLiveInfoRequest from '../hooks/useGetLiveInfoRequest'
 import useGetVodListRequest from '../hooks/useGetVodListRequest'
-import { LiveStatus, MediaType } from '../utils/enums'
+import { MediaType } from '../utils/enums'
 import { daysToToday } from '../utils/functions'
 import SearchBar from './SearchBar'
 
@@ -17,17 +14,13 @@ const navItems = [
 	{ name: '首页', path: '/' },
 	{ name: '频道', path: '/channel' },
 	{ name: '音乐', path: '/music' },
-	{ name: '67373', path: '/67373' },
 ]
 
 const Header: FC = () => {
+	const { pathname } = useLocation()
 	const [currPath, setCurrPath] = useState<string>('')
 	const [toggle, setToggle] = useState<boolean>(false)
-	const { pathname } = useLocation()
 	const [hasNewSong, setHasNewSong] = useState(false)
-	const {
-		response: { status },
-	} = useGetLiveInfoRequest()
 	const {
 		response: { requestId, videoList },
 	} = useGetVodListRequest(MediaType.Audio, 1, 100)
@@ -56,15 +49,6 @@ const Header: FC = () => {
 					{/* 判断是否有新歌 */}
 					{name === '音乐' && hasNewSong && (
 						<FiberNewOutlinedIcon className="text-primary" fontSize="large" />
-					)}
-					{/* 判断直播状态 */}
-					{name === '67373' && (
-						<>
-							{status === LiveStatus.WillStart && (
-								<NotificationsNoneRoundedIcon className="text-primary" />
-							)}
-							{status === LiveStatus.IsLive && <YouTubeIcon className="text-primary" />}
-						</>
 					)}
 				</div>
 			</a>
