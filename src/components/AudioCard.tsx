@@ -15,8 +15,8 @@ const AudioCard: FC<AudioCardProps> = ({
 	highlight = false,
 	onDoubleClick,
 }: AudioCardProps) => {
-	// 是否为最近7天内新出的歌曲
-	const isNewSong = useState(daysToToday(creationTime) <= 7)[0]
+	// 是否为最近3天内新出的歌曲
+	const isNewSong = useState(daysToToday(creationTime) <= 3)[0]
 	// 判断双击还是单击的计时器
 	const timerRef = useRef<number | undefined>(undefined)
 

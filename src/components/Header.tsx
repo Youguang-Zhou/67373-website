@@ -30,7 +30,7 @@ const Header: FC = () => {
 	}, [pathname])
 
 	useEffect(() => {
-		videoList?.video.map((audio) => daysToToday(audio.creationTime) <= 7 && setHasNewSong(true))
+		videoList?.video.map((audio) => daysToToday(audio.creationTime) <= 3 && setHasNewSong(true))
 	}, [requestId])
 
 	const renderNavItems = () =>
