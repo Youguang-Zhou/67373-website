@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@material-ui/core'
+import { useMediaQuery } from '@mui/material'
 import React, { FC, useCallback, useContext, useEffect, useRef } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useMeasure } from 'react-use'

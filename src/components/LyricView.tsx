@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@material-ui/core'
+import { useMediaQuery } from '@mui/material'
 import React, { FC, useContext, useEffect, useRef } from 'react'
 import { LyricContext } from '../contexts/LyricContext'
 import useGetLyricsRequest from '../hooks/useGetLyricsRequest'

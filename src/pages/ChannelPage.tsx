@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Tab, Tabs, useMediaQuery } from '@material-ui/core'
-import { useTheme } from '@material-ui/core/styles'
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import LibraryMusicIcon from '@material-ui/icons/LibraryMusic'
-import MusicNoteIcon from '@material-ui/icons/MusicNote'
-import Pagination from '@material-ui/lab/Pagination'
-import React, { ChangeEvent, FC, ReactNode, useEffect, useState } from 'react'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import LibraryMusicIcon from '@mui/icons-material/LibraryMusic'
+import MusicNoteIcon from '@mui/icons-material/MusicNote'
+import { Tab, Tabs, useMediaQuery } from '@mui/material'
+import Pagination from '@mui/material/Pagination'
+import { useTheme } from '@mui/material/styles'
+import React, { FC, ReactNode, SyntheticEvent, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import cat from '../assets/images/cat.jpeg'
 import channel_banner from '../assets/images/channel_banner.jpeg'
@@ -68,7 +68,7 @@ const ChannelPage: FC = () => {
 		videoList && setVideos(videoList.video)
 	}, [requestId])
 
-	const handleChange = (event: ChangeEvent<Record<string, never>>, value: number) => {
+	const handleChange = (event: SyntheticEvent, value: number) => {
 		setCurrTabIndex(value)
 		setPageNo(1)
 	}
@@ -135,18 +135,17 @@ const ChannelPage: FC = () => {
 				</a>
 			</div>
 			<Tabs
+				scrollButtons
+				allowScrollButtonsMobile
 				value={currTabIndex}
-				scrollButtons="on"
-				centered={!smallScreen}
-				variant={smallScreen ? 'scrollable' : 'standard'}
-				textColor="primary"
-				indicatorColor="primary"
+				className="mx-auto lg:w-3/4 xl:w-2/3 2xl:w-1/2"
+				variant={smallScreen ? 'scrollable' : 'fullWidth'}
 				onChange={handleChange}
 			>
 				<Tab label="唱歌视频" />
 				<Tab label="直播回放" />
 				<Tab label="直播剪辑" />
-				<Tab label="茶话会文字视频" />
+				<Tab label="茶话会视频" />
 				<Tab label="游戏视频" />
 				<Tab label="日常" />
 			</Tabs>

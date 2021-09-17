@@ -1,12 +1,12 @@
-import { Button, IconButton, Slider, useMediaQuery } from '@material-ui/core'
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload'
-import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline'
-import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline'
-import RepeatOneRoundedIcon from '@material-ui/icons/RepeatOneRounded'
-import RepeatRoundedIcon from '@material-ui/icons/RepeatRounded'
-import ShuffleRoundedIcon from '@material-ui/icons/ShuffleRounded'
-import SkipNextIcon from '@material-ui/icons/SkipNext'
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious'
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload'
+import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline'
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline'
+import RepeatOneRoundedIcon from '@mui/icons-material/RepeatOneRounded'
+import RepeatRoundedIcon from '@mui/icons-material/RepeatRounded'
+import ShuffleRoundedIcon from '@mui/icons-material/ShuffleRounded'
+import SkipNextIcon from '@mui/icons-material/SkipNext'
+import SkipPreviousIcon from '@mui/icons-material/SkipPrevious'
+import { Button, IconButton, Slider, useMediaQuery } from '@mui/material'
 import React, { FC, useContext, useState } from 'react'
 import { LyricContext } from '../contexts/LyricContext'
 import { MusicContext } from '../contexts/MusicContext'
@@ -145,8 +145,9 @@ const MiniPlayer: FC<MiniPlayerProps> = ({ currSong }: MiniPlayerProps) => {
 				<div className="flex items-center justify-center space-x-6 lg:space-x-8">
 					<span className="opacity-80 tabular-nums">{formatDuration(displaySliderValue())}</span>
 					<Slider
-						className="max-w-3xl"
+						size="small"
 						max={duration}
+						className="max-w-3xl"
 						value={displaySliderValue()}
 						onChange={handleSliderValueChanged}
 						onChangeCommitted={handleSliderValueChangeCommitted}

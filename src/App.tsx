@@ -1,5 +1,5 @@
-import { orange } from '@material-ui/core/colors'
-import { createTheme, ThemeProvider } from '@material-ui/core/styles'
+import { orange } from '@mui/material/colors'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
 import React, { FC } from 'react'
@@ -18,11 +18,10 @@ import VideoPlayPage from './pages/VideoPlayPage'
 
 moment.locale('zh-cn')
 
-// material-ui的主题
-const theme = createTheme({ palette: { primary: orange } })
+const MUI_THEME = createTheme({ palette: { primary: orange } })
 
 const App: FC = () => (
-	<ThemeProvider theme={theme}>
+	<ThemeProvider theme={MUI_THEME}>
 		<MusicProvider>
 			<LyricProvider>
 				<BrowserRouter>
