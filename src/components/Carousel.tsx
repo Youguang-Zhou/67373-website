@@ -1,13 +1,12 @@
 import React, { Children, FC, HTMLProps } from 'react'
-import SwiperCore, { Autoplay, Pagination } from 'swiper'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { Autoplay, Pagination } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js'
 import 'swiper/swiper-bundle.min.css'
-
-SwiperCore.use([Autoplay, Pagination])
 
 const Carousel: FC<HTMLProps<HTMLElement>> = ({ children }: HTMLProps<HTMLElement>) => (
 	<Swiper
 		loop
+		modules={[Autoplay, Pagination]}
 		autoplay={{ disableOnInteraction: false, pauseOnMouseEnter: true }}
 		pagination={{
 			clickable: true,
