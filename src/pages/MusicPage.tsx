@@ -1,6 +1,6 @@
 import { useMediaQuery } from '@mui/material'
 import React, { FC, useCallback, useContext, useEffect, useRef } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useMeasure } from 'react-use'
 import music_banner from '../assets/images/music_banner.jpeg'
 import AudioCard from '../components/AudioCard'
@@ -13,8 +13,8 @@ import { MediaType } from '../utils/enums'
 import { VodProps } from '../utils/interfaces'
 
 const MusicPage: FC = () => {
-	const history = useHistory()
-	const { id } = useParams<{ id: string }>()
+	const { id } = useParams()
+	const navigate = useNavigate()
 	const observerRef = useRef<HTMLDivElement>(null)
 	const [heightRef, { height }] = useMeasure<HTMLDivElement>()
 	const NAVBAR_HEIGHT = useMediaQuery('(min-width: 640px)') ? 83 : 68
@@ -50,16 +50,16 @@ const MusicPage: FC = () => {
 
 	// 如果url里有id，就设置为当前歌曲，否则跳转到/music
 	useEffect(() => {
-		id || history.push('/music')
+		id || navigate('/music')
 		if (id && playlist && currIndex === undefined) {
-			setCurrIndexById(id) ? setShouldShowLyricView(true) : history.push('/music')
+			setCurrIndexById(id) ? setShouldShowLyricView(true) : navigate('/music')
 		}
 	}, [playlist])
 
 	// 切歌时，url跳转到对应id
 	useEffect(() => {
 		if (currSong) {
-			history.push(`/music/${currSong.videoId}`)
+			navigate(`/music/${currSong.videoId}`)
 			document.title = `${currSong.title}_67373UPUP (=^ェ^=)`
 		}
 	}, [currSong])

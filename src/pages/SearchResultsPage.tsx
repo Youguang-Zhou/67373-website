@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import fafa_nezha from '../assets/images/fafa_nezha.jpeg'
 import AudioCard from '../components/AudioCard'
 import Empty from '../components/Empty'
@@ -8,7 +8,7 @@ import useSearch from '../hooks/useSearch'
 import { VodProps } from '../utils/interfaces'
 
 const SearchResultsPage: FC = () => {
-	const history = useHistory()
+	const navigate = useNavigate()
 	const { search } = useLocation()
 	const [audios, setAudios] = useState<VodProps[] | undefined>(undefined)
 	const [videos, setVideos] = useState<VodProps[] | undefined>(undefined)
@@ -20,13 +20,13 @@ const SearchResultsPage: FC = () => {
 	} = useSearch(query, 1, 100)
 
 	useEffect(() => {
-		if (search.startsWith('?query=')) {
-			// 移除字符串最前面的 ?query= 字符
-			setQuery(decodeURIComponent(search.slice(7)))
+		if (search.startsWith('?q=')) {
+			// 移除字符串最前面的 ?q= 字符
+			setQuery(decodeURIComponent(search.slice(3)))
 			// 如果没有要搜索的，就跳转回主页
-			search === '?query=' && history.push('/')
+			search === '?q=' && navigate('/')
 		} else {
-			history.push('/')
+			navigate('/')
 		}
 	}, [search])
 

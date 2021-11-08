@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FC, HTMLProps, KeyboardEvent, useEffect, useRef, useState } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import useSearch from '../hooks/useSearch'
 import { LongestCommonSubsequence } from '../utils/functions'
 
@@ -11,7 +11,7 @@ const SearchBar: FC<HTMLProps<HTMLDivElement>> = ({ className }: HTMLProps<HTMLD
 	const [selectedIndex, setSelectedIndex] = useState<number | undefined>()
 	const [searchResults, setSearchResults] = useState<string[]>([])
 	const { search } = useLocation()
-	const history = useHistory()
+	const navigate = useNavigate()
 	const inputRef = useRef<HTMLInputElement>(null)
 	const {
 		response: { mediaList },
@@ -72,10 +72,7 @@ const SearchBar: FC<HTMLProps<HTMLDivElement>> = ({ className }: HTMLProps<HTMLD
 	const toSearchResultsPage = (value: string | undefined) => {
 		if (value) {
 			setInput(value)
-			history.push({
-				pathname: '/search',
-				search: `?query=${encodeURIComponent(value)}`,
-			})
+			navigate({ pathname: '/search', search: `?q=${value}` })
 		}
 	}
 

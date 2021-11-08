@@ -3,7 +3,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
 import React, { FC } from 'react'
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import Footer from './components/Footer'
 import Header from './components/Header'
@@ -26,16 +26,16 @@ const App: FC = () => (
 			<LyricProvider>
 				<BrowserRouter>
 					<Header />
-					<Switch>
-						<Route exact path="/channel" component={ChannelPage} />
-						<Route exact path="/music" component={MusicPage} />
-						<Route exact path="/music/:id" component={MusicPage} />
-						<Route exact path="/watch/:id" component={VideoPlayPage} />
-						<Route exact path="/search" component={SearchResultsPage} />
-						<Route exact path="/terms" component={TermsOfUsePage} />
-						<Route exact path="/" component={HomePage} />
-						<Redirect to="/" />
-					</Switch>
+					<Routes>
+						<Route path="/channel" element={<ChannelPage />} />
+						<Route path="/music" element={<MusicPage />} />
+						<Route path="/music/:id" element={<MusicPage />} />
+						<Route path="/watch/:id" element={<VideoPlayPage />} />
+						<Route path="/search" element={<SearchResultsPage />} />
+						<Route path="/terms" element={<TermsOfUsePage />} />
+						<Route path="/" element={<HomePage />} />
+						<Route path="*" element={<Navigate replace to="/" />} />
+					</Routes>
 					<Footer />
 				</BrowserRouter>
 			</LyricProvider>

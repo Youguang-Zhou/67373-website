@@ -6,7 +6,7 @@ import { SvgIconProps, useMediaQuery } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
 import moment from 'moment'
 import React, { FC, useEffect, useRef, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useMeasure } from 'react-use'
 import { VideoJsPlayer } from 'video.js'
 import VideoCard from '../components/VideoCard'
@@ -28,9 +28,9 @@ const SubTitle: FC<SubTitleProps> = ({ icon, subtitle }: SubTitleProps) => (
 )
 
 const VideoPlayPage: FC = () => {
-	const history = useHistory()
+	const { id } = useParams()
+	const navigate = useNavigate()
 	const playerRef = useRef<VideoJsPlayer>()
-	const { id } = useParams<{ id: string }>()
 	const largeScreen = useMediaQuery('(min-width: 1024px)')
 	const [widthRef, { width }] = useMeasure<HTMLDivElement>()
 	const [isToggleDesc, setIsToggleDesc] = useState<boolean>(false)
@@ -48,7 +48,7 @@ const VideoPlayPage: FC = () => {
 	useEffect(() => {
 		if (videoInfo && playInfo && playerRef.current) {
 			// 如果是音乐分类就跳转到音乐页面
-			videoInfo.cateName === '音乐' && history.push(`/music/${videoInfo.videoId}`)
+			videoInfo.cateName === '音乐' && navigate(`/music/${videoInfo.videoId}`)
 			// 设置标题
 			document.title = `${videoInfo.title}_67373UPUP (=^ェ^=)`
 			// 设置视频源
@@ -59,7 +59,7 @@ const VideoPlayPage: FC = () => {
 	}, [requestId])
 
 	useEffect(() => {
-		hasError && history.push('/')
+		hasError && navigate('/')
 	}, [hasError])
 
 	// 标题大小与标题长度相关
