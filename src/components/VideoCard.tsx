@@ -26,7 +26,7 @@ const VideoCard: FC<VideoCardProps> = ({
 			<div className={`${type === 'primary' ? '' : 'flex-shrink-0 w-1/2'}`}>
 				<div className="relative">
 					<div className="aspect-w-16 aspect-h-9">
-						<img src={coverURL} alt={title} />
+						<img className="object-cover" src={coverURL} alt={title} />
 					</div>
 					<span className="absolute bottom-0 right-0 px-1 m-1 text-sm text-white bg-black rounded md:text-base bg-opacity-80">
 						{formatDuration(duration)}
