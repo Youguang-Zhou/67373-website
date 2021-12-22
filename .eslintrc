@@ -1,27 +1,25 @@
 {
 	"env": {
 		"browser": true,
-		"node": true,
 		"es2021": true
 	},
 	"extends": [
 		"eslint:recommended",
 		"plugin:react/recommended",
-		"plugin:prettier/recommended",
-		"plugin:@typescript-eslint/recommended"
+		"plugin:@typescript-eslint/recommended",
+		"prettier"
 	],
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
-		"ecmaFeatures": {
-			"jsx": true
-		},
-		"ecmaVersion": 12,
+		"ecmaFeatures": { "jsx": true },
+		"ecmaVersion": 13,
 		"sourceType": "module"
 	},
 	"plugins": ["react", "@typescript-eslint"],
 	"rules": {
 		"semi": ["error", "never"],
-		"indent": ["error", "tab", { "SwitchCase": 1 }],
-		"quotes": ["error", "single"]
+		"indent": ["error", "tab"],
+		"quotes": ["error", "single"],
+		"linebreak-style": ["error", "unix"]
 	}
 }
