@@ -18,8 +18,8 @@
 	"plugins": ["react", "@typescript-eslint"],
 	"rules": {
 		"semi": ["error", "never"],
-		"indent": ["error", "tab"],
 		"quotes": ["error", "single"],
-		"linebreak-style": ["error", "unix"]
+		"linebreak-style": ["error", "unix"],
+		"indent": ["error", "tab", { "SwitchCase": 1 }]
 	}
 }

@@ -1,9 +1,37 @@
 import axios from 'axios'
+import { MediaType } from './enums'
 
-const { NODE_ENV, REACT_APP_API_BASE_URL_PROD, REACT_APP_API_BASE_URL_DEV } = process.env
+const API = axios.create({ baseURL: process.env.REACT_APP_API_BASE_URL })
 
-const API = axios.create({
-	baseURL: NODE_ENV === 'production' ? REACT_APP_API_BASE_URL_PROD : REACT_APP_API_BASE_URL_DEV,
-})
+// 获取播放列表（通过MediaType获取视频或音频）
+const getVodList = async (
+	mediaType: MediaType,
+	pageNo: number,
+	pageSize: number,
+	cateId?: string // 只有请求视频的时候有用
+): Promise<GetVodListResponseProps> =>
+	await API.get(mediaType, { params: { pageNo, pageSize, cateId } }).then(
+		({ data }) => data
+	)
 
-export { API }
+// 获取搜索结果
+// TODO: axios token cancellation
+const getSearchResults = async (
+	query: string | undefined,
+	pageNo: number,
+	pageSize: number
+): Promise<SearchResponseProps> =>
+	query &&
+	(await API.get('search', { params: { query, pageNo, pageSize } }).then(
+		({ data }) => {
+			// 这个接口会返回audioId，为了与VodProps同步，把audioId改回videoId
+			data.mediaList.map((media: any) => {
+				if (media.mediaType === 'audio') {
+					media.audio.videoId = media.audio.audioId
+				}
+			})
+			return data
+		}
+	))
+
+export { getVodList, getSearchResults }
