@@ -30,6 +30,7 @@ const getSearchResults = async (
 	(await API.get('search', { params: { query, pageNo, pageSize } }).then(
 		({ data }) => {
 			// 这个接口会返回audioId，为了与VodProps同步，把audioId改回videoId
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			data.mediaList.map((media: any) => {
 				if (media.mediaType === 'audio') {
 					media.audio.videoId = media.audio.audioId

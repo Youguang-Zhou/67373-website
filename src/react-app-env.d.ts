@@ -16,6 +16,10 @@ declare interface VideoCardProps {
 	newTab?: boolean
 }
 
+declare interface NotificationProviderProps {
+	hasNewSong: boolean
+}
+
 declare interface GetVodListResponseProps {
 	requestId: string | null
 	total: number | null
