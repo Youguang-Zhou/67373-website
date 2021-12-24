@@ -1,5 +1,7 @@
+import { useEventListener } from '@react-hookz/web'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import love_you from '../assets/love_you.png'
+import { BACK_TO_TOP_HEIGHT } from '../utils/constants'
 import BackToTop from './BackToTop'
 import Empty from './Empty'
 import Loading from './Loading'
@@ -20,15 +22,13 @@ const InfiniteScroll = ({
 		[isLoading, hasMore]
 	)
 
+	useEventListener(window, 'scroll', () => setShowBackToTop(scrollY > BACK_TO_TOP_HEIGHT))
+
 	useEffect(() => {
 		const observer = new IntersectionObserver(scroll)
 		observerRef.current && observer.observe(observerRef.current)
 		return () => observer.disconnect()
 	}, [observerRef, scroll])
-
-	useEffect(() => {
-		window.scrollY > 2000 && setShowBackToTop(true)
-	}, [window.scrollY])
 
 	return (
 		<>
