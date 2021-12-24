@@ -10,10 +10,17 @@ declare interface VodProps {
 	creationTime: string
 }
 
+declare interface VideoCardProps {
+	type?: 'primary' | 'secondary'
+	video: VodProps
+	newTab?: boolean
+}
+
 declare interface GetVodListResponseProps {
 	requestId: string | null
 	total: number | null
 	videoList: { video: VodProps[] } | null
+	nextPage: number | null
 }
 
 declare interface SearchResponseProps {
@@ -24,4 +31,18 @@ declare interface SearchResponseProps {
 		audio: VodProps
 		video: VodProps
 	}> | null
+}
+
+declare interface InfiniteScrollProps {
+	children?: ReactNode
+	hasMore: boolean | undefined
+	hasError: boolean
+	isLoading: boolean
+	loadMore: () => void
+}
+
+declare interface EmptyProps {
+	error?: boolean
+	image?: string
+	description?: string
 }

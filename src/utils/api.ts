@@ -11,7 +11,12 @@ const getVodList = async (
 	cateId?: string // 只有请求视频的时候有用
 ): Promise<GetVodListResponseProps> =>
 	await API.get(mediaType, { params: { pageNo, pageSize, cateId } }).then(
-		({ data }) => data
+		({ data }) => {
+			const currNum =
+				(pageNo - 1) * pageSize + data.videoList.video.length
+			const nextPage = currNum !== data.total ? pageNo + 1 : undefined
+			return { ...data, nextPage }
+		}
 	)
 
 // 获取搜索结果

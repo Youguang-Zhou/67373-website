@@ -1,30 +1,23 @@
-import CircularProgress from '@mui/material/CircularProgress'
-import React, { FC, ReactNode, useCallback, useEffect, useRef } from 'react'
-import { useFirstMountState } from 'react-use'
-import xiaode from '../assets/images/xiaode.png'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import love_you from '../assets/love_you.png'
+import BackToTop from './BackToTop'
 import Empty from './Empty'
+import Loading from './Loading'
 
-interface InfiniteScrollProps {
-	children?: ReactNode
-	isLoading: boolean
-	hasMore: boolean
-	hasError: boolean
-	emptyComponent?: ReactNode
-	loadMore: () => void
-}
-
-const InfiniteScroll: FC<InfiniteScrollProps> = ({
+// 通过IntersectionObserver实现无限滚动，
+// 详见：https://developer.mozilla.org/zh-CN/docs/Web/API/Intersection_Observer_API
+const InfiniteScroll = ({
 	children,
-	isLoading,
 	hasMore,
 	hasError,
-	emptyComponent,
+	isLoading,
 	loadMore,
 }: InfiniteScrollProps) => {
-	const isFirstMount = useFirstMountState()
+	const [showBackToTop, setShowBackToTop] = useState(false)
 	const observerRef = useRef<HTMLDivElement>(null)
 	const scroll = useCallback(
-		(entries) => entries[0].isIntersecting && hasMore && !isLoading && loadMore(),
+		(entries) =>
+			entries[0].isIntersecting && hasMore && !isLoading && loadMore(),
 		[isLoading, hasMore]
 	)
 
@@ -34,9 +27,15 @@ const InfiniteScroll: FC<InfiniteScrollProps> = ({
 		return () => observer.disconnect()
 	}, [observerRef, scroll])
 
+	useEffect(() => {
+		window.scrollY > 2000 && setShowBackToTop(true)
+	}, [window.scrollY])
+
 	return (
 		<>
-			{!isFirstMount && (
+			{isLoading ? (
+				<Loading />
+			) : (
 				<>
 					{hasError ? (
 						<Empty error />
@@ -44,20 +43,16 @@ const InfiniteScroll: FC<InfiniteScrollProps> = ({
 						<>
 							{children}
 							{hasMore ? (
-								<div className="my-8 text-center text-primary" ref={observerRef}>
-									<CircularProgress color="inherit" />
+								// 把观察点绑定到<Loading />组件上
+								<div ref={observerRef}>
+									<Loading />
 								</div>
 							) : (
-								<>{emptyComponent}</>
+								<Empty image={love_you} />
 							)}
 						</>
 					)}
-					<button
-						className="fixed p-1 bg-white rounded-full shadow bottom-10 right-10 md:bottom-20 md:right-20"
-						onClick={() => scrollTo({ top: 0, left: 0, behavior: 'smooth' })}
-					>
-						<img className="w-16 h-16 md:w-20 md:h-20" src={xiaode} alt="backToTop" />
-					</button>
+					{showBackToTop && <BackToTop />}
 				</>
 			)}
 		</>

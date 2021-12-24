@@ -1,44 +1,38 @@
-import React, { FC, useEffect, useState } from 'react'
-import love_you from '../assets/images/love_you.png'
-import Empty from '../components/Empty'
+import React from 'react'
+import { useInfiniteQuery } from 'react-query'
 import InfiniteScroll from '../components/InfiniteScroll'
 import VideoCard from '../components/VideoCard'
-import useGetVodListRequest from '../hooks/useGetVodListRequest'
+import { getVodList } from '../utils/api'
 import { MediaType } from '../utils/enums'
-import { VodProps } from '../utils/interfaces'
 
-const HomePage: FC = () => {
-	const [videos, setVideos] = useState<VodProps[] | undefined>(undefined)
-	const [pageNo, setPageNo] = useState(1)
-	const pageSize = useState(12)[0]
-	const {
-		response: { requestId, videoList },
-		isLoading,
-		hasError,
-		hasMore,
-	} = useGetVodListRequest(MediaType.Video, pageNo, pageSize)
+const { Video } = MediaType
 
-	useEffect(() => {
-		videoList && setVideos(videos?.concat(videoList.video) || videoList.video)
-	}, [requestId])
-
-	const handleLoadMore = () => setPageNo((prevPageNo) => prevPageNo + 1)
+const HomePage = () => {
+	const { data, isLoading, isError, hasNextPage, fetchNextPage } =
+		useInfiniteQuery(
+			Video,
+			({ pageParam = 1 }) => getVodList(Video, pageParam, 12),
+			{
+				getNextPageParam: (lastPage) => lastPage.nextPage,
+			}
+		)
 
 	return (
-		<main className="p-container bg-whitesmoke">
+		<main className="main-container bg-whitesmoke">
 			<h1 className="text-2xl md:text-4xl">今日推荐</h1>
 			<hr className="my-2 md:my-4" />
 			<InfiniteScroll
-				hasMore={hasMore}
-				hasError={hasError}
+				hasMore={hasNextPage}
+				hasError={isError}
 				isLoading={isLoading}
-				loadMore={handleLoadMore}
-				emptyComponent={<Empty image={love_you} />}
+				loadMore={fetchNextPage}
 			>
 				<section className="video-container">
-					{videos?.map((video) => (
-						<VideoCard key={video.videoId} video={video} openInNewTab />
-					))}
+					{data?.pages.map((videos) =>
+						videos.videoList?.video.map((video) => (
+							<VideoCard key={video.videoId} video={video} />
+						))
+					)}
 				</section>
 			</InfiniteScroll>
 		</main>
