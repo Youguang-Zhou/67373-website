@@ -34,10 +34,7 @@ const Navbar = (props: HTMLProps<HTMLDivElement>) => {
 				<NavItem key={index} to={path}>
 					<span className="text-xl lg:text-2xl">{name}</span>
 					{name === '音乐' && hasNewSong && (
-						<FiberNewOutlinedIcon
-							fontSize="large"
-							className="text-primary"
-						/>
+						<FiberNewOutlinedIcon className="text-primary" fontSize="large" />
 					)}
 				</NavItem>
 			))}

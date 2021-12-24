@@ -1,10 +1,4 @@
-import React, {
-	HTMLProps,
-	KeyboardEvent,
-	useEffect,
-	useRef,
-	useState,
-} from 'react'
+import React, { HTMLProps, KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import { getSearchResults } from '../utils/api'
 import { LongestCommonSubsequence } from '../utils/functions'
@@ -21,9 +15,7 @@ const SearchBar = ({ className }: HTMLProps<HTMLDivElement>) => {
 	// 下拉框的搜索结果
 	const [searchResults, setSearchResults] = useState<string[]>([])
 	// 搜索结果的api调用
-	const { data } = useQuery(['search', query], () =>
-		getSearchResults(query, 1, 100)
-	)
+	const { data } = useQuery(['search', query], () => getSearchResults(query, 1, 100))
 
 	// 获取搜索结果
 	useEffect(() => {
@@ -31,11 +23,7 @@ const SearchBar = ({ className }: HTMLProps<HTMLDivElement>) => {
 		setSearchResults([
 			...Array.from(
 				// 用Set去除重复歌曲名
-				new Set(
-					data.mediaList.map(
-						({ audio, video }) => audio.title || video.title
-					)
-				)
+				new Set(data.mediaList.map(({ audio, video }) => audio.title || video.title))
 			),
 		])
 	}, [data])
@@ -43,10 +31,7 @@ const SearchBar = ({ className }: HTMLProps<HTMLDivElement>) => {
 	// 键盘上下键选择搜索结果时，固定光标在字符串末尾
 	useEffect(() => {
 		if (!inputRef.current || !query) return
-		inputRef.current.setSelectionRange(
-			inputRef.current?.value.length,
-			query.length
-		)
+		inputRef.current.setSelectionRange(inputRef.current?.value.length, query.length)
 	}, [selectedIndex])
 
 	// 键盘上下键选择搜索结果
@@ -57,18 +42,14 @@ const SearchBar = ({ className }: HTMLProps<HTMLDivElement>) => {
 				if (index === undefined) {
 					index = searchResults.length - 1
 				} else {
-					index - 1 < 0
-						? (index = searchResults.length - 1)
-						: (index -= 1)
+					index - 1 < 0 ? (index = searchResults.length - 1) : (index -= 1)
 				}
 				break
 			case 'ArrowDown':
 				if (index === undefined) {
 					index = 0
 				} else {
-					index + 1 === searchResults.length
-						? (index = 0)
-						: (index += 1)
+					index + 1 === searchResults.length ? (index = 0) : (index += 1)
 				}
 				break
 			case 'Enter':

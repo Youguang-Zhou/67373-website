@@ -15,11 +15,7 @@ const Footer = () => {
 		>
 			<span>{`© 2020-${new Date().getFullYear()} 67373upup.com`}</span>
 			<span>
-				<a
-					target="_blank"
-					rel="noopener noreferrer"
-					href="http://beian.miit.gov.cn/"
-				>
+				<a target="_blank" rel="noopener noreferrer" href="http://beian.miit.gov.cn/">
 					苏ICP备20007695号-1
 				</a>
 			</span>

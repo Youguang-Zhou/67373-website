@@ -16,8 +16,7 @@ const InfiniteScroll = ({
 	const [showBackToTop, setShowBackToTop] = useState(false)
 	const observerRef = useRef<HTMLDivElement>(null)
 	const scroll = useCallback(
-		(entries) =>
-			entries[0].isIntersecting && hasMore && !isLoading && loadMore(),
+		(entries) => entries[0].isIntersecting && hasMore && !isLoading && loadMore(),
 		[isLoading, hasMore]
 	)
 
