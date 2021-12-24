@@ -100,7 +100,7 @@ const SearchBar = ({ className }: HTMLProps<HTMLDivElement>) => {
 	}
 
 	return (
-		<div className={`relative text-sm ${className}`}>
+		<div className={`relative mx-2 text-sm ${className}`}>
 			<div
 				className={`h-8 px-3 ${
 					query && isFocus && searchResults.length > 0
