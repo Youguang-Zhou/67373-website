@@ -27,6 +27,17 @@ declare interface GetVodListResponseProps {
 	nextPage: number | null
 }
 
+declare interface GetVideoInfoResponseProps {
+	requestId: string
+	videoInfo: VodProps
+	playInfo: Array<{ playURL: string }>
+}
+
+declare interface GetRecommVideosResponseProps {
+	requestId: string
+	videoList: VodProps[]
+}
+
 declare interface SearchResponseProps {
 	requestId: string | null
 	total: number | null
@@ -49,4 +60,18 @@ declare interface EmptyProps {
 	error?: boolean
 	image?: string
 	description?: string
+}
+
+declare interface SubTitleProps {
+	icon: SvgIconProps
+	subtitle: string
+}
+
+declare interface VideoDescriptionProps {
+	description: string
+	playerRef: MutableRefObject<VideoJsPlayer | undefined>
+}
+
+declare interface VideoPlayerProps {
+	onLoad: (player: VideoJsPlayer) => void
 }

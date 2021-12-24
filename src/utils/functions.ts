@@ -7,18 +7,14 @@ export const formatDuration = (duration: number): string => {
 }
 
 // hh:mm:ss格式转为毫秒
-export const durationToSeconds = (hh_mm_ss: string): number =>
-	moment.duration(hh_mm_ss).asSeconds()
+export const duration2Seconds = (hh_mm_ss: string): number => moment.duration(hh_mm_ss).asSeconds()
 
 // 计算输入日期到今天的天数
 export const date2Today = (time: string): number =>
 	moment.duration(moment(new Date()).diff(moment(new Date(time)))).asDays()
 
 // 最长公共子序列
-export const LongestCommonSubsequence = (
-	key: string,
-	str: string
-): number[] => {
+export const LongestCommonSubsequence = (key: string, str: string): number[] => {
 	const n = key.length
 	const m = str.length
 	const dp = Array.from(new Array(n + 1), () => new Array(m + 1).fill(0))
@@ -37,3 +33,6 @@ export const LongestCommonSubsequence = (
 	}
 	return indexes
 }
+
+// Document标题
+export const DocTitleWrapper = (title: string) => `${title}_67373UPUP (=^ェ^=)`

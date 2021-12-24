@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
 import zhCN from 'video.js/dist/lang/zh-CN.json'
 import 'video.js/dist/video-js.css'
@@ -20,11 +20,7 @@ const initialOptions: VideoJsPlayerOptions = {
 	},
 }
 
-interface VideoPlayerProps {
-	onLoad: (player: VideoJsPlayer) => void
-}
-
-const VideoPlayer: FC<VideoPlayerProps> = ({ onLoad }: VideoPlayerProps) => {
+const VideoPlayer = ({ onLoad }: VideoPlayerProps) => {
 	const playerRef = useRef<VideoJsPlayer>()
 	const noticeRef = useRef<HTMLDivElement>(null)
 
@@ -44,15 +40,14 @@ const VideoPlayer: FC<VideoPlayerProps> = ({ onLoad }: VideoPlayerProps) => {
 
 	const notice = (text: string) => {
 		const { current } = noticeRef
-		if (current) {
-			let timer = undefined
-			current.innerHTML = text
-			current.style.opacity = '0.8'
-			timer && clearTimeout(timer)
-			timer = setTimeout(() => {
-				current.style.opacity = '0'
-			}, 1000)
-		}
+		if (!current) return
+		let timer = undefined
+		current.innerHTML = text
+		current.style.opacity = '0.8'
+		timer && clearTimeout(timer)
+		timer = setTimeout(() => {
+			current.style.opacity = '0'
+		}, 1000)
 	}
 
 	const setupHotkeys = ({ preventDefault, which }: videojs.KeyboardEvent) => {
@@ -100,8 +95,8 @@ const VideoPlayer: FC<VideoPlayerProps> = ({ onLoad }: VideoPlayerProps) => {
 			<video id="video-player-67373" className="video-js vjs-16-9 custom-css" />
 			{/* 键盘快捷键提示 */}
 			<span
-				className="absolute px-4 py-1 transition-all bg-black rounded opacity-0 text-light bg-opacity-70 bottom-12 left-4"
 				ref={noticeRef}
+				className="absolute px-4 py-1 transition-all bg-black rounded opacity-0 text-light bg-opacity-70 bottom-12 left-4"
 			></span>
 		</div>
 	)
