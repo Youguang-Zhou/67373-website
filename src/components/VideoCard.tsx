@@ -3,16 +3,18 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { formatDuration } from '../utils/functions'
 
+interface VideoCardProps {
+	type?: 'primary' | 'secondary'
+	video: VodProps
+	newTab?: boolean
+}
+
 const VideoCard = ({
 	type = 'primary',
 	video: { videoId, title, duration, cateName, coverURL, creationTime },
 	newTab = true,
 }: VideoCardProps) => (
-	<Link
-		className="select-none"
-		to={`/watch/${videoId}`}
-		target={newTab ? '_blank' : '_self'}
-	>
+	<Link className="select-none" to={`/watch/${videoId}`} target={newTab ? '_blank' : '_self'}>
 		<div
 			className={`flex ${
 				type === 'primary'
@@ -20,9 +22,7 @@ const VideoCard = ({
 					: 'flex-row w-full space-x-1 hover:text-primary'
 			}`}
 		>
-			<div
-				className={`${type === 'primary' ? '' : 'flex-shrink-0 w-1/2'}`}
-			>
+			<div className={type === 'primary' ? '' : 'flex-shrink-0 w-1/2'}>
 				<div className="relative">
 					<img
 						className="object-cover w-full h-full aspect-video"
@@ -51,9 +51,7 @@ const VideoCard = ({
 				</div>
 				<div className="flex space-x-1 text-gray-600">
 					<small className="hidden md:inline">
-						{cateName.startsWith('视频-')
-							? cateName.slice(3)
-							: cateName}
+						{cateName.startsWith('视频-') ? cateName.slice(3) : cateName}
 					</small>
 					<small className="hidden md:inline">·</small>
 					<small>{moment().to(creationTime)}</small>

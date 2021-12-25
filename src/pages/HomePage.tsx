@@ -8,14 +8,15 @@ import { MediaType } from '../utils/enums'
 const { Video } = MediaType
 
 const HomePage = () => {
-	const { data, isLoading, isError, hasNextPage, fetchNextPage } =
-		useInfiniteQuery(
-			Video,
-			({ pageParam = 1 }) => getVodList(Video, pageParam, 12),
-			{
-				getNextPageParam: (lastPage) => lastPage.nextPage,
-			}
-		)
+	const {
+		data: { pages: allVideos } = {},
+		isLoading,
+		isError,
+		hasNextPage,
+		fetchNextPage,
+	} = useInfiniteQuery(Video, ({ pageParam = 1 }) => getVodList(Video, pageParam), {
+		getNextPageParam: ({ nextPage }) => nextPage,
+	})
 
 	return (
 		<main className="main-container bg-whitesmoke">
@@ -28,10 +29,8 @@ const HomePage = () => {
 				loadMore={fetchNextPage}
 			>
 				<section className="video-container">
-					{data?.pages.map((videos) =>
-						videos.videoList?.video.map((video) => (
-							<VideoCard key={video.videoId} video={video} />
-						))
+					{allVideos?.map(({ videoList: { video: videos } }) =>
+						videos.map((video) => <VideoCard key={video.videoId} video={video} />)
 					)}
 				</section>
 			</InfiniteScroll>

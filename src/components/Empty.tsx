@@ -1,6 +1,12 @@
 import React from 'react'
 import fafa_robot from '../assets/fafa_robot.png'
 
+interface EmptyProps {
+	error?: boolean
+	image?: string
+	description?: string
+}
+
 const Empty = ({ error, image, description }: EmptyProps) => (
 	<div className="flex-col my-0 space-y-4 flex-center md:my-4">
 		<img className="w-32 md:w-48 lg:w-72" src={image || fafa_robot} alt="empty" />

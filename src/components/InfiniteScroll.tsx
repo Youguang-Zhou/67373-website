@@ -1,10 +1,18 @@
 import { useEventListener } from '@react-hookz/web'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import love_you from '../assets/love_you.png'
 import { BACK_TO_TOP_HEIGHT } from '../utils/constants'
 import BackToTop from './BackToTop'
 import Empty from './Empty'
 import Loading from './Loading'
+
+interface InfiniteScrollProps {
+	children?: ReactNode
+	hasMore: boolean | undefined
+	hasError: boolean
+	isLoading: boolean
+	loadMore: () => void
+}
 
 // 通过IntersectionObserver实现无限滚动，
 // 详见：https://developer.mozilla.org/zh-CN/docs/Web/API/Intersection_Observer_API

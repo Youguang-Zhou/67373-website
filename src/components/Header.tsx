@@ -1,6 +1,4 @@
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
-import MenuRoundedIcon from '@mui/icons-material/MenuRounded'
+import { CloseRounded, HelpOutline, MenuRounded } from '@mui/icons-material'
 import React, { useState } from 'react'
 import Logo from './Logo'
 import Navbar from './Navbar'
@@ -22,22 +20,18 @@ const Header = () => {
 				<button
 					type="button"
 					title="使用条款"
-					className="hidden px-4 text-primary md:block"
 					onClick={() => open('/terms')}
+					className="hidden px-4 text-primary md:block"
 				>
-					{<HelpOutlineIcon />}
+					{<HelpOutline />}
 				</button>
 				{/* 移动端logo右侧折叠导航栏的按钮 */}
 				<button
 					type="button"
-					className="block text-gray-400 md:hidden hover:text-gray-500"
 					onClick={() => setToggle(!toggle)}
+					className="block text-gray-400 md:hidden hover:text-gray-500"
 				>
-					{toggle ? (
-						<CloseRoundedIcon fontSize="large" />
-					) : (
-						<MenuRoundedIcon fontSize="large" />
-					)}
+					{toggle ? <CloseRounded fontSize="large" /> : <MenuRounded fontSize="large" />}
 				</button>
 			</div>
 			{/* 移动端 */}

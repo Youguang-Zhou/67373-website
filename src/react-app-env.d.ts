@@ -10,21 +10,11 @@ declare interface VodProps {
 	creationTime: string
 }
 
-declare interface VideoCardProps {
-	type?: 'primary' | 'secondary'
-	video: VodProps
-	newTab?: boolean
-}
-
-declare interface NotificationProviderProps {
-	hasNewSong: boolean
-}
-
 declare interface GetVodListResponseProps {
-	requestId: string | null
-	total: number | null
-	videoList: { video: VodProps[] } | null
-	nextPage: number | null
+	requestId: string
+	total: number
+	videoList: { video: VodProps[] }
+	nextPage: number
 }
 
 declare interface GetVideoInfoResponseProps {
@@ -39,39 +29,11 @@ declare interface GetRecommVideosResponseProps {
 }
 
 declare interface SearchResponseProps {
-	requestId: string | null
-	total: number | null
+	requestId: string
+	total: number
 	mediaList: Array<{
 		mediaType: string
 		audio: VodProps
 		video: VodProps
-	}> | null
-}
-
-declare interface InfiniteScrollProps {
-	children?: ReactNode
-	hasMore: boolean | undefined
-	hasError: boolean
-	isLoading: boolean
-	loadMore: () => void
-}
-
-declare interface EmptyProps {
-	error?: boolean
-	image?: string
-	description?: string
-}
-
-declare interface SubTitleProps {
-	icon: SvgIconProps
-	subtitle: string
-}
-
-declare interface VideoDescriptionProps {
-	description: string
-	playerRef: MutableRefObject<VideoJsPlayer | undefined>
-}
-
-declare interface VideoPlayerProps {
-	onLoad: (player: VideoJsPlayer) => void
+	}>
 }

@@ -20,6 +20,10 @@ const initialOptions: VideoJsPlayerOptions = {
 	},
 }
 
+interface VideoPlayerProps {
+	onLoad: (player: VideoJsPlayer) => void
+}
+
 const VideoPlayer = ({ onLoad }: VideoPlayerProps) => {
 	const playerRef = useRef<VideoJsPlayer>()
 	const noticeRef = useRef<HTMLDivElement>(null)
@@ -45,9 +49,7 @@ const VideoPlayer = ({ onLoad }: VideoPlayerProps) => {
 		current.innerHTML = text
 		current.style.opacity = '0.8'
 		timer && clearTimeout(timer)
-		timer = setTimeout(() => {
-			current.style.opacity = '0'
-		}, 1000)
+		timer = setTimeout(() => (current.style.opacity = '0'), 1000)
 	}
 
 	const setupHotkeys = ({ preventDefault, which }: videojs.KeyboardEvent) => {

@@ -1,9 +1,23 @@
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded'
-import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRightRounded'
-import MailOutlineIcon from '@mui/icons-material/MailOutline'
-import React, { useState } from 'react'
+import {
+	DescriptionOutlined,
+	KeyboardArrowDownRounded,
+	KeyboardArrowRightRounded,
+	MailOutline,
+} from '@mui/icons-material'
+import { SvgIconProps } from '@mui/material'
+import React, { MutableRefObject, useState } from 'react'
+import { VideoJsPlayer } from 'video.js'
 import { duration2Seconds } from '../utils/functions'
+
+interface SubTitleProps {
+	icon: SvgIconProps
+	subtitle: string
+}
+
+interface VideoDescriptionProps {
+	description: string
+	playerRef: MutableRefObject<VideoJsPlayer | undefined>
+}
 
 const SubTitle = ({ icon, subtitle }: SubTitleProps) => (
 	<div className="flex items-center space-x-1">
@@ -17,7 +31,7 @@ const VideoDescription = ({ description, playerRef }: VideoDescriptionProps) => 
 
 	return (
 		<div className="p-4 mb-4 border rounded shadow xl:mb-8">
-			<SubTitle icon={<DescriptionOutlinedIcon fontSize="large" />} subtitle="简介" />
+			<SubTitle icon={<DescriptionOutlined fontSize="large" />} subtitle="简介" />
 			{description.split('\n').map((desc, index) => {
 				// 时间轴
 				if (desc.startsWith('[')) {
@@ -30,9 +44,9 @@ const VideoDescription = ({ description, playerRef }: VideoDescriptionProps) => 
 								<SubTitle
 									icon={
 										isToggleDesc ? (
-											<KeyboardArrowRightRoundedIcon />
+											<KeyboardArrowRightRounded />
 										) : (
-											<KeyboardArrowDownRoundedIcon />
+											<KeyboardArrowDownRounded />
 										)
 									}
 									subtitle="时间轴"
@@ -56,7 +70,7 @@ const VideoDescription = ({ description, playerRef }: VideoDescriptionProps) => 
 											{str.slice(8) === '邮件环节' ? (
 												<span className="inline-flex items-center">
 													{str.slice(8)}
-													<MailOutlineIcon />
+													<MailOutline />
 												</span>
 											) : (
 												<span>{str.slice(8)}</span>

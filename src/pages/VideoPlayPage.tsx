@@ -17,8 +17,8 @@ const VideoPlayPage = () => {
 	const { id } = useParams()
 	const navigate = useNavigate()
 	const playerRef = useRef<VideoJsPlayer>()
-	const [measure, widthRef] = useMeasure<HTMLDivElement>()
 	const largeScreen = useMediaQuery(BREAKPOINT_LG)
+	const [measure, widthRef] = useMeasure<HTMLDivElement>()
 	// 获取主视频的API
 	const {
 		data: {
@@ -31,11 +31,11 @@ const VideoPlayPage = () => {
 			} = {},
 			playInfo,
 		} = {},
-	} = useQuery('videoInfo', () => getVideoInfo(id))
+	} = useQuery(['videoInfo', id], () => getVideoInfo(id))
 	// 获取推荐视频的API
 	const { data: { videoList: recommVideos } = {}, isLoading } = useQuery(
 		['recomm', videoId, title, cateName],
-		() => getRecommVideos(videoId, title, cateName, 20),
+		() => getRecommVideos(videoId, title, cateName),
 		{ enabled: !!videoId }
 	)
 
@@ -101,6 +101,7 @@ const VideoPlayPage = () => {
 											key={video.videoId}
 											video={video}
 											type={largeScreen ? 'secondary' : 'primary'}
+											newTab={false}
 										/>
 									))}
 								</section>

@@ -14,19 +14,24 @@ const SearchBar = ({ className }: HTMLProps<HTMLDivElement>) => {
 	const [selectedIndex, setSelectedIndex] = useState<number | undefined>()
 	// 下拉框的搜索结果
 	const [searchResults, setSearchResults] = useState<string[]>([])
-	// 搜索结果的api调用
-	const { data } = useQuery(['search', query], () => getSearchResults(query, 1, 100))
+	// 搜索结果的API调用
+	const { data: { mediaList } = {} } = useQuery(
+		['search', query],
+		() => getSearchResults(query, 1, 100),
+		{
+			enabled: !!query,
+		}
+	)
 
 	// 获取搜索结果
 	useEffect(() => {
-		if (!data?.mediaList) return
 		setSearchResults([
 			...Array.from(
 				// 用Set去除重复歌曲名
-				new Set(data.mediaList.map(({ audio, video }) => audio.title || video.title))
+				new Set(mediaList?.map(({ audio, video }) => audio.title || video.title))
 			),
 		])
-	}, [data])
+	}, [mediaList])
 
 	// 键盘上下键选择搜索结果时，固定光标在字符串末尾
 	useEffect(() => {
@@ -111,7 +116,6 @@ const SearchBar = ({ className }: HTMLProps<HTMLDivElement>) => {
 			>
 				<input
 					type="text"
-					maxLength={30}
 					ref={inputRef}
 					className="flex-1 outline-none"
 					onFocus={() => setIsFocus(true)}
