@@ -1,49 +1,24 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-import FavoriteIcon from '@mui/icons-material/Favorite'
-import LibraryMusicIcon from '@mui/icons-material/LibraryMusic'
-import MusicNoteIcon from '@mui/icons-material/MusicNote'
-import { Tab, Tabs, useMediaQuery } from '@mui/material'
-import Pagination from '@mui/material/Pagination'
-import { useTheme } from '@mui/material/styles'
-import React, { FC, ReactNode, SyntheticEvent, useEffect, useState } from 'react'
+import { Favorite, LibraryMusic, MusicNote } from '@mui/icons-material'
+import { Pagination, Tab, Tabs, useMediaQuery } from '@mui/material'
+import React, { ReactNode, SyntheticEvent, useState } from 'react'
+import { useQuery } from 'react-query'
 import { Link } from 'react-router-dom'
-import cat from '../assets/images/cat.jpeg'
-import channel_banner from '../assets/images/channel_banner.jpeg'
-import fafa_rose from '../assets/images/fafa_rose.png'
-import xiruisi from '../assets/images/xiruisi.png'
+import banner_channel from '../assets/banner_channel.jpeg'
+import cat from '../assets/cat.jpeg'
+import fafa_0 from '../assets/fafa_0.png'
+import fafa_1 from '../assets/fafa_1.png'
+import fafa_2 from '../assets/fafa_2.png'
+import fafa_3 from '../assets/fafa_3.png'
+import fafa_4 from '../assets/fafa_4.png'
+import fafa_5 from '../assets/fafa_5.png'
+import fafa_rose from '../assets/fafa_rose.png'
+import xiruisi from '../assets/xiruisi.png'
 import Carousel from '../components/Carousel'
 import Empty from '../components/Empty'
 import VideoCard from '../components/VideoCard'
-import useGetVodListRequest from '../hooks/useGetVodListRequest'
+import { getVodList } from '../utils/api'
+import { BREAKPOINT_SM, CATEGORIES, ORIGINALS } from '../utils/constants'
 import { MediaType } from '../utils/enums'
-import { VodProps } from '../utils/interfaces'
-
-const categories = [
-	process.env.REACT_APP_VOD_CATE_ID_CHANGGE,
-	process.env.REACT_APP_VOD_CATE_ID_ZHIBOHUIFANG,
-	process.env.REACT_APP_VOD_CATE_ID_ZHIBOJIANJI,
-	process.env.REACT_APP_VOD_CATE_ID_CHAHUAHUI,
-	process.env.REACT_APP_VOD_CATE_ID_YOUXI,
-	process.env.REACT_APP_VOD_CATE_ID_RICHANG,
-]
-
-const originals = [
-	{
-		id: process.env.REACT_APP_VOD_VIDEO_ID_TONGHUAZHEN,
-		name_cn: '童话镇',
-		name_en: 'tonghuazhen',
-	},
-	{
-		id: process.env.REACT_APP_VOD_VIDEO_ID_APOSHUO,
-		name_cn: '阿婆说',
-		name_en: 'aposhuo',
-	},
-	{
-		id: process.env.REACT_APP_VOD_VIDEO_ID_XIANSHANGYOUCHUNQIU,
-		name_cn: '弦上有春秋',
-		name_en: 'xianshangyouchunqiu',
-	},
-]
 
 interface TabPanelProps {
 	children?: ReactNode
@@ -51,31 +26,37 @@ interface TabPanelProps {
 	index: number
 }
 
-const ChannelPage: FC = () => {
-	const [videos, setVideos] = useState<VodProps[]>([])
-	const [pageNo, setPageNo] = useState<number>(1)
-	const pageSize = useState<number>(12)[0]
-	const [currTabIndex, setCurrTabIndex] = useState<number>(0)
-	const smallScreen = useMediaQuery(useTheme().breakpoints.down('sm'))
+const { Video } = MediaType
+const emptyImages = [fafa_0, fafa_1, fafa_2, fafa_3, fafa_4, fafa_5]
+
+const ChannelPage = () => {
+	const pageSize = 12
+	const [pageNo, setPageNo] = useState(1)
+	const [currTabIndex, setCurrTabIndex] = useState(0)
+	const largeScreen = useMediaQuery(BREAKPOINT_SM)
+
 	const {
-		response: { requestId, total, videoList },
+		data: {
+			total = undefined,
+			nextPage = undefined,
+			videoList: { video: videos = [] } = {},
+		} = {},
 		isLoading,
-		hasError,
-		hasMore,
-	} = useGetVodListRequest(MediaType.Video, pageNo, pageSize, categories[currTabIndex])
+		isError,
+	} = useQuery(
+		[Video, pageNo, pageSize, CATEGORIES[currTabIndex]],
+		() => getVodList(Video, pageNo, pageSize, CATEGORIES[currTabIndex]),
+		{ keepPreviousData: true }
+	)
 
-	useEffect(() => {
-		videoList && setVideos(videoList.video)
-	}, [requestId])
-
-	const handleChange = (event: SyntheticEvent, value: number) => {
+	const handleTabIdexChange = (_: SyntheticEvent, value: number) => {
 		setCurrTabIndex(value)
 		setPageNo(1)
 	}
 
 	const TabPanel = ({ children, value, index }: TabPanelProps) => (
-		<div className="p-container bg-whitesmoke" role="tabpanel" hidden={value !== index}>
-			{hasError ? (
+		<section className="main-container bg-whitesmoke" hidden={value !== index}>
+			{isError ? (
 				<Empty error />
 			) : (
 				<>
@@ -86,22 +67,20 @@ const ChannelPage: FC = () => {
 									{children}
 									<section className="video-container">
 										{videos.map((video) => (
-											<VideoCard key={video.videoId} video={video} openInNewTab />
+											<VideoCard key={video.videoId} video={video} />
 										))}
 									</section>
-									{!hasMore && (
-										<Empty image={require(`../assets/images/fafa_${currTabIndex}.png`).default} />
-									)}
+									{!nextPage && <Empty image={emptyImages[currTabIndex]} />}
 									{total && Math.ceil(total / pageSize) !== 1 && (
 										<Pagination
-											className="flex justify-center pt-4 md:pt-8"
 											page={pageNo}
-											siblingCount={smallScreen ? 1 : 2}
+											siblingCount={largeScreen ? 2 : 1}
 											count={Math.ceil(total / pageSize)}
-											size={smallScreen ? 'small' : 'large'}
+											size={largeScreen ? 'large' : 'small'}
+											className="flex justify-center pt-4 md:pt-8"
 											onChange={(_, pageNo) => setPageNo(pageNo)}
-											showFirstButton={!smallScreen}
-											showLastButton={!smallScreen}
+											showFirstButton={largeScreen}
+											showLastButton={largeScreen}
 										/>
 									)}
 								</>
@@ -110,26 +89,32 @@ const ChannelPage: FC = () => {
 					)}
 				</>
 			)}
-		</div>
+		</section>
 	)
 
 	return (
 		<main>
-			<img className="banner" src={channel_banner} alt="channel_banner" />
-			<div className="flex items-center justify-center my-4">
-				<img className="w-20 h-20 rounded-full" src={cat} alt="ChenYiFaer" />
-				<div className="mx-2 sm:ml-8 md:ml-12 sm:mr-32 md:mr-72">
-					<div className="flex items-center">
-						<h1 className="text-xl md:text-2xl">陈一发儿</h1>
-						<MusicNoteIcon className="text-yellow-500" fontSize="small" />
+			<img className="banner" src={banner_channel} alt="banner_channel" />
+			<div className="flex items-center my-2 md:my-4 justify-evenly xl:mx-48">
+				<div className="space-x-4 flex-center lg:space-x-8 xl:space-x-12">
+					<img
+						src={cat}
+						alt="ChenYiFaer"
+						className="w-16 h-16 rounded-full md:w-20 md:h-20"
+					/>
+					<div>
+						<h1 className="text-xl md:text-2xl">
+							<span>陈一发儿</span>
+							<MusicNote className="text-orange-400" fontSize="small" />
+						</h1>
+						<small className="text-gray-600">673.73万位订阅者</small>
 					</div>
-					<small className="text-gray-600">673.73万位订阅者</small>
 				</div>
 				<a
-					className="w-20 sm:w-auto"
-					href="https://chenyifaer.taobao.com/"
+					className="w-20"
 					target="_blank"
 					rel="noopener noreferrer"
+					href="https://chenyifaer.taobao.com/"
 				>
 					<img className="border rounded border-primary" src={xiruisi} alt="喜瑞斯" />
 				</a>
@@ -138,9 +123,9 @@ const ChannelPage: FC = () => {
 				scrollButtons
 				allowScrollButtonsMobile
 				value={currTabIndex}
+				onChange={handleTabIdexChange}
 				className="mx-auto lg:w-3/4 xl:w-2/3 2xl:w-1/2"
-				variant={smallScreen ? 'scrollable' : 'fullWidth'}
-				onChange={handleChange}
+				variant={largeScreen ? 'fullWidth' : 'scrollable'}
 			>
 				<Tab label="唱歌视频" />
 				<Tab label="直播回放" />
@@ -153,28 +138,28 @@ const ChannelPage: FC = () => {
 			<TabPanel value={currTabIndex} index={0}>
 				<div className="flex items-center mb-2">
 					<h2 className="text-2xl">作品集</h2>
-					<FavoriteIcon className="text-red-600" />
+					<Favorite className="text-red-600" />
 				</div>
 				<div className="flex items-baseline">
 					<div className="w-full sm:w-1/2 lg:w-1/3">
 						<Carousel>
-							{originals.map((song) => (
-								<Link key={song.id} to={`/watch/${song.id}`} target="_blank">
-									<img
-										className="w-full"
-										src={require(`../assets/images/${song.name_en}.jpeg`).default}
-										alt={song.name_cn}
-									/>
+							{ORIGINALS.map(({ id, name, cover }, idex) => (
+								<Link key={id} to={`/watch/${id}`} target="_blank">
+									<img src={cover} alt={name} />
 								</Link>
 							))}
 						</Carousel>
 					</div>
-					<img className="hidden h-auto sm:block sm:w-1/2 lg:w-1/3" src={fafa_rose} alt="发发与玫瑰" />
+					<img
+						src={fafa_rose}
+						alt="发发与玫瑰"
+						className="hidden h-auto sm:block sm:w-1/2 lg:w-1/3"
+					/>
 				</div>
 				<hr className="my-2 md:my-4" />
 				<div className="flex items-center mb-2">
 					<h2 className="text-2xl">歌曲集</h2>
-					<LibraryMusicIcon />
+					<LibraryMusic />
 				</div>
 			</TabPanel>
 			{/* 油管回放 */}
