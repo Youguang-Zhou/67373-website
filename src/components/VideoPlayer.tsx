@@ -83,8 +83,8 @@ const VideoPlayer = ({ onLoad }: VideoPlayerProps) => {
 				break
 			// 下键：音量降低10%
 			case 40:
-				playerRef.current?.volume(playerRef.current?.volume() - volume)
-				notice(`音量${Math.round((playerRef.current?.volume() || 0) * 100)}%`)
+				current?.volume(current?.volume() - volume)
+				notice(`音量${Math.round((current?.volume() || 0) * 100)}%`)
 				break
 			default:
 				break

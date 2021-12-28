@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { EXPIRED_DATE } from './constants'
 
 // 格式化duration，单位是秒
 export const formatDuration = (duration: number): string => {
@@ -9,9 +10,12 @@ export const formatDuration = (duration: number): string => {
 // hh:mm:ss格式转为毫秒
 export const duration2Seconds = (hh_mm_ss: string): number => moment.duration(hh_mm_ss).asSeconds()
 
-// 计算输入日期到今天的天数
-export const date2Today = (time: string): number =>
-	moment.duration(moment(new Date()).diff(moment(new Date(time)))).asDays()
+// 判断是否为最近新出的歌曲
+export const isRecentPublished = (time: string): boolean =>
+	moment.duration(moment(new Date()).diff(moment(new Date(time)))).asDays() <= EXPIRED_DATE
+
+// Document标题
+export const DocTitleWrapper = (title: string) => `${title}_67373UPUP (=^ェ^=)`
 
 // 最长公共子序列
 export const LongestCommonSubsequence = (key: string, str: string): number[] => {
@@ -33,6 +37,3 @@ export const LongestCommonSubsequence = (key: string, str: string): number[] => 
 	}
 	return indexes
 }
-
-// Document标题
-export const DocTitleWrapper = (title: string) => `${title}_67373UPUP (=^ェ^=)`

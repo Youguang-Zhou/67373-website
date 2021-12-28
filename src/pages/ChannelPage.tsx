@@ -49,7 +49,7 @@ const ChannelPage = () => {
 		{ keepPreviousData: true }
 	)
 
-	const handleTabIdexChange = (_: SyntheticEvent, value: number) => {
+	const handleTabIndexChange = (_: SyntheticEvent, value: number) => {
 		setCurrTabIndex(value)
 		setPageNo(1)
 	}
@@ -123,7 +123,7 @@ const ChannelPage = () => {
 				scrollButtons
 				allowScrollButtonsMobile
 				value={currTabIndex}
-				onChange={handleTabIdexChange}
+				onChange={handleTabIndexChange}
 				className="mx-auto lg:w-3/4 xl:w-2/3 2xl:w-1/2"
 				variant={largeScreen ? 'fullWidth' : 'scrollable'}
 			>
@@ -143,7 +143,7 @@ const ChannelPage = () => {
 				<div className="flex items-baseline">
 					<div className="w-full sm:w-1/2 lg:w-1/3">
 						<Carousel>
-							{ORIGINALS.map(({ id, name, cover }, idex) => (
+							{ORIGINALS.map(({ id, name, cover }) => (
 								<Link key={id} to={`/watch/${id}`} target="_blank">
 									<img src={cover} alt={name} />
 								</Link>
