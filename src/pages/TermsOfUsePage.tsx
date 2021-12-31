@@ -8,9 +8,7 @@ const TermsOfUsePage = () => (
 				<p>
 					67373upup.com网站（以下称作“本网站”）是一个由粉丝自发组织的、非盈利性质的视频网站。
 				</p>
-				<p>
-					本网站搬运、上传、播放了陈一发儿的视频，但均未获得陈一发儿本人的许可。
-				</p>
+				<p>本网站搬运、上传、播放了陈一发儿的视频，但均未获得陈一发儿本人的许可。</p>
 				<p>如有任何侵权视频，请联系本网站删除。</p>
 			</div>
 			<div>
@@ -22,11 +20,7 @@ const TermsOfUsePage = () => (
 					本网站
 					<button
 						className="px-1 text-primary"
-						onClick={() =>
-							open(
-								'https://github.com/Youguang-Zhou/67373-website'
-							)
-						}
+						onClick={() => open('https://github.com/Youguang-Zhou/67373-website')}
 					>
 						前端源代码
 					</button>
@@ -38,7 +32,7 @@ const TermsOfUsePage = () => (
 			</div>
 			<div className="flex flex-col items-end">
 				<p>67373代码部</p>
-				<p>2021年12月23日</p>
+				<p>2021年12月31日</p>
 			</div>
 		</section>
 	</main>
