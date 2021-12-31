@@ -3,24 +3,23 @@
 @tailwind utilities;
 
 @layer base {
-	@font-face {
-		font-family: MFYueYuan;
-		src: url(./assets/fonts/MFYueYuan.ttf);
-	}
-
-	body {
-		overflow-y: scroll;
-	}
-
 	::selection {
 		color: #fafafafa;
 		background: orange;
 	}
+
+	.mini-player .MuiSvgIcon-root {
+		font-size: 2rem;
+	}
 }
 
 @layer components {
-	.p-container {
-		@apply px-4 py-4 md:px-12 lg:px-20 md:py-8;
+	.flex-center {
+		@apply flex items-center justify-center;
+	}
+
+	.main-container {
+		@apply p-4 md:px-12 lg:px-20 md:py-8;
 	}
 
 	.video-container {
@@ -31,23 +30,30 @@
 		@apply space-y-4 sm:space-y-0 sm:grid sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 sm:gap-x-12 sm:gap-y-8;
 	}
 
-	.banner {
-		@apply object-cover w-full h-vw-15;
-	}
-
 	.new-song-label {
-		@apply px-1 my-auto text-sm text-yellow-500 border border-yellow-500 rounded;
+		@apply px-1 my-auto text-sm text-orange-400 border border-orange-400 rounded;
 	}
 
-	.hide-scrollbar {
-		overflow: scroll;
-		pointer-events: none;
+	.mini-player {
+		@apply fixed inset-x-0 bottom-0 z-50 flex items-center justify-between p-1 border-t md:px-10 border-opacity-30 bg-spotify-900 bg-opacity-80 backdrop-blur;
+	}
 
+	.big-btn {
+		@apply text-6xl !important;
+	}
+
+	.banner {
+		width: 100%;
+		height: 15vw;
+		object-fit: cover;
+	}
+
+	.no-scrollbar {
 		-ms-overflow-style: none; /* IE and Edge */
 		scrollbar-width: none; /* Firefox */
 	}
 
-	.hide-scrollbar::-webkit-scrollbar {
-		display: none; /* Chrome, Safari and Opera */
+	.no-scrollbar::-webkit-scrollbar {
+		display: none; /*  Chrome, Safari and Opera */
 	}
 }

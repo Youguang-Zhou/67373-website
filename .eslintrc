@@ -15,11 +15,12 @@
 		"ecmaVersion": 13,
 		"sourceType": "module"
 	},
-	"plugins": ["react", "@typescript-eslint"],
+	"plugins": ["react", "@typescript-eslint", "prettier"],
 	"rules": {
 		"semi": ["error", "never"],
 		"quotes": ["error", "single"],
 		"linebreak-style": ["error", "unix"],
-		"indent": ["error", "tab", { "SwitchCase": 1 }]
+		"indent": ["error", "tab", { "SwitchCase": 1 }],
+		"prettier/prettier": ["error", { "endOfLine": "auto" }]
 	}
 }

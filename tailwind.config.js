@@ -1,6 +1,5 @@
 module.exports = {
-	purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
-	darkMode: false,
+	content: ['./src/**/*.{js,jsx,ts,tsx}'],
 	theme: {
 		extend: {
 			colors: {
@@ -13,20 +12,9 @@ module.exports = {
 					900: '#121212',
 				},
 			},
-			fontFamily: { MFYueYuan: ['MFYueYuan', 'sans-serif'] },
-			fontSize: {
-				'vw-5': '5vw',
-			},
-			height: {
-				'vw-15': '15vw',
-			},
-			transitionProperty: {
-				width: 'width',
-			},
+			height: { inherit: 'inherit' },
+			transitionProperty: { width: 'width' },
 		},
 	},
-	variants: {
-		extend: {},
-	},
-	plugins: [require('@tailwindcss/line-clamp'), require('@tailwindcss/aspect-ratio')],
+	plugins: [require('@tailwindcss/line-clamp')],
 }
