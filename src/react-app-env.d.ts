@@ -23,6 +23,10 @@ declare interface GetVideoInfoResponseProps {
 	playInfo: Array<{ playURL: string }>
 }
 
+declare interface GetLyricsResponseProps {
+	lyrics: string[]
+}
+
 declare interface GetRecommVideosResponseProps {
 	requestId: string
 	videoList: VodProps[]

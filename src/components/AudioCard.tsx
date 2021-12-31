@@ -1,26 +1,27 @@
-import React, { FC, useRef, useState } from 'react'
-import { daysToToday, formatDuration } from '../utils/functions'
-import { VodProps } from '../utils/interfaces'
+import React, { useRef } from 'react'
+import { formatDuration } from '../utils/functions'
 
 interface AudioCardProps {
 	audio: VodProps
 	type?: 'primary' | 'secondary'
 	highlight?: boolean
+	isNewSong?: boolean
+	onSingleClick?: () => void
 	onDoubleClick?: () => void
 }
 
-const AudioCard: FC<AudioCardProps> = ({
-	audio: { videoId, title, duration, coverURL, creationTime },
+const AudioCard = ({
+	audio: { title, duration, coverURL },
 	type = 'primary',
 	highlight = false,
+	isNewSong = false,
+	onSingleClick,
 	onDoubleClick,
 }: AudioCardProps) => {
-	// 是否为最近3天内新出的歌曲
-	const isNewSong = useState(daysToToday(creationTime) <= 3)[0]
 	// 判断双击还是单击的计时器
-	const timerRef = useRef<number | undefined>(undefined)
+	const timerRef = useRef<number | undefined>()
 
-	// 单击在当前标签页打开，双击在新标签页打开
+	// 双击在当前标签页打开，单击在新标签页打开
 	const handleClick = () => {
 		if (timerRef.current !== undefined) {
 			// 双击
@@ -30,7 +31,7 @@ const AudioCard: FC<AudioCardProps> = ({
 		} else {
 			// 单击
 			timerRef.current = window.setTimeout(() => {
-				open(`/music/${videoId}`)
+				onSingleClick && onSingleClick()
 				clearTimeout(timerRef.current)
 				timerRef.current = undefined
 			}, 250)
@@ -50,7 +51,7 @@ const AudioCard: FC<AudioCardProps> = ({
 			>
 				<img className="rounded" src={coverURL} alt={title} />
 				<div className="flex space-x-1">
-					<h3 className={`text-xl ${highlight ? 'text-yellow-500' : ''}`}>{title}</h3>
+					<h3 className={`text-xl ${highlight ? 'text-orange-400' : ''}`}>{title}</h3>
 					{isNewSong && <span className="new-song-label">New</span>}
 				</div>
 				<small className="text-lg opacity-80">{formatDuration(duration)}</small>
@@ -61,11 +62,15 @@ const AudioCard: FC<AudioCardProps> = ({
 					<img className="rounded" src={coverURL} alt={title} />
 				</div>
 				<div
-					className={`flex items-center flex-1 p-1 border-b ${type === 'primary' ? 'border-opacity-30' : ''}`}
+					className={`flex items-center flex-1 p-1 border-b ${
+						type === 'primary' ? 'border-opacity-30' : ''
+					}`}
 				>
 					<div className="flex-1">
 						<div className="flex space-x-1">
-							<h3 className={`text-2xl ${highlight ? 'text-yellow-500' : ''}`}>{title}</h3>
+							<h3 className={`text-2xl ${highlight ? 'text-orange-400' : ''}`}>
+								{title}
+							</h3>
 							{isNewSong && <span className="new-song-label">新</span>}
 						</div>
 						<h5 className="opacity-80">陈一发儿</h5>

@@ -3,8 +3,6 @@ import { MediaType } from './enums'
 
 const API = axios.create({ baseURL: process.env.REACT_APP_API_BASE_URL })
 
-const { Video } = MediaType
-
 // 获取播放列表（通过MediaType获取视频或音频）
 const getVodList = (
 	mediaType: MediaType,
@@ -13,15 +11,32 @@ const getVodList = (
 	cateId?: string // 只有请求视频的时候有用
 ): Promise<GetVodListResponseProps> =>
 	API.get(mediaType, { params: { pageNo, pageSize, cateId } }).then(({ data }) => {
-		// 判断是否还有更多视频
+		// 判断是否还有更多音视频
 		const currNum = (pageNo - 1) * pageSize + data.videoList.video.length
 		const nextPage = currNum !== data.total ? pageNo + 1 : undefined
+		// 如果当前请求是音频，则排序
+		if (mediaType == MediaType.Audio) {
+			const audios = data.videoList.video
+			const originals = audios.filter(
+				({ title }: VodProps) =>
+					title === '童话镇' || title === '阿婆说' || title === '弦上有春秋'
+			)
+			const covers = audios.filter(
+				({ title }: VodProps) =>
+					title !== '童话镇' && title !== '阿婆说' && title !== '弦上有春秋'
+			)
+			data.videoList.video = [...originals, ...covers]
+		}
 		return { ...data, nextPage }
 	})
 
 // 获取视频的播放信息
 const getVideoInfo = (id: string | undefined): Promise<GetVideoInfoResponseProps> =>
-	API.get(`${Video}/${id}`).then(({ data }) => data)
+	API.get(`${MediaType.Video}/${id}`).then(({ data }) => data)
+
+// 获取歌词
+const getLyrics = (id: string | undefined): Promise<GetLyricsResponseProps> =>
+	API.get(`lyrics/${id}`).then(({ data }) => data)
 
 // 获取推荐视频
 const getRecommVideos = (
@@ -30,7 +45,7 @@ const getRecommVideos = (
 	cateName: string,
 	num = 20
 ): Promise<GetRecommVideosResponseProps> =>
-	API.get(`${Video}/recomm`, {
+	API.get(`${MediaType.Video}/recomm`, {
 		params: {
 			videoId: videoId,
 			title: encodeURIComponent(title),
@@ -57,4 +72,4 @@ const getSearchResults = (
 		return data
 	})
 
-export { getVodList, getVideoInfo, getRecommVideos, getSearchResults }
+export { getVodList, getVideoInfo, getLyrics, getRecommVideos, getSearchResults }

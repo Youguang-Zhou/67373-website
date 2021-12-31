@@ -1,52 +1,62 @@
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload'
-import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline'
-import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline'
-import RepeatOneRoundedIcon from '@mui/icons-material/RepeatOneRounded'
-import RepeatRoundedIcon from '@mui/icons-material/RepeatRounded'
-import ShuffleRoundedIcon from '@mui/icons-material/ShuffleRounded'
-import SkipNextIcon from '@mui/icons-material/SkipNext'
-import SkipPreviousIcon from '@mui/icons-material/SkipPrevious'
-import { Button, IconButton, Slider, useMediaQuery } from '@mui/material'
-import React, { FC, useContext, useState } from 'react'
+import {
+	CloudDownload,
+	PauseCircleOutline,
+	PlayCircleOutline,
+	RepeatOneRounded,
+	RepeatRounded,
+	ShuffleRounded,
+	SkipNext,
+	SkipPrevious,
+} from '@mui/icons-material'
+import { IconButton, IconButtonProps, IconProps, Slider } from '@mui/material'
+import React, { HTMLProps, useContext, useState } from 'react'
 import { LyricContext } from '../contexts/LyricContext'
 import { MusicContext } from '../contexts/MusicContext'
 import { PlayOrder } from '../utils/enums'
-import { durationToSeconds, formatDuration } from '../utils/functions'
-import { VodProps } from '../utils/interfaces'
+import { duration2Seconds, formatDuration } from '../utils/functions'
 
 interface MiniPlayerProps {
-	currSong: VodProps
+	song: VodProps
+	highlight: boolean
 }
 
-const MiniPlayer: FC<MiniPlayerProps> = ({ currSong }: MiniPlayerProps) => {
-	const { title, duration, description, coverURL } = currSong
-	const { currTime, currOrder, setCurrTime, setCurrOrder, getIsPlaying, seek, playAudio, pauseAudio, switchSong } =
-		useContext(MusicContext)
-	const { lyrics, shouldShowLyricView, setCurrLine, setShouldShowLyricView } = useContext(LyricContext)
-	const btnSize = useMediaQuery('(min-width: 640px)') ? 'large' : 'small'
-	const [draggingValue, setDraggingValue] = useState<number>(0)
+interface ButtonProps extends IconButtonProps {
+	icon: IconProps
+}
 
-	// 播放或暂停
-	const handlePlayOrPauseBtnClicked = () => {
-		getIsPlaying() ? pauseAudio() : playAudio(currSong)
-	}
+const Button = ({ icon, ...props }: ButtonProps) => (
+	<IconButton size="large" color="inherit" {...props}>
+		{icon}
+	</IconButton>
+)
+
+const { Repeat, RepeatOne, Shuffle } = PlayOrder
+
+const MiniPlayer = ({ song, highlight }: MiniPlayerProps) => {
+	const [draggingValue, setDraggingValue] = useState(0)
+	const { title, duration, description, coverURL } = song
+	const { player, isPlaying, currTime, currOrder, setCurrOrder, switchSong, initializePlayer } =
+		useContext(MusicContext)
+	const { lyrics, setCurrLine } = useContext(LyricContext)
 
 	// 进度条左侧显示的时间，如果用户在拖拽进度条则显示拖拽进度，否则显示当前歌曲进度
-	const displaySliderValue = () => (draggingValue !== 0 ? draggingValue : Math.min(currTime, duration))
+	const displaySliderValue = () =>
+		draggingValue !== 0 ? draggingValue : Math.min(currTime, duration)
 
 	// 拖拽进度条时的调用
-	const handleSliderValueChanged = (_: unknown, value: number | number[]) => setDraggingValue(value as number)
+	const handleSliderValueChanged = (_: unknown, value: number | number[]) =>
+		setDraggingValue(value as number)
 
 	// 拖拽进度条后松开鼠标的调用
 	const handleSliderValueChangeCommitted = (_: unknown, value: number | number[]) => {
-		seek(value)
-		setCurrTime(value)
+		if (!player || typeof value !== 'number') return
+		player.currentTime = value
 		setDraggingValue(0)
 		// 处理歌词
 		let max = 0
 		let maxIndex = 0
 		lyrics?.map((lyric: string, index: number) => {
-			const seconds = durationToSeconds(`00:${lyric.slice(1, 6)}`)
+			const seconds = duration2Seconds(`00:${lyric.slice(1, 6)}`)
 			if (seconds >= max && seconds <= value) {
 				max = seconds
 				maxIndex = index
@@ -55,112 +65,106 @@ const MiniPlayer: FC<MiniPlayerProps> = ({ currSong }: MiniPlayerProps) => {
 		setCurrLine(Math.max(0, maxIndex))
 	}
 
-	// 切换播放类型
-	const handlePlayOrderBtnClicked = () => {
-		switch (currOrder) {
-			case PlayOrder.Repeat:
-				setCurrOrder(PlayOrder.RepeatOne)
-				break
-			case PlayOrder.RepeatOne:
-				setCurrOrder(PlayOrder.Shuffle)
-				break
-			case PlayOrder.Shuffle:
-				setCurrOrder(PlayOrder.Repeat)
-				break
-			default:
-				break
+	// 播放或暂停按钮点击时的调用
+	const handlePlayOrPauseBtnClicked = () => {
+		if (player) {
+			player.paused ? player.play() : player.pause()
+		} else {
+			// 新页面下点击播放需要初始化播放器
+			initializePlayer(song)
 		}
 	}
 
-	// 歌词按钮
-	const LyricBtn: FC = () => (
-		<Button
-			size={btnSize}
-			variant="outlined"
-			className="opacity-80 hover:opacity-100"
-			style={{
-				minWidth: 'auto',
-				margin: '0.75rem',
-				padding: btnSize === 'small' ? '0.125rem 0.25rem' : '0.25rem 1rem',
-			}}
-			color={shouldShowLyricView ? 'primary' : 'inherit'}
-			onClick={() => setShouldShowLyricView(!shouldShowLyricView)}
-		>
-			词
-		</Button>
+	// 显示歌词页面
+	const showLyricView = () => document.getElementById('lyric-view')?.scrollIntoView()
+
+	const LyricBtn = (props: HTMLProps<HTMLDivElement>) => (
+		<div {...props}>
+			<Button
+				icon={<span>词</span>}
+				onClick={showLyricView}
+				color={highlight ? 'primary' : 'inherit'}
+			/>
+		</div>
 	)
 
-	// 播放顺序按钮
-	const PlayOrderBtn: FC = () => (
-		<IconButton color="inherit" onClick={handlePlayOrderBtnClicked}>
-			{currOrder === PlayOrder.Repeat && <RepeatRoundedIcon fontSize={btnSize} />}
-			{currOrder === PlayOrder.RepeatOne && <RepeatOneRoundedIcon fontSize={btnSize} />}
-			{currOrder === PlayOrder.Shuffle && <ShuffleRoundedIcon fontSize={btnSize} />}
-		</IconButton>
+	const PlayOrderBtn = (props: HTMLProps<HTMLDivElement>) => (
+		<div {...props}>
+			<Button
+				icon={
+					<>
+						{currOrder === Repeat && <RepeatRounded />}
+						{currOrder === RepeatOne && <RepeatOneRounded />}
+						{currOrder === Shuffle && <ShuffleRounded />}
+					</>
+				}
+				onClick={() => {
+					currOrder === Repeat && setCurrOrder(RepeatOne)
+					currOrder === RepeatOne && setCurrOrder(Shuffle)
+					currOrder === Shuffle && setCurrOrder(Repeat)
+				}}
+			/>
+		</div>
+	)
+
+	const DurationTag = ({ type }: { type: 'start' | 'end' }) => (
+		<span className="opacity-80 tabular-nums">
+			{formatDuration(type === 'start' ? displaySliderValue() : duration)}
+		</span>
 	)
 
 	return (
-		<section className="fixed inset-x-0 bottom-0 flex px-4 py-1 space-x-4 border-t md:py-2 md:px-6 lg:px-10 border-opacity-30 bg-spotify-900 bg-opacity-80 backdrop-filter backdrop-blur">
-			<div className="items-center hidden w-1/4 space-x-8 xl:w-1/5 2xl:w-1/6 lg:flex">
+		<section className="mini-player">
+			{/* 左侧封面及歌曲名 */}
+			<div className="hidden w-1/4 space-x-4 md:flex">
 				<img
-					className="w-24 h-24 rounded-md cursor-pointer"
-					src={coverURL}
 					alt={title}
-					onClick={() => setShouldShowLyricView(true)}
+					src={coverURL}
+					onClick={showLyricView}
+					className="w-24 h-24 rounded-md cursor-pointer"
 				/>
-				<div className="flex-1">
-					<h5 className="text-3xl">{title}</h5>
+				<div className="flex flex-col justify-center">
+					<h3 className="text-2xl line-clamp-2">{title}</h3>
 					<small className="text-lg">陈一发儿</small>
 				</div>
 			</div>
-			<div className="flex-1">
-				<div className="flex items-center justify-evenly lg:justify-center">
-					<div className="block lg:hidden">
-						<LyricBtn />
-					</div>
-					<IconButton color="inherit" onClick={() => switchSong(-1, true)}>
-						<SkipPreviousIcon fontSize={btnSize} />
-					</IconButton>
-					<IconButton
-						color="inherit"
+			{/* 中间控件 */}
+			<div className="flex-1 md:mx-4">
+				<div className="flex-center">
+					<LyricBtn className="block md:hidden" />
+					<Button icon={<SkipPrevious />} onClick={() => switchSong(-1, true)} />
+					<Button
+						icon={
+							isPlaying ? (
+								<PauseCircleOutline className="big-btn" />
+							) : (
+								<PlayCircleOutline className="big-btn" />
+							)
+						}
 						onClick={handlePlayOrPauseBtnClicked}
-						style={{
-							fontSize: btnSize === 'large' ? '4rem' : '3rem',
-							margin: btnSize === 'large' ? '0rem 1rem' : '0rem',
-						}}
-					>
-						{getIsPlaying() ? (
-							<PauseCircleOutlineIcon fontSize="inherit" />
-						) : (
-							<PlayCircleOutlineIcon fontSize="inherit" />
-						)}
-					</IconButton>
-					<IconButton color="inherit" onClick={() => switchSong(1, true)}>
-						<SkipNextIcon fontSize={btnSize} />
-					</IconButton>
-					<div className="block lg:hidden">
-						<PlayOrderBtn />
-					</div>
+					/>
+					<Button icon={<SkipNext />} onClick={() => switchSong(1, true)} />
+					<PlayOrderBtn className="block md:hidden" />
 				</div>
-				<div className="flex items-center justify-center space-x-6 lg:space-x-8">
-					<span className="opacity-80 tabular-nums">{formatDuration(displaySliderValue())}</span>
+
+				<div className="flex-center">
+					<DurationTag type="start" />
 					<Slider
 						size="small"
 						max={duration}
-						className="max-w-3xl"
+						className="mx-4"
 						value={displaySliderValue()}
 						onChange={handleSliderValueChanged}
 						onChangeCommitted={handleSliderValueChangeCommitted}
 					/>
-					<span className="opacity-80 tabular-nums">{formatDuration(duration)}</span>
+					<DurationTag type="end" />
 				</div>
 			</div>
-			<div className="items-center justify-center hidden w-1/4 space-x-4 xl:w-1/5 2xl:w-1/6 lg:flex">
+			{/* 右侧按钮组 */}
+			<div className="hidden w-1/4 flex-center md:flex">
 				<LyricBtn />
 				<PlayOrderBtn />
-				<IconButton color="inherit" onClick={() => open(description)}>
-					<CloudDownloadIcon fontSize={btnSize} />
-				</IconButton>
+				<Button icon={<CloudDownload />} onClick={() => open(description)} />
 			</div>
 		</section>
 	)

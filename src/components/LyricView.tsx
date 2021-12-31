@@ -1,69 +1,61 @@
-import { useMediaQuery } from '@mui/material'
-import React, { FC, useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import { LyricContext } from '../contexts/LyricContext'
-import useGetLyricsRequest from '../hooks/useGetLyricsRequest'
-import { VodProps } from '../utils/interfaces'
+import { MusicContext } from '../contexts/MusicContext'
+import { LYRIC_HEIGHT, MINIPLAYER_HEIGHT, NOT_SCROLL_LINE } from '../utils/constants'
 
 interface LyricViewProps {
-	currSong: VodProps
+	song: VodProps
 }
 
-const LyricView: FC<LyricViewProps> = ({ currSong: { videoId, title, coverURL } }: LyricViewProps) => {
-	const NOT_SCROLL_LINE = 6 // 前几行先不滚动
-	const LYRIC_HEIGHT = useMediaQuery('(min-width: 640px)') ? 44 : 36 // 每行歌词高度
+const LyricView = ({ song: { title, coverURL } }: LyricViewProps) => {
 	const scrollRef = useRef<HTMLDivElement>(null)
-	const { lyrics, currLine, setLyrics } = useContext(LyricContext)
-	const { response: lyricsRes, isLoading, hasError } = useGetLyricsRequest(videoId)
+	const { currSong } = useContext(MusicContext)
+	const { lyrics, currLine } = useContext(LyricContext)
 
-	// 获取歌词
+	// 切歌时自动滚动到歌词处
 	useEffect(() => {
-		setLyrics(lyricsRes.lyrics)
-	}, [lyricsRes])
+		document.getElementById('lyric-view')?.scrollIntoView()
+	}, [currSong])
 
 	// 歌词自动滚动
 	useEffect(() => {
-		if (scrollRef.current) {
-			scrollRef.current.scroll({
-				top: currLine > NOT_SCROLL_LINE ? LYRIC_HEIGHT * (currLine - NOT_SCROLL_LINE) : 0,
-				left: 0,
-				behavior: 'smooth',
-			})
-		}
+		scrollRef.current?.scrollTo({
+			top: currLine > NOT_SCROLL_LINE ? LYRIC_HEIGHT * (currLine - NOT_SCROLL_LINE) : 0,
+			behavior: 'smooth',
+		})
 	}, [currLine])
 
 	return (
-		<section className="flex flex-col items-center justify-center pb-16 md:pb-48 md:flex-row md:pt-8">
-			<div className="w-1/3 pb-4 md:pb-0">
-				<img className="rounded-full" src={coverURL} alt={title} />
-			</div>
-			<div className="w-full text-center md:w-1/2">
-				<h1 className="mb-6 text-4xl font-medium tracking-wide text-white">{title}</h1>
-				<div className="hide-scrollbar" ref={scrollRef} style={{ height: 550 }}>
-					{!isLoading && (
-						<>
-							{!lyrics || hasError ? (
-								<span>暂无歌词X...X</span>
-							) : (
-								<>
-									{lyrics.map((lyric: string, index: number) => (
-										<div
-											key={index}
-											className={`text-lg md:text-xl py-2 ${
-												index === currLine - 1
-													? 'text-yellow-500 opacity-100'
-													: 'text-light opacity-80'
-											}`}
-										>
-											{lyric.slice(11)}
-										</div>
-									))}
-								</>
-							)}
-						</>
-					)}
+		<main
+			id="lyric-view"
+			className="flex items-center mb-8 md:space-x-8 justify-evenly"
+			style={{ height: `calc(100vh - ${MINIPLAYER_HEIGHT}px)` }}
+		>
+			<img className="hidden w-1/3 rounded-full md:block" src={coverURL} alt={title} />
+			<section className="flex flex-col items-center space-y-1 text-center h-inherit">
+				<img
+					alt={title}
+					src={coverURL}
+					className="block w-1/3 p-4 rounded-full md:hidden"
+				/>
+				<h1 className="text-xl font-medium tracking-wide md:text-4xl md:py-8">{title}</h1>
+				<div
+					ref={scrollRef}
+					className="overflow-y-scroll pointer-events-none h-2/3 no-scrollbar"
+				>
+					{lyrics?.map((lyric: string, index: number) => (
+						<div
+							key={index}
+							className={`${
+								index === currLine - 1 ? 'text-orange-400' : 'text-light opacity-80'
+							} text-sm md:text-xl py-1 md:py-2`}
+						>
+							{lyric.slice(11)}
+						</div>
+					))}
 				</div>
-			</div>
-		</section>
+			</section>
+		</main>
 	)
 }
 
