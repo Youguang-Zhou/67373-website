@@ -1,23 +1,25 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useQuery } from 'react-query'
 import { useLocation, useNavigate } from 'react-router-dom'
-import fafa_nezha from '../assets/images/fafa_nezha.jpeg'
+import fafa_nezha from '../assets/fafa_nezha.jpeg'
 import AudioCard from '../components/AudioCard'
 import Empty from '../components/Empty'
 import VideoCard from '../components/VideoCard'
-import useSearch from '../hooks/useSearch'
-import { VodProps } from '../utils/interfaces'
+import { getSearchResults } from '../utils/api'
 
-const SearchResultsPage: FC = () => {
+const SearchResultsPage = () => {
 	const navigate = useNavigate()
 	const { search } = useLocation()
-	const [audios, setAudios] = useState<VodProps[] | undefined>(undefined)
-	const [videos, setVideos] = useState<VodProps[] | undefined>(undefined)
-	const [query, setQuery] = useState<string | undefined>(undefined)
+	const [query, setQuery] = useState<string>()
+	const [audios, setAudios] = useState<VodProps[]>()
+	const [videos, setVideos] = useState<VodProps[]>()
 	const {
-		response: { requestId, mediaList },
+		isError,
 		isLoading,
-		hasError,
-	} = useSearch(query, 1, 100)
+		data: { mediaList } = {},
+	} = useQuery(['search', query], () => getSearchResults(query, 1, 100), {
+		enabled: !!query,
+	})
 
 	useEffect(() => {
 		if (search.startsWith('?q=')) {
@@ -31,15 +33,17 @@ const SearchResultsPage: FC = () => {
 	}, [search])
 
 	useEffect(() => {
-		if (mediaList) {
-			setAudios(mediaList.filter(({ mediaType }) => mediaType === 'audio').map(({ audio }) => audio))
-			setVideos(mediaList.filter(({ mediaType }) => mediaType === 'video').map(({ video }) => video))
-		}
-	}, [requestId])
+		setAudios(
+			mediaList?.filter(({ mediaType }) => mediaType === 'audio').map(({ audio }) => audio)
+		)
+		setVideos(
+			mediaList?.filter(({ mediaType }) => mediaType === 'video').map(({ video }) => video)
+		)
+	}, [mediaList])
 
 	return (
-		<main className="p-container">
-			{hasError ? (
+		<main className="main-container">
+			{isError ? (
 				<Empty error />
 			) : (
 				<>
@@ -48,7 +52,13 @@ const SearchResultsPage: FC = () => {
 							<h1 className="mb-4 text-2xl md:text-4xl">音乐单曲</h1>
 							<div className="audio-container">
 								{audios.map((audio: VodProps) => (
-									<AudioCard key={audio.videoId} audio={audio} type="secondary" />
+									<AudioCard
+										key={audio.videoId}
+										audio={audio}
+										type="secondary"
+										onSingleClick={() => open(`/music/${audio.videoId}`)}
+										onDoubleClick={() => open(`/music/${audio.videoId}`)}
+									/>
 								))}
 							</div>
 						</section>
@@ -58,14 +68,16 @@ const SearchResultsPage: FC = () => {
 							<h1 className="mb-4 text-2xl md:text-4xl">频道视频</h1>
 							<div className="video-container">
 								{videos.map((video) => (
-									<VideoCard key={video.videoId} video={video} openInNewTab />
+									<VideoCard key={video.videoId} video={video} />
 								))}
 							</div>
 						</section>
 					)}
-					{videos && videos.length === 0 && audios && audios.length === 0 && !isLoading && (
-						<Empty image={fafa_nezha} description="找不到搜索结果>.<!" />
-					)}
+					{videos &&
+						videos.length === 0 &&
+						audios &&
+						audios.length === 0 &&
+						!isLoading && <Empty image={fafa_nezha} description="找不到搜索结果>.<!" />}
 				</>
 			)}
 		</main>
