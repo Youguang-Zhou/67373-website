@@ -1,7 +1,7 @@
 import { useMediaQuery } from '@mui/material'
 import { useDocumentTitle, useMeasure } from '@react-hookz/web'
 import moment from 'moment'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { VideoJsPlayer } from 'video.js'
@@ -17,6 +17,7 @@ const VideoPlayPage = () => {
 	const { id } = useParams()
 	const navigate = useNavigate()
 	const playerRef = useRef<VideoJsPlayer>()
+	const [isTheaterMode, setIsTheaterMode] = useState(false)
 	const largeScreen = useMediaQuery(BREAKPOINT_LG)
 	const [measure, widthRef] = useMeasure<HTMLDivElement>()
 	// 获取主视频的API
@@ -69,7 +70,9 @@ const VideoPlayPage = () => {
 			{videoId && (
 				<main className="px-4 lg:px-8 2xl:px-16 2xl:py-2">
 					{/* 标题和日期 */}
-					<section style={{ width: measure?.width }}>
+					<section
+						style={{ width: measure?.width, display: isTheaterMode ? 'none' : 'block' }}
+					>
 						<h1 className={handleDisplayTitleSize(title.length)}>{title}</h1>
 						<div className="flex my-2 space-x-4 text-sm text-gray-500 sm:text-base">
 							<span>{moment(creationTime).format('YYYY-MM-DD HH:mm:ss')}</span>
@@ -78,12 +81,15 @@ const VideoPlayPage = () => {
 					</section>
 					<section className="flex flex-col space-x-0 space-y-4 lg:space-x-8 lg:space-y-0 lg:flex-row">
 						{/* 左边栏 */}
-						<div className="w-full lg:w-2/3" ref={widthRef}>
+						<div className={`w-full ${isTheaterMode ? '' : 'lg:w-2/3'}`} ref={widthRef}>
 							{/* 主视频 */}
-							<VideoPlayer onLoad={(player) => (playerRef.current = player)} />
+							<VideoPlayer
+								onLoad={(player) => (playerRef.current = player)}
+								onTheaterModeToggle={() => setIsTheaterMode((prev) => !prev)}
+							/>
 						</div>
 						{/* 右边栏 */}
-						<div className="w-full lg:w-1/3">
+						<div className={`w-full lg:w-1/3 ${isTheaterMode ? 'hidden' : 'block'}`}>
 							{description && (
 								<VideoDescription description={description} playerRef={playerRef} />
 							)}

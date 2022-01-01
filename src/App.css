@@ -8,8 +8,14 @@
 		background: orange;
 	}
 
+	/* 迷你播放器的图标 */
 	.mini-player .MuiSvgIcon-root {
 		font-size: 2rem;
+	}
+
+	/* 剧场模式的图标 */
+	.vjs-icon-square {
+		@apply text-3xl w-16 !important;
 	}
 }
 

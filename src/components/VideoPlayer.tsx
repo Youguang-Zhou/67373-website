@@ -22,9 +22,10 @@ const initialOptions: VideoJsPlayerOptions = {
 
 interface VideoPlayerProps {
 	onLoad: (player: VideoJsPlayer) => void
+	onTheaterModeToggle: () => void
 }
 
-const VideoPlayer = ({ onLoad }: VideoPlayerProps) => {
+const VideoPlayer = ({ onLoad, onTheaterModeToggle }: VideoPlayerProps) => {
 	const playerRef = useRef<VideoJsPlayer>()
 	const noticeRef = useRef<HTMLDivElement>(null)
 
@@ -34,6 +35,10 @@ const VideoPlayer = ({ onLoad }: VideoPlayerProps) => {
 			userActions: { hotkeys: setupHotkeys },
 		})
 		playerRef.current.volume(0.7)
+		const theaterToggle = playerRef.current.controlBar.addChild('button', {}, 16)
+		theaterToggle.addClass('vjs-icon-square')
+		theaterToggle.setAttribute('title', '剧场模式')
+		theaterToggle.on('click', onTheaterModeToggle)
 		onLoad(playerRef.current)
 		return () => {
 			if (playerRef.current) {
