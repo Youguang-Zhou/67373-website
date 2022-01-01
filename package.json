@@ -1,6 +1,6 @@
 {
 	"name": "67373-website",
-	"version": "3.1.0",
+	"version": "3.2.0",
 	"dependencies": {
 		"@emotion/react": "^11.7.1",
 		"@emotion/styled": "^11.6.0",
