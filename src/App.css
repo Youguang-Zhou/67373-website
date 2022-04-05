@@ -41,7 +41,7 @@
 	}
 
 	.mini-player {
-		@apply fixed inset-x-0 bottom-0 z-50 flex items-center justify-between p-1 border-t md:px-10 border-opacity-30 bg-spotify-900 bg-opacity-80 backdrop-blur;
+		@apply fixed inset-x-0 bottom-0 z-50 flex items-center justify-between p-1 border-t md:px-10 border-spotify-300 bg-spotify-900 bg-opacity-80 backdrop-blur;
 	}
 
 	.big-btn {
