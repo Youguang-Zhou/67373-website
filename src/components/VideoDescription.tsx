@@ -4,13 +4,12 @@ import {
 	KeyboardArrowRightRounded,
 	MailOutline,
 } from '@mui/icons-material'
-import { SvgIconProps } from '@mui/material'
-import React, { MutableRefObject, useState } from 'react'
+import React, { MutableRefObject, ReactNode, useState } from 'react'
 import { VideoJsPlayer } from 'video.js'
 import { duration2Seconds } from '../utils/functions'
 
 interface SubTitleProps {
-	icon: SvgIconProps
+	icon: ReactNode
 	subtitle: string
 }
 

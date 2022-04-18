@@ -8,8 +8,8 @@ import {
 	SkipNext,
 	SkipPrevious,
 } from '@mui/icons-material'
-import { IconButton, IconButtonProps, IconProps, Slider } from '@mui/material'
-import React, { HTMLProps, useContext, useState } from 'react'
+import { IconButton, IconButtonProps, Slider } from '@mui/material'
+import React, { HTMLProps, ReactNode, useContext, useState } from 'react'
 import { LyricContext } from '../contexts/LyricContext'
 import { MusicContext } from '../contexts/MusicContext'
 import { PlayOrder } from '../utils/enums'
@@ -21,7 +21,7 @@ interface MiniPlayerProps {
 }
 
 interface ButtonProps extends IconButtonProps {
-	icon: IconProps
+	icon: ReactNode
 }
 
 const Button = ({ icon, ...props }: ButtonProps) => (

@@ -28,24 +28,22 @@ interface VideoPlayerProps {
 const VideoPlayer = ({ onLoad, onTheaterModeToggle }: VideoPlayerProps) => {
 	const playerRef = useRef<VideoJsPlayer>()
 	const noticeRef = useRef<HTMLDivElement>(null)
+	const videoRef = useRef<HTMLVideoElement>(null)
 
 	useEffect(() => {
-		playerRef.current = videojs('video-player-67373', {
-			...initialOptions,
-			userActions: { hotkeys: setupHotkeys },
-		})
-		playerRef.current.volume(0.7)
-		const theaterToggle = playerRef.current.controlBar.addChild('button', {}, 16)
-		theaterToggle.addClass('vjs-icon-square')
-		theaterToggle.setAttribute('title', '剧场模式')
-		theaterToggle.on('click', onTheaterModeToggle)
-		onLoad(playerRef.current)
-		return () => {
-			if (playerRef.current) {
-				playerRef.current.dispose()
-			}
+		if (!playerRef.current && videoRef.current) {
+			playerRef.current = videojs(videoRef.current, {
+				...initialOptions,
+				userActions: { hotkeys: setupHotkeys },
+			})
+			playerRef.current.volume(0.7)
+			const theaterToggle = playerRef.current.controlBar.addChild('button', {}, 16)
+			theaterToggle.addClass('vjs-icon-square')
+			theaterToggle.setAttribute('title', '剧场模式')
+			theaterToggle.on('click', onTheaterModeToggle)
+			onLoad(playerRef.current)
 		}
-	}, [])
+	}, [playerRef, videoRef])
 
 	const notice = (text: string) => {
 		const { current } = noticeRef
@@ -99,7 +97,11 @@ const VideoPlayer = ({ onLoad, onTheaterModeToggle }: VideoPlayerProps) => {
 	return (
 		<div className="relative">
 			{/* 视频 */}
-			<video id="video-player-67373" className="video-js vjs-16-9 custom-css" />
+			<video
+				ref={videoRef}
+				id="video-player-67373"
+				className="video-js vjs-16-9 custom-css"
+			/>
 			{/* 键盘快捷键提示 */}
 			<span
 				ref={noticeRef}

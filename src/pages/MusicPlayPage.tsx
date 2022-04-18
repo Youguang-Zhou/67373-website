@@ -14,7 +14,7 @@ const MusicPlayPage = () => {
 	const { playlist, currSong, setCurrSong, initializePlayer, cleanUpPlayer } =
 		useContext(MusicContext)
 	const showLyricView = useCallback(
-		(entries) => setShouldShowLyrics(entries[0].isIntersecting),
+		(entries: IntersectionObserverEntry[]) => setShouldShowLyrics(entries[0].isIntersecting),
 		[]
 	)
 
