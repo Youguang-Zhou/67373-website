@@ -6,7 +6,7 @@
 
 网站的前端代码由 React, Typescript 和 Tailwind CSS 编写。
 
-网站的 API 文档在[这里](https://github.com/Youguang-Zhou/67373-API)。
+网站的 API 文档在[这里](README_FOR_API.md)。
 
 ## 2. 版本
 
@@ -36,6 +36,4 @@ npm install && npm start
 
 ## 4. License
 
-禁止商业使用。
-
-No Commercial Use.
+[Creative Commons Attribution-NonCommercial 4.0 International](LICENSE)
