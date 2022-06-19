@@ -20,7 +20,10 @@ const HomePage = () => {
 	return (
 		<main className="main-container bg-whitesmoke">
 			<h1 className="text-2xl md:text-4xl">今日推荐</h1>
-			<hr className="my-2 md:my-4" />
+			<hr className="mt-2 md:mt-4" />
+			<div className="mb-2 md:mb-4 text-gray-700">
+				公告：最新回放请关注微博超话：陈一发儿超话。本站催更联系微博@青山多妩媚67373，谢谢大家支持：）
+			</div>
 			<InfiniteScroll
 				hasMore={hasNextPage}
 				hasError={isError}
