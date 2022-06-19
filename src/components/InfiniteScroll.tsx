@@ -1,5 +1,5 @@
 import { useEventListener } from '@react-hookz/web'
-import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import love_you from '../assets/love_you.png'
 import { BACK_TO_TOP_HEIGHT } from '../utils/constants'
 import BackToTop from './BackToTop'

@@ -1,4 +1,4 @@
-import React, { Children, HTMLProps } from 'react'
+import { Children, HTMLProps } from 'react'
 import { Autoplay, Pagination } from 'swiper'
 import 'swiper/css/bundle'
 import { Swiper, SwiperSlide } from 'swiper/react'

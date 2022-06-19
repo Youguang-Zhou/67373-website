@@ -1,4 +1,4 @@
-import React, { createContext, ProviderProps, useEffect, useState } from 'react'
+import { createContext, ProviderProps, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { getVodList } from '../utils/api'
 import { MediaType } from '../utils/enums'

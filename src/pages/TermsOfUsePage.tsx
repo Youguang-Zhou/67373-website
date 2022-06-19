@@ -1,5 +1,3 @@
-import React from 'react'
-
 const TermsOfUsePage = () => (
 	<main className="flex-col px-4 flex-center md:px-0">
 		<h1 className="py-4 text-2xl md:text-4xl">67373UPUP网站使用条款</h1>

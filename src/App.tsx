@@ -1,7 +1,6 @@
 import { ThemeProvider } from '@mui/material/styles'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
-import React from 'react'
 import { QueryClientProvider } from 'react-query'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import { LyricContext } from '../contexts/LyricContext'
 import { MusicContext } from '../contexts/MusicContext'
 import { LYRIC_HEIGHT, MINIPLAYER_HEIGHT, NOT_SCROLL_LINE } from '../utils/constants'

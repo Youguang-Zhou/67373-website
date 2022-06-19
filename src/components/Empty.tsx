@@ -1,4 +1,3 @@
-import React from 'react'
 import fafa_robot from '../assets/fafa_robot.png'
 
 interface EmptyProps {

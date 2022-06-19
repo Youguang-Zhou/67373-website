@@ -1,4 +1,4 @@
-import React, { HTMLProps, KeyboardEvent, useEffect, useRef, useState } from 'react'
+import { HTMLProps, KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import { getSearchResults } from '../utils/api'
 import { LongestCommonSubsequence } from '../utils/functions'

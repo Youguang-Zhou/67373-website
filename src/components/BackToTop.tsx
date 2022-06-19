@@ -1,4 +1,3 @@
-import React from 'react'
 import xiaode from '../assets/xiaode.png'
 
 const BackToTop = () => (

@@ -1,4 +1,3 @@
-import React from 'react'
 import { useLocation } from 'react-router-dom'
 // import beian_icon from '../assets/beian_icon.png'
 

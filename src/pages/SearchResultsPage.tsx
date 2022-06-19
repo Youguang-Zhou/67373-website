@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { useLocation, useNavigate } from 'react-router-dom'
 import fafa_nezha from '../assets/fafa_nezha.jpeg'

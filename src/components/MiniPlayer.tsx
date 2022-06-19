@@ -9,7 +9,7 @@ import {
 	SkipPrevious,
 } from '@mui/icons-material'
 import { IconButton, IconButtonProps, Slider } from '@mui/material'
-import React, { HTMLProps, ReactNode, useContext, useState } from 'react'
+import { HTMLProps, ReactNode, useContext, useState } from 'react'
 import { LyricContext } from '../contexts/LyricContext'
 import { MusicContext } from '../contexts/MusicContext'
 import { PlayOrder } from '../utils/enums'

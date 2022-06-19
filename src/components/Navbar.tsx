@@ -1,5 +1,5 @@
 import FiberNewOutlinedIcon from '@mui/icons-material/FiberNewOutlined'
-import React, { HTMLProps, useContext } from 'react'
+import { HTMLProps, useContext } from 'react'
 import { Link, LinkProps, useMatch, useResolvedPath } from 'react-router-dom'
 import { NotificationContext } from '../contexts/NotificationContext'
 

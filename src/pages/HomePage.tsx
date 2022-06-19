@@ -1,4 +1,3 @@
-import React from 'react'
 import { useInfiniteQuery } from 'react-query'
 import InfiniteScroll from '../components/InfiniteScroll'
 import VideoCard from '../components/VideoCard'

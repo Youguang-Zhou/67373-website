@@ -1,5 +1,5 @@
 import { useDocumentTitle } from '@react-hookz/web'
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import LyricView from '../components/LyricView'
 import MiniPlayer from '../components/MiniPlayer'

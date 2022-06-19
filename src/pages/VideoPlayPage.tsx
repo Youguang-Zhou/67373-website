@@ -1,7 +1,7 @@
 import { useMediaQuery } from '@mui/material'
 import { useDocumentTitle, useMeasure } from '@react-hookz/web'
 import moment from 'moment'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { VideoJsPlayer } from 'video.js'

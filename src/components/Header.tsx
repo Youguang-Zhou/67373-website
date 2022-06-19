@@ -1,5 +1,5 @@
 import { CloseRounded, HelpOutline, MenuRounded } from '@mui/icons-material'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Logo from './Logo'
 import Navbar from './Navbar'
 import SearchBar from './SearchBar'

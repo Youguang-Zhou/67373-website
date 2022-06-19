@@ -4,7 +4,7 @@ import {
 	KeyboardArrowRightRounded,
 	MailOutline,
 } from '@mui/icons-material'
-import React, { MutableRefObject, ReactNode, useState } from 'react'
+import { MutableRefObject, ReactNode, useState } from 'react'
 import { VideoJsPlayer } from 'video.js'
 import { duration2Seconds } from '../utils/functions'
 

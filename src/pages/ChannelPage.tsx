@@ -1,6 +1,6 @@
 import { Favorite, LibraryMusic, MusicNote } from '@mui/icons-material'
 import { Pagination, Tab, Tabs, useMediaQuery } from '@mui/material'
-import React, { ReactNode, SyntheticEvent, useState } from 'react'
+import { ReactNode, SyntheticEvent, useState } from 'react'
 import { useQuery } from 'react-query'
 import { Link } from 'react-router-dom'
 import banner_channel from '../assets/banner_channel.jpeg'
