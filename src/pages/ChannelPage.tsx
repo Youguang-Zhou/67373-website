@@ -107,7 +107,7 @@ const ChannelPage = () => {
 							<span>陈一发儿</span>
 							<MusicNote className="text-orange-400" fontSize="small" />
 						</h1>
-						<small className="text-gray-600">673.73万位订阅者</small>
+						<small className="text-gray-600">67373万位订阅者</small>
 					</div>
 				</div>
 				<a
