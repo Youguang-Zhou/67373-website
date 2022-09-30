@@ -287,7 +287,55 @@
 }
 ```
 
-<h2 id="6">6. 获取单个音频的歌词</h2>
+<h2 id="6">6. 根据标签搜索游戏直播回放</h2>
+
+-   **接口说明：** 搜索游戏直播回放
+
+-   **接口地址：** /api/searchGame
+
+### 请求参数
+
+| 参数名称 | 类型   | 是否必选 | 描述         |
+| :------- | :----- | :------- | :----------- |
+| tag      | string | 是       | 查询字符串。 |
+
+### 返回示例
+
+```
+{
+    "mediaList": [
+
+        ...
+
+        {
+            "creationTime": "2022-09-28T23:42:09Z",
+            "video": {
+                cateId: 1000326522
+                cateName: "视频-直播回放"
+                coverURL: "https://vod.67373upup.com/image/cover/68FAF48511D74E4F84A93C8376D40533-6-2.png"
+                creationTime: "2022-09-28T23:42:09Z"
+                description: "油管地址: https://www.youtube.com/watch?v=LO37DSYYiLQ"
+                duration: 24693.238
+                title: "[2022-09-28] 《战神4》（第二期）高端女玩家の《战神4》大结局！ GAME NIGHT～"
+                videoId: "2009fb362e204ee4b0e7ae5d13173427"
+            },
+            "attachedMedia": {},
+            "image": {},
+            "mediaType": "video",
+            "audio": {},
+            "mediaId": "e687854518b442e2a1febe7185aa9cdf"
+        },
+
+        ...
+
+    ],
+    "requestId": "8395F67E-9B66-5A30-832D-C821BA580369"
+    "scrollToken": "7f360d71a027922f7ef554c2296d1ee9"
+    "total": 2
+}
+```
+
+<h2 id="7">7. 获取单个音频的歌词</h2>
 
 -   **接口说明：** 获取单个音频的歌词
 
@@ -321,9 +369,9 @@
 }
 ```
 
-<h2 id="7">7. 附录</h2>
+<h2 id="8">8. 附录</h2>
 
-<h3 id="7.1">7.1. 视频分类</h3>
+<h3 id="8.1">8.1. 视频分类</h3>
 
 | 分类名称       | 分类 id    |
 | :------------- | :--------- |

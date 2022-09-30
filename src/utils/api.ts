@@ -1,7 +1,9 @@
 import axios from 'axios'
 import { MediaType } from './enums'
 
-const API = axios.create({ baseURL: process.env.REACT_APP_API_BASE_URL })
+const { REACT_APP_API_BASE_URL, REACT_APP_API_GAME_LIST_URL } = process.env
+
+const API = axios.create({ baseURL: REACT_APP_API_BASE_URL })
 
 // 获取播放列表（通过MediaType获取视频或音频）
 const getVodList = (
@@ -72,4 +74,24 @@ const getSearchResults = (
 		return data
 	})
 
-export { getVodList, getVideoInfo, getLyrics, getRecommVideos, getSearchResults }
+// 获取筛选游戏直播回放结果
+const getSearchGameResults = (
+	tag: string | undefined,
+	pageNo: number,
+	pageSize: number
+): Promise<SearchGameResponseProps> =>
+	API.get('searchGame', { params: { tag, pageNo, pageSize } }).then(({ data }) => data)
+
+// 获取所有播过的游戏列表
+const getGameListResults = () =>
+	REACT_APP_API_GAME_LIST_URL && axios.get(REACT_APP_API_GAME_LIST_URL).then(({ data }) => data)
+
+export {
+	getVodList,
+	getVideoInfo,
+	getLyrics,
+	getRecommVideos,
+	getSearchResults,
+	getSearchGameResults,
+	getGameListResults,
+}

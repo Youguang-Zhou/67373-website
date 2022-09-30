@@ -16,7 +16,7 @@ import xiruisi from '../assets/xiruisi.png'
 import Carousel from '../components/Carousel'
 import Empty from '../components/Empty'
 import VideoCard from '../components/VideoCard'
-import { getVodList } from '../utils/api'
+import { getGameListResults, getSearchGameResults, getVodList } from '../utils/api'
 import { BREAKPOINT_SM, CATEGORIES, ORIGINALS } from '../utils/constants'
 import { MediaType } from '../utils/enums'
 
@@ -34,6 +34,7 @@ const ChannelPage = () => {
 	const [pageNo, setPageNo] = useState(1)
 	const [currTabIndex, setCurrTabIndex] = useState(0)
 	const largeScreen = useMediaQuery(BREAKPOINT_SM)
+	const [selectedTag, setSelectedTag] = useState<string | undefined>()
 
 	const {
 		data: {
@@ -48,6 +49,16 @@ const ChannelPage = () => {
 		() => getVodList(Video, pageNo, pageSize, CATEGORIES[currTabIndex]),
 		{ keepPreviousData: true }
 	)
+
+	const { data: gameResults } = useQuery(
+		[selectedTag],
+		() => getSearchGameResults(selectedTag, 1, 100),
+		{
+			enabled: !!selectedTag,
+		}
+	)
+
+	const { data: gameList } = useQuery('gameList', () => getGameListResults())
 
 	const handleTabIndexChange = (_: SyntheticEvent, value: number) => {
 		setCurrTabIndex(value)
@@ -163,7 +174,47 @@ const ChannelPage = () => {
 				</div>
 			</TabPanel>
 			{/* 油管回放 */}
-			<TabPanel value={currTabIndex} index={1} />
+			<>
+				{currTabIndex == 1 && (
+					<section className="pb-0 main-container bg-whitesmoke">
+						{gameList &&
+							gameList.split('\n').map((tag: string, idx: number) => (
+								<button
+									key={idx}
+									className={`px-2 m-2 ${
+										selectedTag == tag
+											? 'rounded-full border border-orange-400'
+											: ''
+									}`}
+									onClick={() =>
+										setSelectedTag(selectedTag != tag ? tag : undefined)
+									}
+								>
+									<span
+										className={
+											selectedTag == tag ? 'text-orange-400' : 'text-gray-600'
+										}
+									>
+										{tag}
+									</span>
+								</button>
+							))}
+					</section>
+				)}
+				{currTabIndex == 1 && selectedTag ? (
+					<section className="main-container bg-whitesmoke">
+						{gameResults && gameResults.mediaList.length > 0 && (
+							<section className="video-container">
+								{gameResults.mediaList.map(({ video }) => (
+									<VideoCard key={video.videoId} video={video} />
+								))}
+							</section>
+						)}
+					</section>
+				) : (
+					<TabPanel value={currTabIndex} index={1} />
+				)}
+			</>
 			{/* 直播剪辑 */}
 			<TabPanel value={currTabIndex} index={2} />
 			{/* 茶话会文字视频 */}

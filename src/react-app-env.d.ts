@@ -41,3 +41,12 @@ declare interface SearchResponseProps {
 		video: VodProps
 	}>
 }
+
+declare interface SearchGameResponseProps {
+	requestId: string
+	total: number
+	mediaList: Array<{
+		video: VodProps
+	}>
+	scrollToken: string
+}
