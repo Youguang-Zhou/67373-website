@@ -6,11 +6,13 @@
 
 网站的前端代码由 React, Typescript 和 Tailwind CSS 编写。
 
-网站的 API 文档在[这里](README_FOR_API.md)。
+网站的 API 文档在[这里](README_API.md)。
 
 ## 2. 版本
 
--   v3.2.0 🎉
+-   v3.3.0 🎉
+    -   新增游戏直播回放筛选功能。
+-   v3.2.0
     -   新增剧场模式。
 -   v3.1.0
     -   新增推荐视频。
