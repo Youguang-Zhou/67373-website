@@ -43,4 +43,5 @@ export const CATEGORIES = [
 	process.env.REACT_APP_VOD_CATE_ID_CHAHUAHUI,
 	process.env.REACT_APP_VOD_CATE_ID_YOUXI,
 	process.env.REACT_APP_VOD_CATE_ID_RICHANG,
+	process.env.REACT_APP_VOD_CATE_ID_DUANSHIPIN,
 ]

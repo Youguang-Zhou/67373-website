@@ -11,6 +11,7 @@ import fafa_2 from '../assets/fafa_2.png'
 import fafa_3 from '../assets/fafa_3.png'
 import fafa_4 from '../assets/fafa_4.png'
 import fafa_5 from '../assets/fafa_5.png'
+import fafa_6 from '../assets/fafa_6.png'
 import fafa_rose from '../assets/fafa_rose.png'
 import xiruisi from '../assets/xiruisi.png'
 import Carousel from '../components/Carousel'
@@ -27,7 +28,7 @@ interface TabPanelProps {
 }
 
 const { Video } = MediaType
-const emptyImages = [fafa_0, fafa_1, fafa_2, fafa_3, fafa_4, fafa_5]
+const emptyImages = [fafa_0, fafa_1, fafa_2, fafa_3, fafa_4, fafa_5, fafa_6]
 
 const ChannelPage = () => {
 	const pageSize = 12
@@ -144,6 +145,7 @@ const ChannelPage = () => {
 				<Tab label="茶话会视频" />
 				<Tab label="游戏视频" />
 				<Tab label="日常" />
+				<Tab label="短视频" />
 			</Tabs>
 			{/* 唱歌视频 */}
 			<TabPanel value={currTabIndex} index={0}>
@@ -223,6 +225,8 @@ const ChannelPage = () => {
 			<TabPanel value={currTabIndex} index={4} />
 			{/* 日常 */}
 			<TabPanel value={currTabIndex} index={5} />
+			{/* 短视频 */}
+			<TabPanel value={currTabIndex} index={6} />
 		</main>
 	)
 }
